@@ -1,0 +1,57 @@
+
+[user]
+  name = AUTHORNAME
+  email = AUTHOREMAIL
+  signingkey = AUTHORKEY
+
+[credential]
+  helper = GIT_CREDENTIAL_HELPER
+
+[alias]
+  co = checkout
+  promote = !$ZSH/bin/git-promote
+  wtf     = !$ZSH/bin/git-wtf
+  rank-contributors = !$ZSH/bin/git-rank-contributors
+  count   = !git shortlog -sn
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = auto
+
+[core]
+  excludesfile = ~/.gitignore
+  pager = less -FRSX
+  editor = vim
+
+[apply]
+  whitespace = nowarn
+
+[merge]
+  tool = vimdiff
+
+[mergetool]
+  keepBackup = false
+
+[difftool]
+  prompt = false
+
+[help]
+  autocorrect = 1
+
+[hub]
+  protocol = https
+
+[sendemail]
+  smtpserver = smtp.gmail.com
+  from = AUTHORNAME <AUTHOREMAIL>
+  bcc = AUTHOREMAIL
+  smtpserverport = 587
+  smtpencryption = tls
+  smtpuser = AUTHOREMAIL
+
+[tig "bind"]
+  status = C !git commit -s
+
+# vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=gitconfig

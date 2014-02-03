@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Update all Vim/Vundle packages
+
+vim +BundleInstall! +qall
+

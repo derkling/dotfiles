@@ -1,0 +1,330 @@
+set nocompatible               " be iMproved
+filetype off                   " required!
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vundle Plugins Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Available commands:
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Setup Vundle scripts manager
+set runtimepath+=~/.dotfiles/vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colorscheme (Solarized)
+"Bundle 'altercation/vim-colors-solarized'
+"set background=light
+"set background=dark
+"let g:solarized_termcolors=256
+"let g:solarized_visibility="high"
+"colorscheme solarized
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colorscheme (Molokai)
+" Molokai is a Vim port of the monokai theme for TextMate originally created
+" by Wimer Hazenberg.
+Bundle 'vim-scripts/molokai'
+colorscheme molokai
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color and GUI Configuration
+syntax on
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SnipMate
+Bundle "msanders/snipmate.vim"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" EasyMotion
+"Bundle "Lokaltog/vim-easymotion"
+"
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sessions Management
+Bundle "xolox/vim-misc.git"
+Bundle "xolox/vim-session"
+" Other interesting plugins from xolox:
+" http://www.vim.org/scripts/script.php?script_id=4597
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PowerLine
+Bundle "https://github.com/Lokaltog/vim-powerline"
+set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
+"let g:Powerline_symbols = 'fancy' " Enable usage of FANCY symbols
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FuzzyFinder
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+let g:fuf_modesDisable = []
+nnoremap <silent> <LocalLeader>h :FufHelp<CR>
+nnoremap <silent> <LocalLeader>1  :FufLine<CR>
+nnoremap <silent> <LocalLeader>2  :FufFileWithCurrentBufferDir<CR>
+nnoremap <silent> <LocalLeader>@  :FufFile<CR>
+nnoremap <silent> <LocalLeader>3  :FufBuffer<CR>
+nnoremap <silent> <LocalLeader>4  :FufDirWithCurrentBufferDir<CR>
+nnoremap <silent> <LocalLeader>$  :FufDir<CR>
+nnoremap <silent> <LocalLeader>5  :FufChangeList<CR>
+nnoremap <silent> <LocalLeader>6  :FufMruFile<CR>
+nnoremap <silent> <LocalLeader>8  :FufBookmark<CR> 
+nnoremap <silent> <LocalLeader>*  :FuzzyFinderAddBookmark<CR><CR>
+nnoremap <silent> <LocalLeader>9  :FufTaggedFile<CR> 
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" tComment
+Bundle "tComment"
+nnoremap // :TComment<CR>
+vnoremap // :TComment<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Command-T
+"Bundle "wincent/Command-T"
+"let g:CommandTMatchWindowAtTop=1 " show window at top
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" CScope
+Bundle "derkling/cscope.vim"
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Doxygen
+Bundle "DoxygenToolkit.vim"
+map <LocalLeader>d :Dox<CR>
+map <LocalLeader>d :Dox<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree
+" https://github.com/jistr/vim-nerdtree-tabs/blob/master/README.md
+Bundle "scrooloose/nerdtree"
+Bundle "jistr/vim-nerdtree-tabs"
+noremap <silent> <F12> :NERDTreeToggle<CR>
+noremap! <silent> <F12> <ESC>:NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0 " use ASCII chars
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntax and errors highlighter
+Bundle 'Syntastic'
+let g:syntastic_c_compiler_options=' -Wall -pedantic'
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LaTeX
+Bundle "vim-latex/vim-latex.github.com.git"
+autocmd BufEnter *.tex,*.bib source ~/.dotfiles/vim/plugins/latex.vim
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Global Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" This MUST be the last entry BEFORE the following custom configuration
+filetype plugin indent plugin on
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Confiugrations which cause vim to behave a lot differently from regular Vi
+set nocompatible	" vim defaults, not vi!
+set showcmd		" Show (partial) command in status line.
+set showmatch		" Show matching brackets.
+set ignorecase		" Do case insensitive matching
+set smartcase		" Do smart case matching
+set autowrite		" Automatically save before commands like :next and :make
+set hidden		" Hide buffers when they are abandoned
+set ttymouse=xterm2     " Enable mouse usage on screen terminal emulator
+set mouse=a		" Enable mouse usage (all modes) in terminals
+set nobackup		" Disable creation of backup (*.ext~) files
+set laststatus=2	" Always show the statusline
+set encoding=utf-8	" Necessary to show Unicode glyphs
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jump to the last position when reopening a file
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Incremental search with results highlight
+set incsearch
+set hlsearch
+" Ctrl-L clears the highlight from the last search
+noremap  <C-l> :nohlsearch<CR><C-l>
+noremap! <C-l> <ESC>:nohlsearch<CR><C-l>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart backspace
+set backspace=start,indent,eol
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Highlight spaces
+"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+"highlight ExtraWhitespace ctermbg=red guibg=red
+"" Show trailing whitespace:
+"match ExtraWhitespace /\s\+$/
+"" Show trailing whitespace, except when typing at the end of a line
+"":match ExtraWhitespace /\s\+\%#\@<!$/
+"match ExtraWhitespace /\s\+$\| \+\ze\t/
+"" Show tabs that are not at the start of a line:
+"match ExtraWhitespace /[^\t]\zs\t\+/
+"" Show spaces used for indenting (so you use only tabs for indenting).
+""match ExtraWhitespace /^\t*\zs \+/
+"autocmd InsertLeave * redraw!
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Better TAB completion for files (like the shell)
+if has("wildmenu")
+    set wildmenu
+    set wildmode=longest,list
+    " Ignore stuff (for TAB autocompletion)
+    set wildignore+=*.a,*.o
+    set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
+    set wildignore+=.DS_Store,.git,.hg,.svn
+    set wildignore+=*~,*.swp,*.tmp
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" TAB and Shift-TAB in command mode cycle buffers
+"nmap <Tab>   :bn<CR>
+"nmap <S-Tab> :bp<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Resize vsplit panes on VIM window resize events
+autocmd VimResized * exe "normal! \<c-w>="
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Function KEYs Mapping
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F2 - Toggle auto-indenting for code paste
+" pressing F2 in normal mode will invert the 'paste' option
+nnoremap <F2> :set invpaste paste?<CR>
+" press F2 when in insert mode, to toggle 'paste' on and off
+set pastetoggle=<F2>
+" enables displaying whether 'paste' is turned on in insert mode
+set showmode
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F3 - Toggle text wrapping
+noremap <F3> :set nowrap!<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F4 - Line numbering
+:set number		" display line numbers along the left side of a window
+:set numberwidth=5	" change the width of the 'gutter' column used for numbering
+:set cpoptions+=n	" use the number column for the text of wrapped lines
+:highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+" Use relative vs absolute line numbergin
+nnoremap <C-n> :call NumberToggle()<cr>
+:au FocusLost * :set number
+:au FocusGained * :set relativenumber
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
+" Toggle line numbering
+noremap <F4> :set nonumber!<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F5 - Remove thrailing whitespaces
+noremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F6 - Highlight all instances of word under cursor, when idle.
+function! AutoHighlightToggle()
+  let @/ = ''
+  if exists('#auto_highlight')
+    au! auto_highlight
+    augroup! auto_highlight
+    setl updatetime=4000
+    echo 'Highlight current word: off'
+    return 0
+  else
+    augroup auto_highlight
+      au!
+      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+    augroup end
+    setl updatetime=500
+    echo 'Highlight current word: ON'
+    return 1
+  endif
+endfunction
+nnoremap <F6> :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F7 - Spell Checking with multi-language support
+let g:myLang=0
+let g:myLangList=["nospell","en_us","en_gb","it"]
+function! ToggleSpell()
+	let g:myLang=g:myLang+1
+	if g:myLang>=len(g:myLangList) | let g:myLang=0 | endif
+	if g:myLang==0
+		setlocal nospell
+	else
+		execute "setlocal spell spelllang=".get(g:myLangList, g:myLang)
+	endif
+	echo "spell checking language:" g:myLangList[g:myLang]
+endfunction
+nnoremap <silent> <F7> :call ToggleSpell()<CR>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Filetype Specific Configurations
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Makefiles
+autocmd FileType make setlocal noexpandtab
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" C/C++
+autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S source ~/.dotfiles/vim/plugins/c.vim
+autocmd BufNewFile,BufRead *.dox set filetype=cpp.doxygen
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python
+autocmd BufEnter *.py set ai sw=4 ts=4 sta et fo=croql softtabstop=4
+
+
