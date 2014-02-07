@@ -154,6 +154,15 @@ vnoremap <Leader>dw :DeleteTrailingWhitespace<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Show GIT diff in the 'gutter' (sign column)
+Bundle 'airblade/vim-gitgutter'
+nnoremap <Leader>tg  :GitGutterToggle<CR>
+nnoremap <Leader>tgh :GitGutterLineHighlightsToggle<CR>
+nnoremap <Leader>dgs <Plug>GitGutterStageHunk
+nnoremap <Leader>dgr <Plug>GitGutterRevertHunk
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " LaTeX
 Bundle "vim-latex/vim-latex.github.com.git"
 autocmd BufEnter *.tex,*.bib source ~/.dotfiles/vim/plugins/latex.vim
