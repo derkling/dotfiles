@@ -129,6 +129,29 @@ Bundle 'Syntastic'
 let g:syntastic_c_compiler_options=' -Wall -pedantic'
 
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Highlight trailing whitespaces
+" http://www.vim.org/scripts/script.php?script_id=3966
+Bundle 'ShowTrailingWhitespace'
+highlight ShowTrailingWhitespace ctermbg=Blue guibg=Blue
+nnoremap <silent> <Leader>tw
+	\ :<C-u>call ShowTrailingWhitespace#Toggle(0) <Bar>
+	\ echo (ShowTrailingWhitespace#IsSet()
+		\ ? 'Show trailing whitespace'
+		\ : 'Not showing trailing whitespace'
+	\ )<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Delete trailing whitespaces
+" http://www.vim.org/scripts/script.php?script_id=3967
+Bundle 'DeleteTrailingWhitespace'
+let g:DeleteTrailingWhitespace = 0
+let g:DeleteTrailingWhitespace_Action = 'ask'
+let g:DeleteTrailingWhitespace_ChoiceAffectsHighlighting = 1
+nnoremap <Leader>dw :<C-u>%DeleteTrailingWhitespace<CR>
+vnoremap <Leader>dw :DeleteTrailingWhitespace<CR>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " LaTeX
