@@ -83,9 +83,9 @@ nnoremap <silent> <LocalLeader>4  :FufDirWithCurrentBufferDir<CR>
 nnoremap <silent> <LocalLeader>$  :FufDir<CR>
 nnoremap <silent> <LocalLeader>5  :FufChangeList<CR>
 nnoremap <silent> <LocalLeader>6  :FufMruFile<CR>
-nnoremap <silent> <LocalLeader>8  :FufBookmark<CR> 
+nnoremap <silent> <LocalLeader>8  :FufBookmark<CR>
 nnoremap <silent> <LocalLeader>*  :FuzzyFinderAddBookmark<CR><CR>
-nnoremap <silent> <LocalLeader>9  :FufTaggedFile<CR> 
+nnoremap <silent> <LocalLeader>9  :FufTaggedFile<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -166,8 +166,6 @@ nnoremap <Leader>dgr <Plug>GitGutterRevertHunk
 " LaTeX
 Bundle "vim-latex/vim-latex.github.com.git"
 autocmd BufEnter *.tex,*.bib source ~/.dotfiles/vim/plugins/latex.vim
-
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
