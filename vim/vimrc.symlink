@@ -212,23 +212,6 @@ noremap! <C-l> <ESC>:nohlsearch<CR><C-l>
 set backspace=start,indent,eol
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Highlight spaces
-"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-"highlight ExtraWhitespace ctermbg=red guibg=red
-"" Show trailing whitespace:
-"match ExtraWhitespace /\s\+$/
-"" Show trailing whitespace, except when typing at the end of a line
-"":match ExtraWhitespace /\s\+\%#\@<!$/
-"match ExtraWhitespace /\s\+$\| \+\ze\t/
-"" Show tabs that are not at the start of a line:
-"match ExtraWhitespace /[^\t]\zs\t\+/
-"" Show spaces used for indenting (so you use only tabs for indenting).
-""match ExtraWhitespace /^\t*\zs \+/
-"autocmd InsertLeave * redraw!
-
-
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Better TAB completion for files (like the shell)
 if has("wildmenu")
