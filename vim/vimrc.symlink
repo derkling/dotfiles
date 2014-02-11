@@ -84,6 +84,13 @@ let g:airline_theme='ubaryd'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Powerline Fonts
+" Bundle 'Lokaltog/powerline-fonts'
+" let g:airline_powerline_fonts=1
+" set guifont=Menlo
+
+
 
 
 
