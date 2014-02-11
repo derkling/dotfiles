@@ -36,29 +36,6 @@ noremap <silent> <F8> :TlistToggle<CR>
 noremap! <silent> <F8> <ESC>:TlistToggle<CR>
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Smart in-line manpages with 'K' in command mode
-"
-fun! ReadMan()
-  " Assign current word under cursor to a script variable:
-  let s:man_word = expand('<cword>')
-  " Open a new window:
-  :wincmd n
-  " Read in the manpage for man_word (col -b is for formatting):
-  :exe ":r!man 3 " . s:man_word . " | col -b"
-  " Goto first line...
-  :goto
-  " and delete it:
-  :delete
-  " finally set file type to 'man':
-  :set filetype=man
-  " lines set to 20
-  :resize 20
-endfun
-" Map the K key to the ReadMan function:
-noremap K :call ReadMan()<CR>
-
-
 "" GUI coloring
 "highlight Pmenu ctermbg=green gui=bold
 "highlight Pmenu ctermfg=black gui=bold

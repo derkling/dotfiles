@@ -211,6 +211,13 @@ let g:airline#extensions#hunks#enabled = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Documentation viewer
+Bundle 'powerman/vim-plugin-viewdoc'
+let g:viewdoc_open='new'
+let g:viewdoc_only=1
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " LaTeX
 Bundle "vim-latex/vim-latex.github.com.git"
 autocmd BufEnter *.tex,*.bib source ~/.dotfiles/vim/plugins/latex.vim
