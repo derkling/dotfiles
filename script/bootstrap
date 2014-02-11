@@ -163,7 +163,7 @@ install_dotfiles () {
   done
 
   # Symlink dotfile root to home directory
-  [ -f .dotfiles ] || ln -s $DOTFILES_ROOT ~/.dotfiles
+  [ -L ~/.dotfiles ] || ln -s $DOTFILES_ROOT ~/.dotfiles
 
 }
 
