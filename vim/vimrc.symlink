@@ -43,6 +43,10 @@ colorscheme molokai
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color and GUI Configuration
 syntax on
+set background=dark
+set laststatus=2
+set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SnipMate
