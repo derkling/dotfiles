@@ -182,6 +182,10 @@ vnoremap <Leader>dw :DeleteTrailingWhitespace<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" GIT Fugitive
+Bundle 'tpope/vim-fugitive'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Show GIT diff in the 'gutter' (sign column)
 Bundle 'airblade/vim-gitgutter'
 nnoremap <Leader>tg  :GitGutterToggle<CR>
