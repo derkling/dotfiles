@@ -30,12 +30,6 @@ set cinoptions=:0,l1,t0,g0
 set foldmethod=syntax
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F8 - Toggle TagList window
-noremap <silent> <F8> :TlistToggle<CR>
-noremap! <silent> <F8> <ESC>:TlistToggle<CR>
-
-
 "" GUI coloring
 "highlight Pmenu ctermbg=green gui=bold
 "highlight Pmenu ctermfg=black gui=bold
