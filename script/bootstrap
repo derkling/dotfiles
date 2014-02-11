@@ -70,13 +70,13 @@ wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 echo 'Updating fonts cache [~/.fonts]...'
 [ -d ~/.fonts ] || mkdir ~/.fonts
-ln -s $DOTFILES_ROOT/tmux/PowerlineSymbols.otf ~/.fonts/PowerlineSymbols.otf
+ln -fs $DOTFILES_ROOT/tmux/PowerlineSymbols.otf ~/.fonts/PowerlineSymbols.otf
 fc-cache -vf ~/.fonts
 echo 'Setup fontconfig...'$DOTFILES_ROOT/tmux/
 [ -d ~/.fonts.conf.d ] || mkdir ~/.fonts.conf.d
 [ -d ~/.config/fontconfig/conf.d/ ] || mkdir -p ~/.config/fontconfig/conf.d
-ln -s $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.fonts.conf.d/10-powerline-symbols.conf
-ln -s $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.config/fontconfig/conf.d/10-powerline-symbols.conf
+ln -fs $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.fonts.conf.d/10-powerline-symbols.conf
+ln -fs $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.config/fontconfig/conf.d/10-powerline-symbols.conf
 }
 
 setup_vim() {
@@ -86,7 +86,7 @@ info 'Setup VIM (using vundle)\n'
 cd $DOTFILES_ROOT/vim/bundle
 git clone https://github.com/gmarik/vundle.git
 cd $DOTFILES_ROOT
-ln -s $DOTFILES_ROOT/vim ~/.vim
+ln -fs $DOTFILES_ROOT/vim ~/.vim
 vim +BundleInstall +qall
 success 'VIM'
 }
@@ -163,7 +163,7 @@ install_dotfiles () {
   done
 
   # Symlink dotfile root to home directory
-  [ -L ~/.dotfiles ] || ln -s $DOTFILES_ROOT ~/.dotfiles
+  [ -L ~/.dotfiles ] || ln -fs $DOTFILES_ROOT ~/.dotfiles
 
 }
 
