@@ -150,8 +150,11 @@ let g:NERDTreeDirArrows=0 " use ASCII chars
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Syntax and errors highlighter
-Bundle 'Syntastic'
+" External language specific syntax checkers are required, look at:
+" syntax_checkers/<filetype>/*.vim
+Bundle 'scrooloose/syntastic'
 let g:syntastic_c_compiler_options=' -Wall -pedantic'
+let g:airline#extensions#syntastic#enabled = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
