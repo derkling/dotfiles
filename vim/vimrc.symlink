@@ -186,8 +186,9 @@ vnoremap <Leader>dw :DeleteTrailingWhitespace<CR>
 Bundle 'airblade/vim-gitgutter'
 nnoremap <Leader>tg  :GitGutterToggle<CR>
 nnoremap <Leader>tgh :GitGutterLineHighlightsToggle<CR>
-nnoremap <Leader>dgs <Plug>GitGutterStageHunk
-nnoremap <Leader>dgr <Plug>GitGutterRevertHunk
+nnoremap <Leader>dgs :GitGutterStageHunk<CR>
+nnoremap <Leader>dgr :GitGutterRevertHunk<CR>
+let g:airline#extensions#hunks#enabled = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
