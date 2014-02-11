@@ -34,3 +34,12 @@ alias l='ls -CF'
 alias dir='ls --color=auto --format=vertical'
 alias vdir='ls --color=auto --format=long'
 
+################################################################################
+# Commonly used commands
+################################################################################
+
+alias ta='tmux attach -t'
+alias tl='tmux list-sessions'
+alias tm='tmux -2' # Force 256 color mode
+alias ts='tmux new-session -s'
+
