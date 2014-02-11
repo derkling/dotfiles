@@ -54,10 +54,10 @@ Bundle "msanders/snipmate.vim"
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" EasyMotion
-"Bundle "Lokaltog/vim-easymotion"
-"
-"
+" EasyMotion
+Bundle 'Lokaltog/vim-easymotion'
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sessions Management
 Bundle "xolox/vim-misc.git"
