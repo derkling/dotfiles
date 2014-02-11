@@ -92,6 +92,10 @@ let g:airline_right_sep=''
 
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" CTags SideBar
+Bundle 'majutsushi/tagbar'
+let g:airline#extensions#tagbar#enabled = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -353,6 +357,11 @@ function! ToggleSpell()
 	echo "spell checking language:" g:myLangList[g:myLang]
 endfunction
 nnoremap <silent> <F7> :call ToggleSpell()<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" F8 - Toggle CTags bar
+nnoremap <F8> :TagbarToggle<CR>
 
 
 
