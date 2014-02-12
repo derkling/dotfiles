@@ -331,8 +331,8 @@ function! NumberToggle()
 endfunc
 " Use relative vs absolute line numbergin
 nnoremap <C-n> :call NumberToggle()<cr>
-:au FocusLost * :set number
-:au FocusGained * :set relativenumber
+autocmd BufLeave    * :set number
+autocmd BufEnter    * :set relativenumber
 autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
 " Toggle line numbering
