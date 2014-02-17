@@ -142,6 +142,21 @@ vnoremap // :TComment<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" EasyGrep - Fast and Easy Find and Replace Across Multiple Files
+" Default mappings:
+"   <Leader>vv  - Grep for the word under the cursor, match all occurences,
+"   <Leader>vV  - Grep for the word under the cursor, match whole word, like
+"   <Leader>va  - Like vv, but add to existing list
+"   <Leader>vA  - Like vV, but add to existing list
+"   <Leader>vr  - Perform a global search search on the word under the cursor
+"                 and prompt for a pattern with which to replace it.
+"   <Leader>vo  - Select the files to search in and set grep options
+Bundle 'EasyGrep'
+noremap <leader>go <esc>:GrepOption<cr>
+nnoremap go :GrepOption<cr>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CScope
 Bundle "derkling/cscope.vim"
 
