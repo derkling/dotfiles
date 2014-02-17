@@ -401,6 +401,7 @@ autocmd FileType make setlocal noexpandtab
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " C/C++
 autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S source ~/.dotfiles/vim/plugins/c.vim
+autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S normal zR
 autocmd BufNewFile,BufRead *.dox set filetype=cpp.doxygen
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
