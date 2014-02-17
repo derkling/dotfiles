@@ -157,6 +157,18 @@ nnoremap go :GrepOption<cr>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" QuickFix window management
+noremap <leader>fo <esc>:copen<cr>
+noremap <leader>fc <esc>:cclose<cr>
+noremap <leader>fn <esc>:cnext<cr>
+noremap <leader>fp <esc>:cprevious<cr>
+nnoremap fo :copen<cr>
+nnoremap fc :cclose<cr>
+nnoremap fn :cnext<cr>
+nnoremap fp :cprevious<cr>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CScope
 Bundle "derkling/cscope.vim"
 
