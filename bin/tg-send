@@ -1,0 +1,9 @@
+#!/bin/bash
+
+PIDFILE=/tmp/tgd.pid
+[ -f $PIDFILE ] || exit 1
+
+TGPID=`cat $PIDFILE`
+
+echo "$*" > /proc/$TGPID/fd/0
+
