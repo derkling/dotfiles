@@ -91,6 +91,19 @@ vim +BundleInstall +qall
 success 'VIM'
 }
 
+setup_gpg() {
+  info 'Setup GPG\n'
+  if [ -f ~/.gnupg/secring.gpg ]; then
+    info "Using existing GPG keyring [~/.gnupg/secring.gpg]"
+    echo
+    gpg -K
+  else
+    info "Setting up new GPG keyring..."
+    gpg --gen-key
+  fi
+  success 'GPG'
+}
+
 link_files () {
   ln -s $1 $2
   success "linked $1 to $2"
@@ -172,6 +185,7 @@ setup_zshell
 install_dotfiles
 setup_fonts
 setup_vim
+setup_gpg
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]
