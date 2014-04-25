@@ -278,6 +278,14 @@ set nobackup		" Disable creation of backup (*.ext~) files
 set laststatus=2	" Always show the statusline
 set encoding=utf-8	" Necessary to show Unicode glyphs
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set GVim configuration
+if has("gui_running")
+	if has("gui_gtk2")
+		set guifont=Monospace\ 8 " Set 8pt font
+		set lines=75 columns=180 " Maximize window
+	endif
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Jump to the last position when reopening a file
