@@ -108,6 +108,42 @@ setup_gpg() {
   success 'GPG'
 }
 
+setup_mutt() {
+  info 'Setup MUTT\n'
+
+  user ' - What is your GMail real name?'
+  read -e gmail_realname
+  user ' - What is your GMail username?'
+  read -e gmail_username
+  if [ -z $EDITOR ]; then
+    warn ' Please, edit [~/dotfiles/mutt/signature] to setup your signature!\n'
+    warn ' Press a key once done... '
+    read
+  else
+    warn ' Press a key to edit you email signature '
+    read -n 1
+    $EDITOR ~/dotfiles/mutt/signature
+  fi
+  success 'Using email signature:'
+  cat ~/dotfiles/mutt/signature
+  user ' - What is your GMail password?'
+  read -e gmail_password
+  info 'Available GPG IDs:'
+  echo
+  gpg -K
+  user ' - What is the GPG ID to use for GMail passowrd protection?'
+  read -e gpg_id
+
+  mkdir -p ~/.mutt/cache
+  echo "set my_gmail_realname = \"$gmail_realname\""  > ~/.mutt/gmail_credentials
+  echo "set my_gmail_username = \"$gmail_username\"" >> ~/.mutt/gmail_credentials
+  echo "set my_gmail_password = \"$gmail_password\"" >> ~/.mutt/gmail_credentials
+
+  gpg -e -r "$gpg_id" ~/.mutt/gmail_credentials
+  shred -xu ~/.mutt/gmail_credentials
+  success 'MUTT'
+}
+
 link_files () {
   ln -s $1 $2
   success "linked $1 to $2"
@@ -190,6 +226,7 @@ install_dotfiles
 setup_fonts
 setup_vim
 setup_gpg
+setup_mutt
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]

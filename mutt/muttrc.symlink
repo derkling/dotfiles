@@ -1,0 +1,74 @@
+
+################################################################################
+# Loading GPG-Protected GMail user credentials
+source "gpg -dq ~/.mutt/gmail_credentials.gpg |"
+
+################################################################################
+# User details
+set realname	  = "$my_gmail_realname"
+set from	  = "$my_gmail_username@gmail.com"
+set signature	  = "~/dotfiles/mutt/signature"
+set use_from 	  = yes
+set envelope_from = yes
+
+################################################################################
+# Native IMAP settings
+set imap_user	= "$my_gmail_username@gmail.com"
+set imap_pass	= "$my_gmail_password"
+set folder	= "imaps://$my_gmail_username@imap.gmail.com:993"
+set spoolfile	= +INBOX
+mailboxes	= +INBOX
+# Store message headers locally to speed things up.
+set header_cache = ~/.mutt/cache
+# Sent messages
+set record 	= "+[Gmail]/Sent Mail"
+# Postponed messages
+set postponed 	= "+[Gmail]/Drafts"
+# Deleted messages
+set trash 	= "+[Gmail]/All Mail"
+# Allow Mutt to open new imap connection automatically.
+unset imap_passive
+# Keep IMAP connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 300
+# How often to check for new mail (time in seconds).
+set mail_check 	= 120
+
+################################################################################
+# Native SMTP settings
+# Gmail saves automatically sent e-mail to +[Gmail]/Sent. This is required to
+# avoid duplications
+set smtp_url	  = "smtps://$my_gmail_username@smtp.gmail.com"
+set smtp_pass	  = "$my_gmail_password"
+set ssl_force_tls = yes
+set ssl_starttls  = yes
+
+################################################################################
+# Editor
+set editor	= "vim -c 'set tw=70 et' '+/^$' "
+# See headers when editing
+set edit_headers= yes
+
+################################################################################
+# Other TUI settings
+set markers			# mark wrapped lines of text in the pager with a +
+set smart_wrap			# Don't wrap mid-word
+set pager_context = 5		# Retain 5 lines of previous page when scrolling.
+set pager_index_lines = 10	# Keep 10 lines index in pager view
+set status_on_top		# Status bar on top.
+push <show-version>		# Shows mutt version at startup
+# Wombat-like Color Scheme
+source ~/dotfiles/mutt/vombatidae.mutt
+
+# #======================================================#
+# # What to show and order of headers
+# ignore *
+# unignore Date: From: User-Agent: X-Mailer X-Operating-System To: \
+#          Cc: Reply-To: Subject: Mail-Followup-To:
+# hdr_order Date: From: User-Agent: X-Mailer X-Operating-System To: \
+#         Cc: Reply-To: Subject: Mail-Followup-To:
+# #======================================================#
+# # Aliases
+# set alias_file = ~/mail/mutt_aliases # In their own file
+# source ~/mail/mutt_aliases           # Source them
+# set sort_alias=alias                 # Sort alphabetically
+
