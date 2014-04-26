@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 QUEUEDIR=$HOME/.mutt/msmtp_queues
+PINGHOST=smtp.gmail.com
 
 # Set secure permissions on created directories and files
 umask 077
@@ -36,5 +37,12 @@ echo "$@" > "$MSMTPFILE" || exit 1
 
 # Write the mail to $MAILFILE
 cat > "$MAILFILE" || exit 1
+
+# If we are online, run the queue immediately.
+# Replace the test with something suitable for your site.
+ping -c 1 -w 2 $PINGHOST > /dev/null
+if [ $? -eq 0 ]; then
+	msmtp-runqueue.sh > /dev/null &
+fi
 
 exit 0
