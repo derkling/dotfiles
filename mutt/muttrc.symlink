@@ -33,14 +33,22 @@ set imap_keepalive = 300
 # How often to check for new mail (time in seconds).
 set mail_check 	= 120
 
+# ################################################################################
+# # Native SMTP settings
+# # Gmail saves automatically sent e-mail to +[Gmail]/Sent. This is required to
+# # avoid duplications
+# set smtp_url	  = "smtps://$my_gmail_username@smtp.gmail.com"
+# set smtp_pass	  = "$my_gmail_password"
+# set ssl_force_tls = yes
+# set ssl_starttls  = yes
+# # GMail already copies emails into "[Gmail]/Sent Mail", without this a copy
+# # for each sent email will be present in this folder
+# unset record
+
 ################################################################################
-# Native SMTP settings
-# Gmail saves automatically sent e-mail to +[Gmail]/Sent. This is required to
-# avoid duplications
-set smtp_url	  = "smtps://$my_gmail_username@smtp.gmail.com"
-set smtp_pass	  = "$my_gmail_password"
-set ssl_force_tls = yes
-set ssl_starttls  = yes
+# Send email using local MSMTP server
+set mbox_type	= Maildir
+set sendmail	= ~/dotfiles/mutt/bin/msmtp-enqueue.sh
 # GMail already copies emails into "[Gmail]/Sent Mail", without this a copy
 # for each sent email will be present in this folder
 unset record
