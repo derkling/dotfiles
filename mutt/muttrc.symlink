@@ -21,7 +21,7 @@ mailboxes	= +INBOX
 # Store message headers locally to speed things up.
 set header_cache = ~/.mutt/cache
 # Sent messages
-set record 	= "+[Gmail]/Sent Mail"
+# set record 	= "+[Gmail]/Sent Mail"
 # Postponed messages
 set postponed 	= "+[Gmail]/Drafts"
 # Deleted messages
@@ -41,6 +41,9 @@ set smtp_url	  = "smtps://$my_gmail_username@smtp.gmail.com"
 set smtp_pass	  = "$my_gmail_password"
 set ssl_force_tls = yes
 set ssl_starttls  = yes
+# GMail already copies emails into "[Gmail]/Sent Mail", without this a copy
+# for each sent email will be present in this folder
+unset record
 
 ################################################################################
 # Editor
