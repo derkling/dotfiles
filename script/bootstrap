@@ -134,7 +134,19 @@ setup_mutt() {
   user ' - What is the GPG ID to use for GMail passowrd protection?'
   read -e gpg_id
 
+  info 'Setup folders...'
+  umask 077
+  mkdir -p ~/.mutt/msmtp_queues
   mkdir -p ~/.mutt/cache
+
+  info 'Setup MSMTP client...'
+  sed -e "s/GMAIL_USERNAME/$gmail_username/g" \
+    ~/dotfiles/mutt/msmtprc.symlink.example > ~/dotfiles/mutt/msmtprc.symlink
+  echo "$gmail_password"  > ~/.mutt/gmail_$gmail_username
+  gpg -e -r "$gpg_id" ~/.mutt/gmail_$gmail_username
+  shred -xu ~/.mutt/gmail_$gmail_username
+
+  info 'Setup credentials...'
   echo "set my_gmail_realname = \"$gmail_realname\""  > ~/.mutt/gmail_credentials
   echo "set my_gmail_username = \"$gmail_username\"" >> ~/.mutt/gmail_credentials
   echo "set my_gmail_password = \"$gmail_password\"" >> ~/.mutt/gmail_credentials

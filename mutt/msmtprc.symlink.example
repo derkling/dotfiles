@@ -1,0 +1,19 @@
+# vim: ft=msmtp
+
+# Accounts will inherit settings from this section
+defaults
+auth		on
+tls		on
+tls_trust_file	/usr/share/ca-certificates/mozilla/Thawte_Premium_Server_CA.crt
+
+# Gmail Account for "GMAIL_USERNAME"
+account 	gmail
+from		GMAIL_USERNAME@gmail.com
+user		GMAIL_USERNAME@gmail.com
+host		smtp.gmail.com
+port		587
+tls_trust_file	/etc/ssl/certs/ca-certificates.crt
+passwordeval	gpg --pgp2 -d --for-your-eyes-only --no-tty -d ~/.mutt/gmail_GMAIL_USERNAME.gpg
+
+# Set a default account
+account default : gmail
