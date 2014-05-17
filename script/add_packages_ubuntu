@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# Hacking utilities
+PACKAGES="$PACKAGES \
+	build-essential \
+	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
+	gcc-arm-linux-androideabi \
+	autoconf automake libtool \
+	cmake \
+	premake \
+	doxygen graphviz \
+	byacc flex bison \
+	ltrace strace \
+	git gitk git-gui tig git-flow \
+	mercurial \
+	intel-gpu-tools \
+	python \
+	linaro-boot-utils linaro-image-tools \
+	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
+	qemu-system-x86 qemu-system-arm \
+	qemu-launcher qemuctl \
+"
+
+# Text tools and utilties
+PACKAGES="$PACKAGES \
+	vim \
+	texinfo \
+	texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+	texlive-lang-english texlive-lang-italian \
+	latex-beamer \
+	latex-make latex-mk latexmk \
+	vim-latexsuite \
+"
+
+# Unix utils
+PACKAGES="$PACKAGES \
+	zsh \
+	aterm screen tmux \
+	gawk sed moreutils \
+	ranger autojump bc \
+	htop hwloc \
+	powertop \
+	x11-xserver-utils arandr xdotool \
+	usbutils \
+"
+# hwloc => lstopo|hwloc-ls
+# x11-xserver-utils => xrandr
+
+# Networking libraries
+PACKAGES="$PACKAGES \
+	iproute iptables netcat-openbsd rsync tcpdump nmap \
+	openssh-client openssh-server \
+	msmtp mutt \
+	curl wget axel \
+"
+
+# Multimedia libraries
+PACKAGES="$PACKAGES \
+	smplayer sox \
+"
+
+# Development libraries
+PACKAGES="$PACKAGES \
+	ncurses-dev \
+"
+
+# Archive utilities
+PACKAGES="$PACKAGES \
+	atool unrar \
+"
+
+echo
+echo
+echo "Additional packages to be installed: "
+echo $PACKAGES
+echo
+echo
+
+sudo apt-get update
+sudo apt-get install aptitude
+sudo aptitude install $PACKAGES
+
