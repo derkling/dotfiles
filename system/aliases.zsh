@@ -47,3 +47,9 @@ alias tl='tmux list-sessions'
 alias tm='tmux -2' # Force 256 color mode
 alias ts='tmux new-session -s'
 
+################################################################################
+# Customized command options
+################################################################################
+
+alias ranger='ranger --confdir=~/dotfiles/ranger'
+
