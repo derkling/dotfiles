@@ -30,6 +30,31 @@ fail () {
   exit
 }
 
+install_packages () {
+
+DISTRO_ID=$(lsb_release -si)
+DISTRO_VERSION=$(lsb_release -sr)
+DISTRO_CODENAME=$(lsb_release -sc)
+SCRIPT="$HOME/dotfiles/script/add_packages_${DISTRO_ID,,}"
+
+info "Looking for [$SCRIPT]...\n"
+if [ ! -f $SCRIPT ]; then
+  fail "Distribution [$DISTRO_ID] not supported"
+  warn "You should provide a [$SCRIPT] installation script"
+  return
+fi
+
+info "Found [$SCRIPT]...\n"
+user "Do you want to download additional $DISTRO_ID packages? [N/y]: "
+read RESP
+[ x${RESP,,} == xy ] || return
+
+# Checking for distro specific installation script
+info "Installing additional $DISTRO_ID packages...\n"
+sudo $SCRIPT
+
+}
+
 setup_gitconfig () {
   [ -f git/gitconfig.symlink ] && return
   info 'Setup gitconfig'
@@ -232,6 +257,7 @@ install_dotfiles () {
 
 }
 
+install_packages
 setup_gitconfig
 setup_zshell
 install_dotfiles
