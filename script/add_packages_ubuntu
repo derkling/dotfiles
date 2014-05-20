@@ -8,6 +8,7 @@ PACKAGES="$PACKAGES \
 	autoconf automake libtool \
 	cmake \
 	premake \
+	ccache \
 	doxygen graphviz \
 	byacc flex bison \
 	ltrace strace \
