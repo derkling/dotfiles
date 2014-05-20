@@ -39,7 +39,7 @@ PACKAGES="$PACKAGES \
 	aterm screen tmux \
 	gawk sed moreutils \
 	ranger autojump bc \
-	htop hwloc \
+	htop iotop hwloc \
 	powertop \
 	x11-xserver-utils arandr xdotool \
 	usbutils \
