@@ -43,6 +43,7 @@ PACKAGES="$PACKAGES \
 	powertop \
 	x11-xserver-utils arandr xdotool \
 	usbutils \
+	smartmontools \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
