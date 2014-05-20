@@ -73,6 +73,12 @@ PACKAGES="$PACKAGES \
 
 echo
 echo
+echo "Adding Linaro PPA"
+echo
+sudo add-apt-repository ppa:linaro-maintainers/tools
+
+echo
+echo
 echo "Additional packages to be installed: "
 echo $PACKAGES
 echo
