@@ -51,6 +51,8 @@ set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SnipMate
 Bundle "msanders/snipmate.vim"
+let g:snips_author = 'Patrick Bellasi'
+ino  <C-j> <C-r>=TriggerSnippet()<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
