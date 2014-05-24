@@ -56,6 +56,14 @@ Bundle "msanders/snipmate.vim"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " EasyMotion
 Bundle 'Lokaltog/vim-easymotion'
+let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+let g:EasyMotion_smartcase = 1   " Case sensitivity
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
