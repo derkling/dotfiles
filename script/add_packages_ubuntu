@@ -41,7 +41,7 @@ PACKAGES="$PACKAGES \
 	ranger autojump bc \
 	htop iotop hwloc \
 	powertop \
-	x11-xserver-utils arandr xdotool \
+	x11-xserver-utils arandr xdotool xsel \
 	usbutils \
 	smartmontools \
 "
