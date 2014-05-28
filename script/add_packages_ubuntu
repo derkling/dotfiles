@@ -27,6 +27,7 @@ PACKAGES="$PACKAGES \
 	vim \
 	texinfo \
 	texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+	texlive-fonts-recommended \
 	texlive-lang-english texlive-lang-italian \
 	latex-beamer \
 	latex-make latex-mk latexmk \
