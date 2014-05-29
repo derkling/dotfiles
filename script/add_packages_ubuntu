@@ -49,6 +49,26 @@ PACKAGES="$PACKAGES \
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
 
+# GNOME utils
+PACKAGES="$PACKAGES \
+	nautilus-actions \
+	nautilus-compare \
+	nautilus-emblems \
+	nautilus-filename-repairer \
+	nautilus-gtkhash \
+	nautilus-ideviceinfo \
+	nautilus-image-converter \
+	nautilus-image-manipulator \
+	nautilus-open-terminal \
+	nautilus-pastebin \
+	nautilus-qdigidoc \
+	nautilus-script-audio-convert \
+	nautilus-scripts-manager \
+	nautilus-sendto \
+	nautilus-share \
+	nautilus-wipe \
+"
+
 # Networking libraries
 PACKAGES="$PACKAGES \
 	iproute iptables netcat-openbsd rsync tcpdump nmap \
@@ -88,4 +108,7 @@ echo
 sudo apt-get update
 sudo apt-get install aptitude
 sudo aptitude install $PACKAGES
+
+# Restart nautilus session to enable extensions
+nautilus -q
 
