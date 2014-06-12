@@ -5,6 +5,7 @@ PACKAGES="$PACKAGES \
 	build-essential \
 	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
 	gcc-arm-linux-androideabi \
+	colorgcc \
 	autoconf automake libtool \
 	cmake \
 	premake \
@@ -20,6 +21,11 @@ PACKAGES="$PACKAGES \
 	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
 	qemu-system-x86 qemu-system-arm \
 	qemu-launcher qemuctl \
+"
+
+# 32bit tools
+PACKAGES="$PACKAGES \
+	libncurses5:i386 \
 "
 
 # Text tools and utilties
@@ -45,9 +51,15 @@ PACKAGES="$PACKAGES \
 	x11-xserver-utils arandr xdotool xsel \
 	usbutils \
 	smartmontools \
+	sysfsutils \
+	tree \
+	figlet \
+	inxi \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
+# sysfsutils => systool
+# inxi => inxi -v4 -c6 OR inxi -bDc 6
 
 # GNOME utils
 PACKAGES="$PACKAGES \
@@ -75,11 +87,15 @@ PACKAGES="$PACKAGES \
 	openssh-client openssh-server \
 	msmtp mutt \
 	curl wget axel \
+	transmission \
 "
 
 # Multimedia libraries
 PACKAGES="$PACKAGES \
 	smplayer sox \
+	gimp gimp-data-extras gimp-flegita gimp-gutenprint \
+	gimp-normalmap gimp-plugin-registry gimp-texturize \
+	gcolor2 \
 "
 
 # Development libraries
@@ -90,6 +106,11 @@ PACKAGES="$PACKAGES \
 # Archive utilities
 PACKAGES="$PACKAGES \
 	atool unrar \
+"
+
+# Python packages
+PACKAGES="$PACKAGES \
+	python-matplotlib \
 "
 
 echo
