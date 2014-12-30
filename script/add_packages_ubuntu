@@ -43,10 +43,10 @@ PACKAGES="$PACKAGES \
 # Unix utils
 PACKAGES="$PACKAGES \
 	zsh \
-	aterm screen tmux \
+	aterm screen tmux terminator \
 	gawk sed moreutils \
 	ranger autojump bc \
-	htop iotop hwloc \
+	htop iotop hwloc pv \
 	powertop \
 	x11-xserver-utils arandr xdotool xsel \
 	usbutils \
@@ -55,6 +55,7 @@ PACKAGES="$PACKAGES \
 	tree \
 	figlet \
 	inxi \
+	hexdump ghex \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
