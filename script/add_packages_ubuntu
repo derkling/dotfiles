@@ -3,7 +3,8 @@
 # Hacking utilities
 PACKAGES="$PACKAGES \
 	build-essential \
-	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
+	gcc-arm-linux-gnueabi   g++-arm-linux-gnueabi   pkg-config-arm-linux-gnueabi \
+	gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf pkg-config-arm-linux-gnueabihf \
 	gcc-arm-linux-androideabi \
 	colorgcc \
 	autoconf automake libtool \
