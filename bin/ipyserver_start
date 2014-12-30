@@ -1,0 +1,10 @@
+#!/bin/bash
+
+IPADDR=$(ifconfig eth0 2>/dev/null | awk '/inet addr:/ {print $2}' | sed 's/addr://')
+
+echo 'Starting iPython Notebook server...'
+echo '  IP Address : ' $IPADDR
+echo '  Folder     : ' $(pwd)
+
+nohup /usr/local/bin/ipython notebook --ip=$IPADDR &
+
