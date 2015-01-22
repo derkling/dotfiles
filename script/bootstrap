@@ -257,6 +257,13 @@ install_dotfiles () {
 
 }
 
+setup_ranger() {
+  info 'Setup RANGER configuration'
+  [ -d ~/.config/ranger ] && rm -rf ~/.config/ranger
+  [ -d ~/.config ] || mkdir ~/.config
+  ln -s ~/.dotfiles/ranger ~/.config/ranger
+}
+
 install_packages
 setup_gitconfig
 setup_zshell
@@ -265,6 +272,7 @@ setup_fonts
 setup_vim
 setup_gpg
 setup_mutt
+setup_ranger
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]
