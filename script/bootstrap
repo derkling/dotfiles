@@ -257,6 +257,11 @@ install_dotfiles () {
 
 }
 
+setup_python() {
+  info 'installing additional python packages via PIP'
+  sudo pip install --upgrade pyzmq jinja2 tornado ipython notebooktools numpy pandas
+}
+
 setup_ranger() {
   info 'Setup RANGER configuration'
   [ -d ~/.config/ranger ] && rm -rf ~/.config/ranger
@@ -272,6 +277,7 @@ setup_fonts
 setup_vim
 setup_gpg
 setup_mutt
+setup_python
 setup_ranger
 
 # If we're on a Mac, let's install and setup homebrew.

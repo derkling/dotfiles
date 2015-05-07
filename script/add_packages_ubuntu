@@ -112,7 +112,10 @@ PACKAGES="$PACKAGES \
 
 # Python packages
 PACKAGES="$PACKAGES \
+	python-dev \
 	python-matplotlib \
+	python-scipy \
+	python-pip \
 "
 
 echo
