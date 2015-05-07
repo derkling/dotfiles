@@ -88,6 +88,7 @@ PACKAGES="$PACKAGES \
 	iproute iptables netcat-openbsd rsync tcpdump nmap \
 	openssh-client openssh-server \
 	msmtp mutt \
+	irssi \
 	curl wget axel \
 	transmission \
 "
