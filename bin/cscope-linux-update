@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Get the project tag, which should be the project top level directory
+# We assume, if not otherwise specified, that this script is run from the
+# project top level folder
+# NOTE: we should lookup parent folders for a ".git" folder and use that
+#       as project top level dir.
+PROJECT_DIR=${1:-`pwd`}
+PROJECT_TAG=$(basename $PROJECT_DIR)
+
+echo "Update CScopeDB for [$PROJECT_TAG]..."
+
+echo "Get current branch name..."
+BRANCH_TAG=$(git symbolic-ref -q HEAD)
+BRANCH_TAG=${BRANCH_TAG##refs/heads/}
+BRANCH_TAG=${BRANCH_TAG:-HEAD}
+BDIR=~/BUILDs/$PROJECT_TAG/$BRANCH_TAG
+
+if [ -d ~/BUILDs ]; then
+	echo "Setup BUILDs folder: $BDIR"
+	mkdir -p $BDIR 2>/dev/null
+else
+	BDIR='./'
+fi
+
+echo "Generate CSCope DB for this branch..."
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- O=$BDIR cscope
+
+
+# Check for CScope VIM plugin and update index if available
+[ -d ~/.cscope.vim ] || exit 0
+
+echo "Linking VIM Cscope DB to this new BD..."
+ln -fs $BDIR/cscope.out    ~/.cscope.vim/$PROJECT_TAG.db
+ln -fs $BDIR/cscope.out.in ~/.cscope.vim/$PROJECT_TAG.db.in
+ln -fs $BDIR/cscope.out.po ~/.cscope.vim/$PROJECT_TAG.db.po
+
+echo "Update Cscope DB index..."
+PROJECT_EXISTS=$(grep $PROJECT_DIR ~/.cscope.vim/index | wc -l)
+[ $PROJECT_EXISTS -eq 0 ] || exit 0
+echo "$PROJECT_DIR|$PROJECT_TAG|1" >> ~/.cscope.vim/index
+
