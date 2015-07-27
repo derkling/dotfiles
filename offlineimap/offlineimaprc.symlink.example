@@ -1,0 +1,62 @@
+[general]
+ui = ttyui
+accounts = IMAPACCOUNT
+# Controls how many accounts may be synced simultaneously
+maxsyncaccounts = 1
+
+# IMAPACCOUNT Account
+# ------------
+[Account IMAPACCOUNT]
+localrepository = IMAPACCOUNT-Local
+remoterepository = IMAPACCOUNT-Remote
+# Minutes between syncs
+autorefresh = 3
+# Number of quick-syncs between autorefreshes. Quick-syncs do not update if the
+# only changes were to IMAP flags
+quick = 10
+
+
+# IMAPACCOUNT Account - Local Folder
+# ---------------------------
+[Repository IMAPACCOUNT-Local]
+type = Maildir
+localfolders = ~/Mail/IMAPACCOUNT
+
+# IMAPACCOUNT Account - Remote folder
+# ----------------------------
+[Repository IMAPACCOUNT-Remote]
+type = IMAP
+remotehost = IMAPSERVER
+remoteuser = IMAPUSERNAME
+realdelete = no
+maxconnections = 3
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+# # Synchronize only the folders Inbox and Sent:
+# folderfilter = lambda foldername: foldername in ['Inbox', 'Sent']
+
+# Instead of closing the connection once a sync is complete, offlineimap will
+# send empty data to the server to hold the connection open. A value of 60
+# attempts to hold the connection for a minute between syncs (both quick and
+# autorefresh).This setting has no effect if autorefresh and holdconnectionopen
+# are not both set.
+keepalive = 60
+# OfflineIMAP normally closes IMAP server connections between refreshes if
+# the global option autorefresh is specified.  If you wish it to keep the
+# connection open, set this to true. This setting has no effect if autorefresh
+# is not set.
+holdconnectionopen = yes
+
+# MUTT mailboxes autogeneration
+# ------------------------------
+# Mutt cannot be simply pointed to an IMAP or maildir directory and be expected
+# to guess which subdirectories happen to be the mailboxes, yet offlineimap can
+# generate a muttrc fragment containing the mailboxes that it syncs.
+[mbnames]
+enabled = yes
+filename = ~/.mutt/mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+

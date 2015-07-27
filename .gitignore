@@ -7,3 +7,5 @@ vim/sessions
 fonts
 mutt/msmtprc.symlink
 *.pyo
+imapfilter/certificates
+imapfilter/credentials.enc

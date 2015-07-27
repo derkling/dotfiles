@@ -1,0 +1,325 @@
+
+-- The time in seconds for the program to wait for a mail server's response
+options.timeout = 120
+
+-- According to the IMAP specification, when trying to write a message to a
+-- non-existent mailbox, the server must send a hint to the client, whether it
+-- should create the mailbox and try again or not. However some IMAP servers
+-- don't follow the specification and don't send the correct response code to the
+-- client. By enabling this option the client tries to create the mailbox, despite
+-- of the server's response.
+options.create = true
+
+-- By enabling this option new mailboxes that were automatically created, get
+-- also subscribed; they are set active in order for IMAP clients to recognize
+-- them
+options.subscribe = true
+
+-- Normally, messages are marked for deletion and are actually deleted when the
+-- mailbox is closed. When this option is enabled, messages are expunged
+-- immediately after being marked deleted.
+options.expunge = true
+
+-- Passwords could be extracted during execution time from an encrypted
+-- file.
+--
+-- The file is encrypted using the openssl(1) command line tool.  For
+-- example the "passwords.txt" file:
+--
+--   secret1
+--   secret2
+--
+-- ... is encrypted and saved to a file named "passwords.enc" with the
+-- command:
+--
+--   $ openssl bf -in passwords.txt -out passwords.enc
+--
+-- The auxiliary function pipe_from() is supplied for conveniency.  The
+-- user is prompted to enter the decryption password, the file is
+-- decrypted and the account passwords are set accordingly:
+-- status, output = pipe_from('openssl bf -d -in ~/passwords.enc')
+-- _, _, password1, password2 = string.find(output, '([%w%p]+)\n([%w%p]+)')
+
+-- Read IMAP server password from encripted credentials file
+status, output = pipe_from('openssl bf -d -in ~/dotfiles/imapfilter/credentials.enc')
+_, _, passwd = string.find(output, '([%w%p]+)')
+
+-- Configure ARM server
+IMAPACCOUNT = IMAP {
+  server = "IMAPSERVER",
+  username = "IMAPUSERNAME",
+  password = passwd
+}
+
+-- Function to filter new messages from the INBOX folder
+--
+mailfilters = function()
+
+	-- Get list of new messages in INBOX
+	newm = IMAPACCOUNT["INBOX"]:is_unseen()
+
+	-- All Cambridge
+	msgs = newm:contain_field('To', 'All-Cambridge')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_cambridge"], msgs)
+
+	-- OAK related messages
+	msgs = newm:match_field('To', '.*oak.*') +
+	       newm:match_field('Cc', '.*oak.*')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_mtk_crbk"], msgs)
+
+	-- JIRA
+	msgs = newm:contain_field('Subject', 'JIRA')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_jira"], msgs)
+
+	-- Italians
+	msgs = newm:contain_field('To', 'Italians')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_italians"], msgs)
+
+	-- Linux-Eng
+	msgs = newm:contain_field('To', 'linux-eng')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_linunx_eng"], msgs)
+
+	-- Linaro SchedTools
+	msgs = newm:contain_field('To', 'sched-tools@linaro.org') +
+	       newm:contain_field('Cc', 'sched-tools@linaro.org')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/linaro_sched"], msgs)
+
+	-- LKML
+	msgs = newm:contain_field('To', 'linux-kernel@vreg.kernel.org')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/lkml_sched"], msgs)
+
+	-- Weekly Reports
+	msgs = newm:contain_field('To', 'SSG-sw@arm.com') +
+	       newm:contain_field('Subject', '[Weekly]')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["Reports"], msgs)
+
+	-- Yammer
+	msgs = newm:contain_field('To', 'noreply@yammer.com')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/social"], msgs)
+
+	-- EAS Group
+	msgs = newm:match_field('From', '.*(Randhawa|Redpath|Morten|Eggemann|Lelli).*')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_eas"], msgs)
+
+	-- SSG Group
+	msgs = newm:match_field('From', '.*(Trofimov|Garcia-Tobin|Rickards|Eljuse|Pickard|Niven).*arm.com')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_ssg"], msgs)
+
+	-- Wait for next message into INBOX
+	update = IMAPACCOUNT['INBOX']:enter_idle()
+end
+
+-- Execute in background in a loop
+become_daemon(1, mailfilters)
+
+-- -----------------------------------------------------------------------------
+-- --  Examples of Mailboxes rules                                            --
+-- -----------------------------------------------------------------------------
+--
+-- -- Get the status of a mailbox
+-- account1.INBOX:check_status()
+--
+-- -- Get all the messages in the mailbox.
+-- results = account1.INBOX:select_all()
+--
+-- -- Get newly arrived, unread messages
+-- results = account1.INBOX:is_new()
+--
+-- -- Get unseen messages with the specified "From" header.
+-- results = account1.INBOX:is_unseen() *
+--           account1.INBOX:contain_from('weekly-news@news.letter')
+--
+-- -- Copy messages between mailboxes at the same account.
+-- results:copy_messages(account1.news)
+--
+-- -- Get messages with the specified "From" header but without the
+-- -- specified "Subject" header.
+-- results = account1.INBOX:contain_from('announce@my.unix.os') -
+--           account1.INBOX:contain_subject('security advisory')
+--
+-- -- Copy messages between mailboxes at a different account.
+-- results:copy_messages(account2.security)
+--
+-- -- Get messages with any of the specified headers.
+-- results = account1.INBOX:contain_from('marketing@company.junk') +
+--           account1.INBOX:contain_from('advertising@annoying.promotion') +
+--           account1.INBOX:contain_subject('new great products')
+--
+-- -- Delete messages.
+-- results:delete_messages()
+--
+-- -- Get messages with the specified "Sender" header, which are older than
+-- -- 30 days.
+-- results = account1.INBOX:contain_field('sender', 'owner@announce-list') *
+--           account1.INBOX:is_older(30)
+--
+-- -- Move messages to the "announce" mailbox inside the "lists" folder.
+-- results:move_messages(account1['lists/announce'])
+--
+-- -- Get messages, in the "devel" mailbox inside the "lists" folder, with the
+-- -- specified "Subject" header and a size less than 50000 octets (bytes).
+-- results = account1['lists/devel']:contain_subject('[patch]') *
+--           account1['lists/devel']:is_smaller(50000)
+--
+-- -- Move messages to the "patch" mailbox.
+-- results:move_messages(account2.patch)
+--
+-- -- Get recent, unseen messages, that have either one of the specified
+-- -- "From" headers, but do not have the specified pattern in the body of
+-- -- the message.
+-- results = ( account1.INBOX:is_recent() *
+--             account1.INBOX:is_unseen() *
+--             ( account1.INBOX:contain_from('tux@penguin.land') +
+--               account1.INBOX:contain_from('beastie@daemon.land') ) ) -
+--           account1.INBOX:match_body('.*all.work.and.no.play.*')
+--
+-- -- Mark messages as important.
+-- results:mark_flagged()
+--
+-- -- Get all messages in two mailboxes residing in the same server.
+-- results = account1.news:select_all() +
+--           account1.security:select_all()
+--
+-- -- Mark messages as seen.
+-- results:mark_seen()
+--
+-- -- Get recent messages in two mailboxes residing in different servers.
+-- results = account1.INBOX:is_recent() +
+--           account2.INBOX:is_recent()
+--
+-- -- Flag messages as seen and important.
+-- results:add_flags({ '\\Seen', '\\Flagged' })
+--
+-- -- Get unseen messages.
+-- results = account1.INBOX:is_unseen()
+--
+-- -- From the messages that were unseen, match only those with the specified
+-- -- regular expression in the header.
+-- newresults = results:match_header('^.+MailScanner.*Check: [Ss]pam$')
+--
+-- -- Delete those messages.
+-- newresults:delete_messages()
+--
+--
+-- -----------------------------------------------------------------------------
+-- -- Other  examples on how IMAPFilter can be extended using                 --
+-- -- the Lua programming language.                                           --
+-- -----------------------------------------------------------------------------
+--
+--
+-- -- IMAPFilter can be detached from the controlling terminal and run in
+-- -- the background as a system daemon.
+-- --
+-- -- The auxiliary function become_daemon() is supplied for conveniency.
+-- -- The following example puts imapfilter in the background and runs
+-- -- endlessly, executing the commands in the forever() function and
+-- -- sleeping for 600 seconds between intervals:
+--
+-- function forever()
+--     results = myaccount.mymailbox:is_old()
+--     results:move_messages(myaccount.myothermailbox)
+-- end
+--
+-- become_daemon(600, forever)
+--
+--
+-- -- IMAPFilter can take advantage of all those filtering utilities that
+-- -- are available and use a wide range of heuristic tests, text analysis,
+-- -- internet-based realtime blacklists, advanced learning algorithms,
+-- -- etc. to classify mail.  IMAPFilter can pipe a message to a program
+-- -- and act on the message based on the program's exit status.
+-- --
+-- -- The auxiliary function pipe_to() is supplied for conveniency.  For
+-- -- example if there was a utility named "bayesian-spam-filter", which
+-- -- returned 1 when it considered the message "spam" and 0 otherwise:
+--
+-- all = myaccount.mymailbox:select_all()
+--
+-- results = Set {}
+-- for _, mesg in ipairs(all) do
+--     mbox, uid = table.unpack(mesg)
+--     text = mbox[uid]:fetch_message()
+--     if (pipe_to('bayesian-spam-filter', text) == 1) then
+--         table.insert(results, mesg)
+--     end
+-- end
+--
+-- results:delete_messages()
+--
+--
+-- -- One might want to run the bayesian filter only in those parts (attachments)
+-- -- of the message that are of type text/plain and smaller than 1024 bytes.
+-- -- This is possible using the fetch_structure() and fetch_part() functions:
+--
+-- all = myaccount.mymailbox:select_all()
+--
+-- results = Set {}
+-- for _, mesg in ipairs(all) do
+--     mbox, uid = table.unpack(mesg)
+--     structure = mbox[uid]:fetch_structure()
+--     for partid, partinf in pairs(structure) do
+--         if partinf.type:lower() == 'text/plain' and partinf.size < 1024 then
+--             part = mbox[uid]:fetch_part(partid)
+--             if (pipe_to('bayesian-spam-filter', part) == 1) then
+--                 table.insert(results, mesg)
+--                 break
+--             end
+--         end
+--     end
+-- end
+--
+-- results:delete_messages()
+--
+--
+-- -- Messages can be appended to a mailbox.  One can fetch a message from a
+-- -- mailbox, optionally process it, and then upload it to the same or different
+-- -- mailbox, at the same or different mail servers.  In the following example a
+-- -- header field is added to all messages, and the processed messages are then
+-- -- appended to a different mailbox.
+--
+-- all = myaccount.mymailbox:select_all()
+--
+-- for _, mesg in ipairs(all) do
+--     mbox, uid = table.unpack(mesg)
+--     header = mbox[uid]:fetch_header()
+--     body = mbox[uid]:fetch_body()
+--     message = header:gsub('[\r\n]+$', '\r\n') ..
+--               'My-Header: My-Content\r\n' .. '\r\n' .. body
+--     myaccount.myothermaibox:append_message(message)
+-- end
+--
+--
+-- -- Passwords could be extracted during execution time from an encrypted
+-- -- file.
+-- --
+-- -- The file is encrypted using the openssl(1) command line tool.  For
+-- -- example the "passwords.txt" file:
+-- --
+-- --   secret1
+-- --   secret2
+-- --
+-- -- ... is encrypted and saved to a file named "passwords.enc" with the
+-- -- command:
+-- --
+-- --   $ openssl bf -in passwords.txt -out passwords.enc
+-- --
+-- -- The auxiliary function pipe_from() is supplied for conveniency.  The
+-- -- user is prompted to enter the decryption password, the file is
+-- -- decrypted and the account passwords are set accordingly:
+--
+-- status, output = pipe_from('openssl bf -d -in ~/passwords.enc')
+--
+-- _, _, password1, password2 = string.find(output, '([%w%p]+)\n([%w%p]+)')
+--
+-- account1 = IMAP {
+--     server = 'imap1.mail.server',
+--     username = 'user1',
+--     password = password1
+-- }
+--
+-- account2 = IMAP {
+--     server = 'imap2.mail.server',
+--     username = 'user2',
+--     password = password2
+-- }
+--

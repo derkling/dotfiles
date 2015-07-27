@@ -181,6 +181,37 @@ setup_mutt() {
   success 'MUTT'
 }
 
+setup_imap() {
+
+  info 'Setup IMAP Filter\n'
+  ln -fs $DOTFILES_ROOT/imapfilter ~/.imapfilter
+
+  user ' - What is the account name?'
+  read -e imap_account
+  user ' - What is your IMAP server?'
+  read -e imap_server
+  user ' - What is your IMAP username?'
+  read -e imap_username
+  user ' - What is your IMAP password?'
+  read -e imap_password
+
+  sed -e "s/IMAPACCOUNT/$imap_account/g" \
+      -e "s/IMAPSERVER/$imap_server/g" \
+      -e "s/IMAPUSERNAME/$imap_username/g" \
+      imapfilter/config.lua.example > imapfilter/config.lua
+
+  echo > imapfilter/credentials.txt
+  openssl bf -in imapfilter/credentials.txt -out imapfilter/credentials.enc
+  shred -u imapfilter/credentials.txt
+
+  success 'IMAPFilter'
+
+  info 'Setup Offiline IMAP\n'
+  sed -e "s/IMAPACCOUNT/$imap_account/g" \
+      offlineimap/offlineimaprc.symlink.example > offlineimaprc.symlink
+  success 'OfflineIMAP'
+}
+
 setup_irssi() {
   info 'Setup IRSSI configuration'
   [ -d ~/.irssi ] && rm -rf ~/.irssi
@@ -282,6 +313,7 @@ setup_fonts
 setup_vim
 setup_gpg
 setup_mutt
+setup_imap
 setup_irssi
 setup_python
 setup_ranger
