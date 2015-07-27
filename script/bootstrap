@@ -296,7 +296,7 @@ install_dotfiles () {
 
 setup_python() {
   info 'installing additional python packages via PIP'
-  sudo pip install --upgrade pyzmq jinja2 tornado ipython notebooktools numpy pandas
+  sudo pip install --upgrade pyzmq jinja2 tornado ipython notebooktools numpy pandas markupsafe jsonschema
 }
 
 setup_ranger() {
