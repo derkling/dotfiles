@@ -15,6 +15,7 @@ PACKAGES="$PACKAGES \
 	byacc flex bison \
 	ltrace strace \
 	git gitk git-gui tig git-flow \
+	cscope \
 	mercurial \
 	intel-gpu-tools \
 	python \
@@ -57,6 +58,7 @@ PACKAGES="$PACKAGES \
 	figlet \
 	inxi \
 	hexdump ghex \
+	ttyrec \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
@@ -91,7 +93,9 @@ PACKAGES="$PACKAGES \
 	irssi \
 	curl wget axel \
 	transmission \
+	uml-utilities\
 "
+# uml-utilities => tunctl
 
 # Multimedia libraries
 PACKAGES="$PACKAGES \
