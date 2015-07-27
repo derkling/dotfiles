@@ -184,7 +184,7 @@ setup_mutt() {
 setup_irssi() {
   info 'Setup IRSSI configuration'
   [ -d ~/.irssi ] && rm -rf ~/.irssi
-  ln -fs ~/.dotfiles/irssi ~/.irssi
+  ln -fs ~/dotfiles/irssi ~/.irssi
 }
 
 link_files () {
@@ -259,7 +259,7 @@ install_dotfiles () {
   done
 
   # Symlink dotfile root to home directory
-  [ -L ~/.dotfiles ] || ln -fs $DOTFILES_ROOT ~/.dotfiles
+  [ -L ~/dotfiles ] || ln -fs $DOTFILES_ROOT ~/dotfiles
 
 }
 
@@ -272,13 +272,12 @@ setup_ranger() {
   info 'Setup RANGER configuration'
   [ -d ~/.config/ranger ] && rm -rf ~/.config/ranger
   [ -d ~/.config ] || mkdir ~/.config
-  ln -s ~/.dotfiles/ranger ~/.config/ranger
+  ln -s ~/dotfiles/ranger ~/.config/ranger
 }
 
 install_packages
 setup_gitconfig
 setup_zshell
-install_dotfiles
 setup_fonts
 setup_vim
 setup_gpg
@@ -286,6 +285,7 @@ setup_mutt
 setup_irssi
 setup_python
 setup_ranger
+install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]
