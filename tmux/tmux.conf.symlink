@@ -33,6 +33,11 @@ set-option -g mouse-select-window on
 set-option -g mouse-resize-pane on
 set-window-option -g mode-mouse on
 
+# Limit the amount of text that is printed in the console to prevent
+# tmux from freezing when seeing tons of output
+setw -g c0-change-trigger 10
+setw -g c0-change-interval 250
+
 # Toggle mouse on
 bind M \
     set -g mode-mouse on \;\
