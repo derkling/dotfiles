@@ -118,6 +118,11 @@ cd $DOTFILES_ROOT
 ln -fs $DOTFILES_ROOT/vim ~/.vim
 vim +BundleInstall +qall
 success 'VIM'
+info 'Build CommandT binary component'
+cd $DOTFILES_ROOT/vim/bundle/command-t/ruby/command-t
+ruby extconf.rb
+make
+success 'VIM'
 }
 
 setup_gpg() {

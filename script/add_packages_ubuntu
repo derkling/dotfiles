@@ -19,6 +19,7 @@ PACKAGES="$PACKAGES \
 	mercurial \
 	intel-gpu-tools \
 	python \
+	ruby ruby-dev \
 	linaro-boot-utils linaro-image-tools \
 	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
 	qemu-system-x86 qemu-system-arm \
@@ -32,7 +33,7 @@ PACKAGES="$PACKAGES \
 
 # Text tools and utilties
 PACKAGES="$PACKAGES \
-	vim \
+	vim-nox \
 	texinfo \
 	texlive-latex-base texlive-latex-recommended texlive-latex-extra \
 	texlive-fonts-recommended \
