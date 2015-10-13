@@ -11,3 +11,8 @@ if [ -x /usr/bin/lesspipe ]; then
   [ -n "$BASH_VERSION" ] && \
 	  "$(SHELL=/bin/sh lesspipe)" #assume Bash
   fi
+
+# Disable default mapping of Ctrs+S to the old-fashioned XON/XOFF flow control
+# This mapping is used by the CommandT VIM plugin to open a selection in an
+# horizontal split
+stty -ixon -ixoff
