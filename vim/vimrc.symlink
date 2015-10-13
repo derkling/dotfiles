@@ -147,8 +147,15 @@ vnoremap // :TComment<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Command-T
-"Bundle "wincent/Command-T"
-"let g:CommandTMatchWindowAtTop=1 " show window at top
+Bundle "wincent/Command-T"
+let g:CommandTMatchWindowAtTop=1 " show window at top
+" set the PmenuSel color to be visible with black background
+highlight PmenuSel ctermfg=black ctermbg=white
+" Setup mappings for CommandT
+nnoremap <silent> <leader>zx :CommandT<CR>
+nnoremap <silent> <leader>zb :CommandTBuffer<CR>
+nnoremap <silent> <leader>zm :CommandTMRU<CR>
+nnoremap <silent> <leader>zt :CommandTTag<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
