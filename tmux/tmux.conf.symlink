@@ -4,7 +4,7 @@ setw -g mode-keys vi
 # remap prefix to Control + a
 set -g prefix C-a
 unbind C-b
-bind C-a send-prefix
+bind a send-prefix
 
 # force a reload of the config file
 unbind r
