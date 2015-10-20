@@ -6,6 +6,12 @@ servers = (
     autoconnect = "yes";
   },
   {
+    address = "holmes.freenode.net";
+    chatnet = "FreeNode";
+    port = "6667";
+    autoconnect = "yes";
+  },
+  {
     address = "irc.oftc.net";
     chatnet = "OFTC";
     port = "6667";
@@ -30,13 +36,24 @@ chatnets = {
     max_msgs = "3";
     max_whois = "30";
   };
-  PDSW = { type = "IRC"; nick = "derking"; realname = "Patrick Bellasi"; };
-  SEKRIT = { type = "IRC"; nick = "derking"; realname = "Patrick Bellasi"; };
+  FreeNode = {
+    type = "IRC";
+    nick = "derkling";
+    realname = "Patrick Bellasi";
+    max_kicks = "1";
+    max_msgs = "3";
+    max_whois = "30";
+  };
+  PDSW = { type = "IRC"; nick = "derkling"; realname = "Patrick Bellasi"; };
+  SEKRIT = { type = "IRC"; nick = "derkling"; realname = "Patrick Bellasi"; };
 };
 
 channels = (
   { name = "#kernel"; chatnet = "SEKRIT"; autojoin = "yes"; },
   { name = "#linux-rt"; chatnet = "OFTC"; autojoin = "yes"; },
+  { name = "#linaro"; chatnet = "FreeNode"; autojoin = "yes"; },
+  { name = "#linaro-android"; chatnet = "FreeNode"; autojoin = "yes"; },
+  { name = "#linaro-kernel"; chatnet = "FreeNode"; autojoin = "yes"; },
   { name = "#pdsw"; chatnet = "PDSW"; autojoin = "yes"; },
   { name = "#power"; chatnet = "PDSW"; autojoin = "yes"; }
 );
@@ -239,6 +256,36 @@ windows = {
         chat_type = "IRC";
         name = "#pdsw";
         tag = "PDSW";
+      }
+    );
+  };
+  5 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#linaro-kernel";
+        tag = "FreeNode";
+      }
+    );
+  };
+  6 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#linaro-android";
+        tag = "FreeNode";
+      }
+    );
+  };
+  7 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#linaro";
+        tag = "FreeNode";
       }
     );
   };
