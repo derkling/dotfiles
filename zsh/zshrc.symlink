@@ -96,7 +96,7 @@ ZSH_THEME="blinks"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump battery cmake command-not-found debian dircycle encode64 git git-extra git-flow screen tmux)
+plugins=(autojump battery cmake command-not-found debian dircycle encode64 git git-extra git-flow screen tmux web-search)
 
 source $ZSH/oh-my-zsh.sh
 
