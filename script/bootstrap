@@ -312,6 +312,7 @@ setup_ranger() {
 }
 
 install_packages
+install_dotfiles
 setup_gitconfig
 setup_zshell
 setup_fonts
