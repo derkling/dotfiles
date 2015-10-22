@@ -4,7 +4,7 @@
 ################################################################################
 
 # shortcut to this dotfiles path is $ZSH
-export ZSH=$HOME/.dotfiles
+export ZSH=$HOME/dotfiles
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/Coding
@@ -104,4 +104,4 @@ source $ZSH/oh-my-zsh.sh
 # Third - Point ZSH to my dotfile folder
 ################################################################################
 
-export ZSH=$HOME/.dotfiles
+export ZSH=$HOME/dotfiles
