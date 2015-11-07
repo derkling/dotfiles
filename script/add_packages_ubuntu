@@ -3,13 +3,23 @@
 # Hacking utilities
 PACKAGES="$PACKAGES \
 	build-essential \
-	gcc-arm-linux-gnueabi   g++-arm-linux-gnueabi   pkg-config-arm-linux-gnueabi \
-	gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf pkg-config-arm-linux-gnueabihf \
+	\
+	cpp-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-aarch64-linux-gnu \
+	pkg-config-aarch64-linux-gnu \
+	\
+	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi gcc-arm-linux-gnueabi \
+	pkg-config-arm-linux-gnueabi \
+	\
+	gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf \
+	pkg-config-arm-linux-gnueabihf \
+	\
 	gcc-arm-linux-androideabi \
+	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
+	\
 	colorgcc \
 	autoconf automake libtool \
 	cmake \
-	premake \
+	premake4 \
 	ccache \
 	doxygen graphviz \
 	byacc flex bison \
@@ -21,8 +31,8 @@ PACKAGES="$PACKAGES \
 	python \
 	ruby ruby-dev \
 	linaro-boot-utils linaro-image-tools \
-	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
-	qemu-system-x86 qemu-system-arm \
+	\
+	qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
 	qemu-launcher qemuctl \
 "
 
