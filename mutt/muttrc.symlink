@@ -61,9 +61,27 @@ set edit_headers= yes
 
 ################################################################################
 # Other TUI settings
+
+# Use threaded conversations
+set sort = "threads"
+set sort_aux = "reverse-last-date-received"
+
+# Make use of the "In-Reply-To" and "References" fields when soring by message
+# threads. Otherwise, "pseudo threads" are created by grouping messages with
+# the same subject.
+set strict_threads = "yes"
+
+# Do not collapse a thread if it contains any unread messages
+unset collapse_unread
+
+# How to sort entries in the file browser
+set sort_browser = "alpha"
+# set sort_browser = "date"
+# set sort_browser = "size"
+
 set markers			# mark wrapped lines of text in the pager with a +
 set smart_wrap			# Don't wrap mid-word
-set pager_context = 5		# Retain 5 lines of previous page when scrolling.
+set pager_context = 10		# Retain 10 lines of previous page when scrolling.
 set pager_index_lines = 10	# Keep 10 lines index in pager view
 set status_on_top		# Status bar on top.
 push <show-version>		# Shows mutt version at startup
@@ -74,7 +92,7 @@ source ~/dotfiles/mutt/vombatidae.mutt
 ################################################################################
 # Sidebar settings
 # set up the sidebar, default not visible
-set sidebar_width=24
+set sidebar_width=36
 set sidebar_visible=yes
 set sidebar_delim='|'
 set sidebar_sort=yes
