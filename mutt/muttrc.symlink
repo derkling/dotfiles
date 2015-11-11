@@ -133,6 +133,14 @@ macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches
 # set alias_file = ~/mail/mutt_aliases # In their own file
 # source ~/mail/mutt_aliases           # Source them
 # set sort_alias=alias                 # Sort alphabetically
+################################################################################
+# Custom Commands
+
+# Limit visualization to current thread or all threads
+# http://thetarpit.org/posts/y00/00a-conversation-view-in-mutt.html
+macro index,pager \CL <tag-thread><limit>~T<enter><tag-thread> "show only current thread"
+macro index,pager \CH <limit>all<enter> "show everything"
+
 
 ################################################################################
 # MailCap Configuration
