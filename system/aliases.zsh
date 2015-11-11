@@ -11,8 +11,10 @@ if [ "$TERM" != "dumb" ] && [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-if [ "$TERM"=="xterm" ]; then
-	export TERM="xterm-256color"
+if [ "x$TMUX_PANE" != "x" ]; then
+    export TERM="screen-256color"
+elif [ -n "$DISPLAY" -a "$TERM"=="xterm" ]; then
+    export TERM="xterm-256color"
 fi
 
 if $(grc &>/dev/null)
