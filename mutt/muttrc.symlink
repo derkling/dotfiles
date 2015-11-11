@@ -141,6 +141,12 @@ macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches
 macro index,pager \CL <tag-thread><limit>~T<enter><tag-thread> "show only current thread"
 macro index,pager \CH <limit>all<enter> "show everything"
 
+# Collaps current or all threads
+# note: with 'strict_threads' enabled all threads with an unread messages will
+#       not be collapsed
+bind index - collapse-thread
+bind index _ collapse-all
+
 
 ################################################################################
 # MailCap Configuration
