@@ -79,6 +79,11 @@ set sort_browser = "alpha"
 # set sort_browser = "date"
 # set sort_browser = "size"
 
+# Headers to show and their order
+ignore *
+unignore Date: From: To: Cc: Subject: Message-ID:
+hdr_order Date: From: To: Cc: Subject: Message-ID:
+
 set markers			# mark wrapped lines of text in the pager with a +
 set smart_wrap			# Don't wrap mid-word
 set pager_context = 10		# Retain 10 lines of previous page when scrolling.
@@ -123,13 +128,6 @@ bind index B bounce-message
 # Save tagged emails into /tmp/incoming folder
 macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches into ~/incoming/*.mbox"
 
-# #======================================================#
-# # What to show and order of headers
-# ignore *
-# unignore Date: From: User-Agent: X-Mailer X-Operating-System To: \
-#          Cc: Reply-To: Subject: Mail-Followup-To:
-# hdr_order Date: From: User-Agent: X-Mailer X-Operating-System To: \
-#         Cc: Reply-To: Subject: Mail-Followup-To:
 # #======================================================#
 # # Aliases
 # set alias_file = ~/mail/mutt_aliases # In their own file
