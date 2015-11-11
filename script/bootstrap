@@ -141,10 +141,21 @@ setup_gpg() {
 setup_mutt() {
   info 'Setup MUTT\n'
 
-  user ' - What is your GMail real name?'
-  read -e gmail_realname
-  user ' - What is your GMail username?'
-  read -e gmail_username
+  # Setup your accounts
+  info 'Setup MUTT configuration...'
+  if [ -z $EDITOR ]; then
+    warn ' Please, edit [~/dotfiles/mutt/muttrc.symlink] to setup your\n'
+    warn ' incoming/outgoing server accounts'
+    warn ' Press a key once done... '
+    read
+  else
+    warn ' Press a key to edit you MUTT configuration '
+    read -n 1
+    $EDITOR ~/dotfiles/mutt/muttrc.symlink
+  fi
+
+  # Setup your signature
+  info 'Setup Signature...'
   if [ -z $EDITOR ]; then
     warn ' Please, edit [~/dotfiles/mutt/signature] to setup your signature!\n'
     warn ' Press a key once done... '
@@ -156,33 +167,11 @@ setup_mutt() {
   fi
   success 'Using email signature:'
   cat ~/dotfiles/mutt/signature
-  user ' - What is your GMail password?'
-  read -e gmail_password
-  info 'Available GPG IDs:'
-  echo
-  gpg -K
-  user ' - What is the GPG ID to use for GMail passowrd protection?'
-  read -e gpg_id
 
   info 'Setup folders...'
   umask 077
-  mkdir -p ~/.mutt/msmtp_queues
   mkdir -p ~/.mutt/cache
 
-  info 'Setup MSMTP client...'
-  sed -e "s/GMAIL_USERNAME/$gmail_username/g" \
-    ~/dotfiles/mutt/msmtprc.symlink.example > ~/dotfiles/mutt/msmtprc.symlink
-  echo "$gmail_password"  > ~/.mutt/gmail_$gmail_username
-  gpg -e -r "$gpg_id" ~/.mutt/gmail_$gmail_username
-  shred -xu ~/.mutt/gmail_$gmail_username
-
-  info 'Setup credentials...'
-  echo "set my_gmail_realname = \"$gmail_realname\""  > ~/.mutt/gmail_credentials
-  echo "set my_gmail_username = \"$gmail_username\"" >> ~/.mutt/gmail_credentials
-  echo "set my_gmail_password = \"$gmail_password\"" >> ~/.mutt/gmail_credentials
-
-  gpg -e -r "$gpg_id" ~/.mutt/gmail_credentials
-  shred -xu ~/.mutt/gmail_credentials
   success 'MUTT'
 }
 

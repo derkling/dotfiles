@@ -1,57 +1,83 @@
 
 ################################################################################
-# Loading GPG-Protected GMail user credentials
-source "gpg -dq ~/.mutt/gmail_credentials.gpg |"
-
-################################################################################
 # User details
-set realname	  = "$my_gmail_realname"
-set from	  = "$my_gmail_username@gmail.com"
+set realname	  = "FIRST LAST"
+set from	  = "FIRST.LAST@SERVER.COM"
 set signature	  = "~/dotfiles/mutt/signature"
 set use_from 	  = yes
 set envelope_from = yes
 
 ################################################################################
-# Native IMAP settings
-set imap_user	= "$my_gmail_username@gmail.com"
-set imap_pass	= "$my_gmail_password"
-set folder	= "imaps://$my_gmail_username@imap.gmail.com:993"
-set spoolfile	= +INBOX
-mailboxes	= +INBOX
-# Store message headers locally to speed things up.
-set header_cache = ~/.mutt/cache
-# Sent messages
-# set record 	= "+[Gmail]/Sent Mail"
-# Postponed messages
-set postponed 	= "+[Gmail]/Drafts"
-# Deleted messages
-set trash 	= "+[Gmail]/All Mail"
-# Allow Mutt to open new imap connection automatically.
-unset imap_passive
-# Keep IMAP connection alive by polling intermittently (time in seconds).
-set imap_keepalive = 300
-# How often to check for new mail (time in seconds).
-set mail_check 	= 120
-
-# ################################################################################
-# # Native SMTP settings
-# # Gmail saves automatically sent e-mail to +[Gmail]/Sent. This is required to
-# # avoid duplications
-# set smtp_url	  = "smtps://$my_gmail_username@smtp.gmail.com"
-# set smtp_pass	  = "$my_gmail_password"
-# set ssl_force_tls = yes
-# set ssl_starttls  = yes
-# # GMail already copies emails into "[Gmail]/Sent Mail", without this a copy
-# # for each sent email will be present in this folder
-# unset record
+# Incoming Emails
+################################################################################
+#
+# Supported configurations:
+# A) using MUTT internal IMAP client
+# B) using local Mailbox synchronized via OfflineIMAP
 
 ################################################################################
-# Send email using local MSMTP server
-set mbox_type	= Maildir
-set sendmail	= ~/dotfiles/mutt/bin/msmtp-enqueue.sh
-# GMail already copies emails into "[Gmail]/Sent Mail", without this a copy
-# for each sent email will be present in this folder
-unset record
+# A) Native IMAP settings
+#
+# set imap_user	= "USERNAME"
+# set folder	= "imap://USER@SERVER.COM:143"
+# set spoolfile	= "+Inbox"
+# set record 	= "=Sent Items"
+# set postponed = "=Drafts"
+#
+# set header_cache     = ~/.mutt/cache
+# set message_cachedir = ~/.mutt/cache/bodies
+# set certificate_file = ~/.mutt/certificates
+#
+# # Allow Mutt to open new imap connection automatically.
+# unset imap_passive
+# # Keep IMAP connection alive by polling intermittently (time in seconds).
+# set imap_keepalive = 60
+# # How often to check for new mail (time in seconds).
+# set mail_check = 60
+# # Avoid IMAP mailbox closing
+# set imap_idle
+# set timeout = 15
+#
+# # Setup automatic notification for new email
+# mailboxes =Inbox \
+#           ='Sent Items'
+
+################################################################################
+# B) OfflineImap configuration
+set folder = "~/Mail"
+source ~/.mutt/mailboxes
+set spoolfile = "+ACCOUNT1/INBOX"
+set postponed = "+ACCOUNT1/Drafts"
+set record    = "+ACCOUNT1/Sent\ Items"
+
+
+################################################################################
+# Outgoing Emails
+################################################################################
+#
+# Supported configurations:
+# A) using MUTT internal SMTP client
+# B) using local SMTP server
+
+################################################################################
+# A) Native SMTP clients
+set smtp_url	  = "smtp://USERNAME@SERVER.COM:25"
+
+# ################################################################################
+# B) Local MSMTP server
+# set mbox_type	= Maildir
+# set sendmail	= ~/dotfiles/mutt/bin/msmtp-enqueue.sh
+
+
+################################################################################
+# Global outgoing mails settings
+
+# Keep a copy of sent messages in the current folder
+folder-hook . 'set record="^"'
+# GMail already copies emails into "[Gmail]/Sent Mail", unset record to
+# avoid a copy for each sent email in the "Sent Mail" folderr
+# unset record
+
 
 ################################################################################
 # Editor
