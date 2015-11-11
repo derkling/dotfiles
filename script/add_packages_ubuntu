@@ -103,6 +103,7 @@ PACKAGES="$PACKAGES \
 	msmtp mutt offlineimap imapfilter \
 	irssi \
 	curl wget axel \
+	links2 \
 	transmission \
 	uml-utilities\
 "

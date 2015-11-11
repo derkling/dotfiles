@@ -118,3 +118,7 @@ macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches
 # source ~/mail/mutt_aliases           # Source them
 # set sort_alias=alias                 # Sort alphabetically
 
+################################################################################
+# MailCap Configuration
+set mailcap_path = ~/dotfiles/mutt/mailcap
+auto_view text/html
