@@ -15,8 +15,7 @@ set envelope_from = yes
 # A) using MUTT internal IMAP client
 # B) using local Mailbox synchronized via OfflineIMAP
 
-################################################################################
-# A) Native IMAP settings
+# A) Native IMAP settings ------------------------------------------------------
 #
 # set imap_user	= "USERNAME"
 # set folder	= "imap://USER@SERVER.COM:143"
@@ -42,13 +41,24 @@ set envelope_from = yes
 # mailboxes =Inbox \
 #           ='Sent Items'
 
-################################################################################
-# B) OfflineImap configuration
-set folder = "~/Mail"
-source ~/.mutt/mailboxes
-set spoolfile = "+ACCOUNT1/INBOX"
-set postponed = "+ACCOUNT1/Drafts"
-set record    = "+ACCOUNT1/Sent\ Items"
+# B) OfflineImap configuration -------------------------------------------------
+set mbox_type        = Maildir                # mailbox type
+
+set folder           = "~/Mail"               # Mailbox location
+set spoolfile        = "+Work/INBOX"           # default inbox
+set postponed        = "+Work/Drafts"
+set record           = "+Work/Sent\ Items"
+
+# Global incoming settings -----------------------------------------------------
+
+set timeout    = 3       # idle time before scanning
+set mail_check = 0       # minimum time between scans
+set wait_key   = no      # shut up, mutt
+unset move               # gmail does that
+# set delete               # purge deleted messages without asking
+# unset confirmappend      # don't ask when appending to exsting mailbox
+# unset quit               # don't ask to quit mutt
+set mark_old             # read/new is good enough for me
 
 
 ################################################################################
@@ -59,122 +69,110 @@ set record    = "+ACCOUNT1/Sent\ Items"
 # A) using MUTT internal SMTP client
 # B) using local SMTP server
 
-################################################################################
-# A) Native SMTP clients
-set smtp_url	  = "smtp://USERNAME@SERVER.COM:25"
+# A) Native SMTP clients -------------------------------------------------------
+set smtp_url	  = "smtp://USERNAME@SERVER.COM:PORT"
 
-# ################################################################################
-# B) Local MSMTP server
+# B) Local MSMTP server --------------------------------------------------------
 # set mbox_type	= Maildir
 # set sendmail	= ~/dotfiles/mutt/bin/msmtp-enqueue.sh
 
+# Global outgoing mails settings -----------------------------------------------
 
-################################################################################
-# Global outgoing mails settings
 
-# Keep a copy of sent messages in the current folder
-folder-hook . 'set record="^"'
-# GMail already copies emails into "[Gmail]/Sent Mail", unset record to
-# avoid a copy for each sent email in the "Sent Mail" folderr
+# GMail already copies emails into "[Gmail]/Sent Mail"
+# If GMail is used: unset record to avoid a copy for each sent email in the
+# "Sent Mail" folder
 # unset record
 
 
 ################################################################################
-# Editor
-set editor	= "vim -c 'set tw=70 et' '+/^$' "
-# See headers when editing
-set edit_headers= yes
-
+# General UI Settings
 ################################################################################
-# Other TUI settings
 
-# Use threaded conversations
-set sort = "threads"
-set sort_aux = "reverse-last-date-received"
-
-# Make use of the "In-Reply-To" and "References" fields when soring by message
-# threads. Otherwise, "pseudo threads" are created by grouping messages with
-# the same subject.
-set strict_threads = "yes"
-
-# Do not collapse a thread if it contains any unread messages
-unset collapse_unread
-
-# How to sort entries in the file browser
-set sort_browser = "alpha"
-# set sort_browser = "date"
-# set sort_browser = "size"
-
-# Headers to show and their order
-ignore *
-unignore Date: From: To: Cc: Subject: Message-ID:
-hdr_order Date: From: To: Cc: Subject: Message-ID:
-
-set markers			# mark wrapped lines of text in the pager with a +
-set smart_wrap			# Don't wrap mid-word
-set pager_context = 10		# Retain 10 lines of previous page when scrolling.
-set pager_index_lines = 10	# Keep 10 lines index in pager view
-set status_on_top		# Status bar on top.
-push <show-version>		# Shows mutt version at startup
-# Wombat-like Color Scheme
-source ~/dotfiles/mutt/vombatidae.mutt
+push <show-version>                            # Shows mutt version at startup
+source ~/dotfiles/mutt/vombatidae.mutt         # Wombat-like Color Scheme
 
 
 ################################################################################
 # Sidebar settings
-# set up the sidebar, default not visible
-set sidebar_width=36
-set sidebar_visible=yes
-set sidebar_delim='|'
-set sidebar_sort=yes
+################################################################################
 
+# Style and colors -------------------------------------------------------------
+set sidebar_visible = yes
+set sidebar_width   = 36
+set sidebar_delim   = ' |'
+set sidebar_sort    = yes
 # color of folders with new mail
 color sidebar_new yellow default
+# Folders selection shortcuts --------------------------------------------------
+bind index \CP sidebar-prev    # prev folder
+bind index \CN sidebar-next    # next folder
+bind index \CO sidebar-open    # open folder
+bind pager \CP sidebar-prev    # prev folder
+bind pager \CN sidebar-next    # next folder
+bind pager \CO sidebar-open    # open folder
 
-# ctrl-n, ctrl-p to select next, prev folder
-# ctrl-o to open selected folder
-bind index \CP sidebar-prev
-bind index \CN sidebar-next
-bind index \CO sidebar-open
-bind pager \CP sidebar-prev
-bind pager \CN sidebar-next
-bind pager \CO sidebar-open
 
-# I don’t need these. just for documentation purposes. See below.
-# sidebar-scroll-up
-# sidebar-scroll-down
+################################################################################
+# Status bar
+################################################################################
 
-# b toggles sidebar visibility
-macro index b ‘<enter-command>toggle sidebar_visible<enter><refresh>’
-macro pager b ‘<enter-command>toggle sidebar_visible<enter><redraw-screen>’
+# set status_on_top   # Status bar on top.
+set status_chars  = " *%A"
 
-# Remap bounce-message function to “B”
-bind index B bounce-message
+
+################################################################################
+# Index Configuration
+################################################################################
+
+# View Options ---------------------------------
+set sort         = threads                     # like gmail
+set sort_aux     = reverse-last-date-received  # like gmail
+set strict_threads = "yes"                     # threads based on "In-Reply-To" and "References"
+set uncollapse_jump                            # jump to next unread in uncollapsed threads
+unset collapse_unread                          # do not collapse on unread messages
+
+# How to sort entries in the file browser
+set sort_browser = "alpha"                     # sort files by name
+# set sort_browser = "date"
+# set sort_browser = "size"
+
+
+
 
 # Save tagged emails into /tmp/incoming folder
 macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches into ~/incoming/*.mbox"
 
-# #======================================================#
-# # Aliases
-# set alias_file = ~/mail/mutt_aliases # In their own file
-# source ~/mail/mutt_aliases           # Source them
-# set sort_alias=alias                 # Sort alphabetically
 ################################################################################
-# Custom Commands
+# Pager Settings
+################################################################################
 
-# Limit visualization to current thread or all threads
-# http://thetarpit.org/posts/y00/00a-conversation-view-in-mutt.html
-macro index,pager \CL <tag-thread><limit>~T<enter><tag-thread> "show only current thread"
-macro index,pager \CH <limit>all<enter> "show everything"
+# View Options -----------------------------------------------------------------
+set markers			# mark wrapped lines of text in the pager with a +
+set smart_wrap			# Don't wrap mid-word
+set pager_context = 10		# Retain 10 lines of previous page when scrolling.
+set pager_index_lines = 10	# Keep 10 lines index in pager view
 
-# Collaps current or all threads
-# note: with 'strict_threads' enabled all threads with an unread messages will
-#       not be collapsed
-bind index - collapse-thread
-bind index _ collapse-all
+ignore *                                            # ignore all headers
+unignore  From: To: Cc: Date: Subject: Message-ID:  # show only these
+hdr_order From: To: Cc: Date: Subject: Message-ID:  # in this order
+unhdr_order * # some distros order things by default
+
+
 
 
 ################################################################################
 # MailCap Configuration
-set mailcap_path = ~/dotfiles/mutt/mailcap
+################################################################################
+
+set mailcap_path = ~/dotfiles/mutt/mailcap       # entries for filetypes
 auto_view text/html
+
+################################################################################
+# Editor
+################################################################################
+
+# View Options -----------------------------------------------------------------
+set editor	 = "vim -c 'set tw=70 et' '+/^$' "
+set edit_headers = yes # See headers when editing
+
