@@ -138,6 +138,8 @@ set status_chars  = " *%A"
 ################################################################################
 
 # View Options ---------------------------------
+set date_format  = "%d-%b %H:%M"
+set index_format = "%4C [%Z]  %D  %-20.20F  %s"
 set sort         = threads                     # like gmail
 set sort_aux     = reverse-last-date-received  # like gmail
 set strict_threads = "yes"                     # threads based on "In-Reply-To" and "References"
