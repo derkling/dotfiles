@@ -151,6 +151,11 @@ set sort_browser = "alpha"                     # sort files by name
 # set sort_browser = "date"
 # set sort_browser = "size"
 
+# Index Key Bindings ---------------------------------
+bind index k  previous-entry
+bind index j  next-entry
+bind index gg first-entry
+bind index G  last-entry
 
 
 
@@ -173,6 +178,13 @@ hdr_order From: To: Cc: Date: Subject: Message-ID:  # in this order
 unhdr_order * # some distros order things by default
 
 
+# Key Bindings ---------------------------------
+bind pager k  previous-line
+bind pager j  next-line
+bind pager gg top
+bind pager G  bottom
+bind index K  previous-entry
+bind index J  next-entry
 
 
 ################################################################################
