@@ -64,6 +64,8 @@ unset move               # gmail does that
 # unset confirmappend      # don't ask when appending to exsting mailbox
 # unset quit               # don't ask to quit mutt
 set mark_old             # read/new is good enough for me
+set beep                 # bell on errors (required for new mails bell)
+set beep_new             # bell on new mails
 
 
 ################################################################################
