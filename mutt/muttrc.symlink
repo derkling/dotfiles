@@ -204,6 +204,9 @@ bind index J  next-entry
 bind pager r  group-reply
 bind pager f  forward-message
 
+# View attachments properly.
+bind attach <return> view-mailcap
+
 
 ################################################################################
 # MailCap Configuration
@@ -211,6 +214,8 @@ bind pager f  forward-message
 
 set mailcap_path = ~/dotfiles/mutt/mailcap       # entries for filetypes
 auto_view text/html
+alternative_order text/plain text/html           # prefer TXT encoding
+
 
 ################################################################################
 # Editor

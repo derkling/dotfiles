@@ -1,1 +1,3 @@
-text/html;	links2 -g -dump %s;		nametemplate=%s.html; copiousoutput
+text/html;		links2 -g -dump %s;	nametemplate=%s.html; copiousoutput
+image/*;        	mutt_bgrun geeqie %s;
+application/pdf;	mutt_bgrun evince %s;
