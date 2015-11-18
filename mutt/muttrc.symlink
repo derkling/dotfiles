@@ -54,6 +54,8 @@ set spoolfile        = "+Work/INBOX"           # default inbox
 set postponed        = "+Work/Drafts"
 set record           = "+Work/Sent\ Items"
 
+source ~/dotfiles/mutt/mailboxes_to_show      # mailboxes in the sidebar
+
 # Global incoming settings -----------------------------------------------------
 
 set timeout    = 3       # idle time before scanning
