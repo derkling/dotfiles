@@ -157,6 +157,21 @@ bind index j  next-entry
 bind index gg first-entry
 bind index G  last-entry
 
+bind index <tab>      next-new-then-unread
+bind index <space>    collapse-thread         # collapse current thread
+bind index _          collapse-all            # collapse all threads
+
+# Saner copy/move dialogs
+macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
+macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
+
+# Limit visualization to current thread or all threads
+# http://thetarpit.org/posts/y00/00a-conversation-view-in-mutt.html
+macro index,pager \CL <tag-thread><limit>~T<enter><tag-thread> "show only current thread"
+macro index,pager \CH <limit>all<enter> "show everything"
+
+# R to mark all (filtered messages) as read
+macro index R "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 
 
 # Save tagged emails into /tmp/incoming folder
@@ -185,6 +200,9 @@ bind pager gg top
 bind pager G  bottom
 bind index K  previous-entry
 bind index J  next-entry
+
+bind pager r  group-reply
+bind pager f  forward-message
 
 
 ################################################################################
