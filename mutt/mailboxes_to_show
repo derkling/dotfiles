@@ -1,6 +1,27 @@
 mailboxes \
 "+Work/INBOX" \
+"+Work/ML/.arm_cambridge" \
+"+Work/ML/.arm_eas" \
+"+Work/ML/.arm_hmp" \
+"+Work/ML/.arm_italians" \
+"+Work/ML/.arm_jira" \
+"+Work/ML/.arm_linux_eng" \
+"+Work/ML/.arm_mtk_crbk" \
+"+Work/ML/.arm_social" \
+"+Work/ML/.arm_ssg" \
+"+Work/ML/.arm_talks" \
+"+Work/ML/.linaro_sched" \
+"+Work/ML/.lkml_sched" \
+"+Work/ML/.social" \
 "+Work/Drafts" \
 "+Work/Sent Items" \
+"+Work/ToDo" \
+"+Work/MyReports" \
+"+Work/Reports" \
+"+Work/Archives" \
+"+Work/Archives.2014" \
+"+Work/Archives.2015" \
+"+Work/Clutter" \
 "+Work/Deleted Items" \
+"+Work/Junk Email" \
 
