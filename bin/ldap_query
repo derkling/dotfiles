@@ -1,0 +1,114 @@
+#!/bin/bash
+
+LDAP_SERVER=${LDAP_SERVER:-10.1.127.52}
+LDAP_PORT=${LDAP_PORT:-3268}
+LDAP_USER=${LDAP_USER:-'emea\patbel01'}
+LDAP_BIND=${LDAP_BIND:-'dc=arm,dc=com'}
+LDAP_CREDENTIALS=${LDAP_CREDENTIALS:-~/dotfiles/mutt/ldap_credentials.gpg}
+
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <name>"
+    exit 1
+fi
+
+# Default: max number of records
+LIMIT=100
+
+while getopts "n:l:t:L:" opt; do
+  case $opt in
+    n)
+      FILTER="(&(objectClass=user) (|(givenName=$OPTARG*) (sn=$OPTARG*)))"
+      ;;
+    l)
+      FILTER="(&(objectClass=user) (l=$OPTARG*))"
+      ;;
+    t)
+      FILTER="(&(objectClass=user) (title=*$OPTARG*))"
+      ;;
+    L)
+      LIMIT=$OPTARG
+  esac
+done
+
+FIELDS="displayName mail title c l department roomNumber telephoneNumber mobile"
+
+
+################################################################################
+# Example Record
+################################################################################
+# # Patrick Bellasi, Users, Cambridge, Emea.Arm.com
+# dn: CN=Patrick Bellasi,OU=Users,OU=Cambridge,DC=Emea,DC=Arm,DC=com
+# displayName: Patrick Bellasi
+# c: GB
+# l: Cambridge
+# title: Senior Software Engineer
+# telephoneNumber: +44 12 2340 5831
+# department: SYEG
+# mail: Patrick.Bellasi@arm.com
+# roomNumber: 3G06
+# mobile: +44 77 9529 6331
+
+PWD=$(gpg -dq $LDAP_CREDENTIALS)
+/usr/bin/ldapsearch \
+	-h $LDAP_SERVER -p $LDAP_PORT \
+	-b "$LDAP_BIND" \
+	-D "$LDAP_USER" -w $PWD \
+	-z $LIMIT -x \
+	"$FILTER" $FIELDS | \
+awk '
+/^dn: / {
+	PRINT=1;
+}
+/^displayName: / {
+	gsub(/displayName: /, "");
+	NAM=$0;
+}
+/^c: / {
+	gsub(/c: /, "");
+	COU=$0;
+}
+/^l: / {
+	gsub(/l: /, "");
+	LOC=$0;
+}
+/^title: / {
+	gsub(/title: /, "");
+	TIT=$0;
+}
+/^telephoneNumber: / {
+	gsub(/telephoneNumber: /, "");
+	TEL=$0;
+}
+/^department: / {
+	gsub(/department: /, "");
+	DEP=$0;
+}
+/^mail: / {
+	gsub(/mail: /, "");
+	MAI=$0;
+}
+/^roomNumber: / {
+	gsub(/roomNumber: /, "");
+	RNB=$0;
+}
+/^mobile: / {
+	gsub(/mobile: /, "");
+	MOB=$0;
+}
+/^$/ {
+	if(PRINT) {
+		printf("%s\n", NAM);
+		printf("  role       : %s\n", TIT);
+		printf("  mail       : %s\n", MAI);
+		printf("  location   : %s (%s)\n", LOC, COU);
+		printf("  department : %s (%s)\n", DEP, RNB);
+		printf("  telephone  : %s\n", TEL);
+		printf("  gsm        : %s\n", MOB);
+	}
+	PRINT=0;
+}
+'
+
+# awk "$FILTER"
+
