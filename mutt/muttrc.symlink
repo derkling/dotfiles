@@ -1,8 +1,8 @@
 
 ################################################################################
 # User details
-set realname	  = "FIRST LAST"
-set from	  = "FIRST.LAST@SERVER.COM"
+set realname	  = "Patrick Bellasi"
+set from	  = "patrick.bellasi@arm.com"
 set signature	  = "~/dotfiles/mutt/signature"
 set use_from 	  = yes
 set envelope_from = yes
@@ -79,7 +79,7 @@ set beep_new             # bell on new mails
 # B) using local SMTP server
 
 # A) Native SMTP clients -------------------------------------------------------
-set smtp_url	  = "smtp://USERNAME@SERVER.COM:PORT"
+set smtp_url      = "smtp://patbel01@foss.arm.com:587"
 
 # B) Local MSMTP server --------------------------------------------------------
 # set mbox_type	= Maildir
