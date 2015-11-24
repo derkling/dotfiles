@@ -15,8 +15,12 @@ fi
 # Default: max number of records
 LIMIT=100
 
-while getopts "n:l:t:L:" opt; do
+
+while getopts "f:n:l:t:L:" opt; do
   case $opt in
+    f)
+      FORMAT=$OPTARG
+      ;;
     n)
       FILTER="(&(objectClass=user) (|(givenName=$OPTARG*) (sn=$OPTARG*)))"
       ;;
@@ -28,35 +32,39 @@ while getopts "n:l:t:L:" opt; do
       ;;
     L)
       LIMIT=$OPTARG
+      ;;
   esac
 done
 
-FIELDS="displayName mail title c l department roomNumber telephoneNumber mobile"
-
-
-################################################################################
-# Example Record
-################################################################################
-# # Patrick Bellasi, Users, Cambridge, Emea.Arm.com
-# dn: CN=Patrick Bellasi,OU=Users,OU=Cambridge,DC=Emea,DC=Arm,DC=com
-# displayName: Patrick Bellasi
-# c: GB
-# l: Cambridge
-# title: Senior Software Engineer
-# telephoneNumber: +44 12 2340 5831
-# department: SYEG
-# mail: Patrick.Bellasi@arm.com
-# roomNumber: 3G06
-# mobile: +44 77 9529 6331
+FIELDS="displayName mail mailNickname title c l department roomNumber telephoneNumber mobile"
 
 PWD=$(gpg -dq $LDAP_CREDENTIALS)
-/usr/bin/ldapsearch \
-	-h $LDAP_SERVER -p $LDAP_PORT \
-	-b "$LDAP_BIND" \
-	-D "$LDAP_USER" -w $PWD \
-	-z $LIMIT -x \
-	"$FILTER" $FIELDS | \
-awk '
+
+MUTTALIASES='
+/^dn: / {
+	PRINT=1;
+}
+/^displayName: / {
+	gsub(/displayName: /, "");
+	NAM=$0;
+}
+/^mail: / {
+	gsub(/mail: /, "");
+	MAI=$0;
+}
+/^mailNickname: /{
+	gsub(/mailNickname: /, "");
+	MAN=$0
+}
+/^$/ {
+	if(PRINT) {
+		printf("alias %-15s %-30s <%s>\n", MAN, NAM, tolower(MAI));
+	}
+	PRINT=0;
+}
+'
+
+DETAILS='
 /^dn: / {
 	PRINT=1;
 }
@@ -88,6 +96,10 @@ awk '
 	gsub(/mail: /, "");
 	MAI=$0;
 }
+/^mailNickname: /{
+	gsub(/mailNickname: /, "");
+	MAN=$0
+}
 /^roomNumber: / {
 	gsub(/roomNumber: /, "");
 	RNB=$0;
@@ -98,17 +110,43 @@ awk '
 }
 /^$/ {
 	if(PRINT) {
-		printf("%s\n", NAM);
-		printf("  role       : %s\n", TIT);
-		printf("  mail       : %s\n", MAI);
-		printf("  location   : %s (%s)\n", LOC, COU);
-		printf("  department : %s (%s)\n", DEP, RNB);
-		printf("  telephone  : %s\n", TEL);
-		printf("  gsm        : %s\n", MOB);
+		printf("%s - %s - %s\n", NAM, MAN, tolower(MAI));
+		printf("  role       :  %s\n", TIT);
+		printf("  location   :  %s (%s)\n", LOC, COU);
+		printf("  department :  %s (%s)\n", DEP, RNB);
+		printf("  telephone  :  %s\n", TEL);
+		printf("  gsm        :  %s\n", MOB);
 	}
 	PRINT=0;
 }
 '
 
+################################################################################
+# Example Record
+################################################################################
+# # Patrick Bellasi, Users, Cambridge, Emea.Arm.com
+# dn: CN=Patrick Bellasi,OU=Users,OU=Cambridge,DC=Emea,DC=Arm,DC=com
+# displayName: Patrick Bellasi
+# c: GB
+# l: Cambridge
+# title: Senior Software Engineer
+# telephoneNumber: +44 12 2340 5831
+# department: SYEG
+# mail: Patrick.Bellasi@arm.com
+# roomNumber: 3G06
+# mobile: +44 77 9529 6331
+
+if [ "x$FORMAT" == "xmutt" ]; then
+	FORMAT=$MUTTALIASES
+else
+	FORMAT=$DETAILS
+fi
+/usr/bin/ldapsearch \
+	-h $LDAP_SERVER -p $LDAP_PORT \
+	-b "$LDAP_BIND" \
+	-D "$LDAP_USER" -w $PWD \
+	-z $LIMIT -x \
+	"$FILTER" $FIELDS | \
+awk "$FORMAT"
 # awk "$FILTER"
 
