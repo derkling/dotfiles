@@ -15,11 +15,17 @@ fi
 # Default: max number of records
 LIMIT=100
 
+# Default: filter collected data
+DEBUG=0
+
 
 while getopts "f:n:l:t:L:" opt; do
   case $opt in
     f)
       FORMAT=$OPTARG
+      if [ "x$FORMAT" = "xdebug" ]; then
+	      DEBUG=1
+      fi
       ;;
     n)
       FILTER="(&(objectClass=user) (|(givenName=$OPTARG*) (sn=$OPTARG*)))"
@@ -141,6 +147,17 @@ if [ "x$FORMAT" == "xmutt" ]; then
 else
 	FORMAT=$DETAILS
 fi
+
+if [ $DEBUG -eq 1 ]; then
+set -x
+/usr/bin/ldapsearch \
+	-h $LDAP_SERVER -p $LDAP_PORT \
+	-b "$LDAP_BIND" \
+	-D "$LDAP_USER" -w $PWD \
+	-z $LIMIT -x \
+	"$FILTER"
+set +x
+else
 /usr/bin/ldapsearch \
 	-h $LDAP_SERVER -p $LDAP_PORT \
 	-b "$LDAP_BIND" \
@@ -148,5 +165,7 @@ fi
 	-z $LIMIT -x \
 	"$FILTER" $FIELDS | \
 awk "$FORMAT"
+
+fi # DEBUG
 # awk "$FILTER"
 
