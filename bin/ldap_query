@@ -47,6 +47,10 @@ FIELDS="displayName mail mailNickname title c l department roomNumber telephoneN
 PWD=$(gpg -dq $LDAP_CREDENTIALS)
 
 MUTTALIASES='
+/^dn: .*Disabled Accounts,/ {
+	PRINT=0;
+	next;
+}
 /^dn: / {
 	PRINT=1;
 }
@@ -71,6 +75,10 @@ MUTTALIASES='
 '
 
 DETAILS='
+/^dn: .*Disabled Accounts,/ {
+	PRINT=0;
+	next;
+}
 /^dn: / {
 	PRINT=1;
 }
