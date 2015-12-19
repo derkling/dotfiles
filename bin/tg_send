@@ -48,13 +48,17 @@ START_TELEGRAM() {
 }
 START_TELEGRAM
 
-while getopts a:cd:f:hm:p:rst: FLAG; do
+while getopts a:c:d:f:hm:p:rst: FLAG; do
   case $FLAG in
     a) # audio file to send
       AUDIO=$OPTARG
       ;;
     c) # send console output get from stdin
-      CONSOLE=1
+      if [[ "x$OPTARG" == "xhtml" ]]; then
+        CONSOLE_HTML=1
+      else
+        CONSOLE_IMAGE=1
+      fi
       ;;
     d) # document file to send
       DOCUMENT=$OPTARG
@@ -88,12 +92,22 @@ while getopts a:cd:f:hm:p:rst: FLAG; do
 done
 
 # Send console output on STDIN as image
-if [ ! -z "$CONSOLE" ]; then
+if [ ! -z "$CONSOLE_IMAGE" ]; then
 	echo "Sending STDIN to [$DEST] as image..."
 	TMPIMAGE=$(tempfile -p "timg_" -s ".png")
 	cat | convert -font courier label:@- $TMPIMAGE
 	echo "send_photo $DEST $TMPIMAGE" | nc localhost $TELEGRAM_PORT
 	rm -f $TMPIMAGE
+	exit 0
+fi
+
+# Send console output on STDIN as HTML
+if [ ! -z "$CONSOLE_HTML" ]; then
+	echo "Sending STDIN to [$DEST] as html..."
+	TMPHTML="/tmp/console_$(date +%Y%m%d_%H%m%S).html"
+	cat | ansi2html --bg=dark > $TMPHTML
+	echo "send_document $DEST $TMPHTML" | nc localhost $TELEGRAM_PORT
+	rm -f $TMPHTML
 	exit 0
 fi
 
