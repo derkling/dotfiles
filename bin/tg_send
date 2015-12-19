@@ -26,6 +26,8 @@ HELP() {
   echo    "${REV}-d${NORM} -- Document to send ${BOLD}d${NORM}."
   echo    "${REV}-f${NORM} -- File to send ${BOLD}f${NORM}."
   echo -e "${REV}-h${NORM} -- Displays this help message."\\n
+  echo    "${REV}-r${NORM} -- Send a region of screen."
+  echo    "${REV}-s${NORM} -- Send a full desktop screenshot."
   echo -e "Example: ${BOLD}$SCRIPT -t Some_Telegram_User -m <message>${NORM}"\\n
   exit 1
 }
@@ -46,7 +48,7 @@ START_TELEGRAM() {
 }
 START_TELEGRAM
 
-while getopts a:cd:f:hm:p:t: FLAG; do
+while getopts a:cd:f:hm:p:rst: FLAG; do
   case $FLAG in
     a) # audio file to send
       AUDIO=$OPTARG
@@ -71,6 +73,12 @@ while getopts a:cd:f:hm:p:t: FLAG; do
       ;;
     t) # message destination
       DEST=$OPTARG
+      ;;
+    r) # region of screen
+      REGION=1
+      ;;
+    s) # screen
+      SCREEN=1
       ;;
     \?) #unrecognized option - show help
       echo -e \\n"Option -${BOLD}$OPTARG${NORM} not allowed."
@@ -124,3 +132,22 @@ if [ ! -z "$FILE" ]; then
 	exit 0
 fi
 
+# Send a region of screen
+if [ ! -z "$REGION" ]; then
+	echo "Sending region of screen to [$DEST] as image..."
+	TMPIMAGE=$(tempfile -p "timg_" -s ".png")
+	import $TMPIMAGE
+	echo "send_photo $DEST $TMPIMAGE" | nc localhost $TELEGRAM_PORT
+	rm -f $TMPIMAGE
+	exit 0
+fi
+
+# Send a screenshot of the full screen content
+if [ ! -z "$SCREEN" ]; then
+	echo "Sending screenshot of full screen to [$DEST] as image..."
+	TMPIMAGE=$(tempfile -p "timg_" -s ".png")
+	import -window root $TMPIMAGE
+	echo "send_photo $DEST $TMPIMAGE" | nc localhost $TELEGRAM_PORT
+	rm -f $TMPIMAGE
+	exit 0
+fi
