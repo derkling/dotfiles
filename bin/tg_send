@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# Default paramters
+TELEGRAM_PATH=${TELEGRAM_PATH:-"telegram-cli"}
+TELEGRAM_PORT=${TELEGRAM_PORT:-"1234"}
+DEST=MySelf
+
+#Set Script Name variable
+SCRIPT=`basename ${BASH_SOURCE[0]}`
+
+#Set fonts for Help.
+NORM=`tput sgr0`
+BOLD=`tput bold`
+REV=`tput smso`
+
+#Help function
+HELP() {
+  echo
+  echo -e "Help documentation for ${BOLD}${SCRIPT}.${NORM}"\\n
+  echo -e "${REV}Basic usage:${NORM} ${BOLD}$SCRIPT <switches>${NORM}"\\n
+  echo    "Command line <switches> are optional. The following <switches> are recognized."
+  echo    "${REV}-t${NORM} -- Destination ${BOLD}t${NORM}. Default is ${BOLD}${DEST}${NORM}."
+  echo    "${REV}-m${NORM} -- Message to send ${BOLD}m${NORM}."
+  echo    "${REV}-p${NORM} -- Picutre to send ${BOLD}p${NORM}."
+  echo    "${REV}-a${NORM} -- Audio to send ${BOLD}a${NORM}."
+  echo    "${REV}-d${NORM} -- Document to send ${BOLD}d${NORM}."
+  echo    "${REV}-f${NORM} -- File to send ${BOLD}f${NORM}."
+  echo -e "${REV}-h${NORM} -- Displays this help message."\\n
+  echo -e "Example: ${BOLD}$SCRIPT -t Some_Telegram_User -m <message>${NORM}"\\n
+  exit 1
+}
+
+START_TELEGRAM() {
+  # Check for telegram-cli being already running...
+  RUNNING=$(ps aux | grep telegram | grep -v grep | wc -l)
+  [ $RUNNING -eq 0 ] || return 0
+  # Start telegram-cli
+  echo
+  echo "NOTE: assuming telegram-cli is already installed and configured to login using a valid username"
+  echo "Starting telegram-cli [$TELEGRAM_PATH:$TELEGRAM_PORT]..."
+  TELEGRAM_KEY="$(dirname $TELEGRAM_PATH)/../tg-server.pub"
+  $TELEGRAM_PATH -k $TELEGRAM_KEY -W -P $TELEGRAM_PORT -d &
+  sleep 10
+  # TODO add a check that telegram-cli has been properly started
+  echo "trying to send your command via telegram-cli..."
+}
+START_TELEGRAM
+
+while getopts a:cd:f:hm:p:t: FLAG; do
+  case $FLAG in
+    a) # audio file to send
+      AUDIO=$OPTARG
+      ;;
+    c) # send console output get from stdin
+      CONSOLE=1
+      ;;
+    d) # document file to send
+      DOCUMENT=$OPTARG
+      ;;
+    f) # file to send
+      FILE=$OPTARG
+      ;;
+    h) # Show help
+      HELP
+      ;;
+    m) # message text to
+      MESSAGE=$OPTARG
+      ;;
+    p) # photo file to send
+      PHOTO=$OPTARG
+      ;;
+    t) # message destination
+      DEST=$OPTARG
+      ;;
+    \?) #unrecognized option - show help
+      echo -e \\n"Option -${BOLD}$OPTARG${NORM} not allowed."
+      HELP
+      ;;
+  esac
+done
+
+# Send console output on STDIN as image
+if [ ! -z "$CONSOLE" ]; then
+	echo "Sending STDIN to [$DEST] as image..."
+	TMPIMAGE=$(tempfile -p "timg_" -s ".png")
+	cat | convert -font courier label:@- $TMPIMAGE
+	echo "send_photo $DEST $TMPIMAGE" | nc localhost $TELEGRAM_PORT
+	rm -f $TMPIMAGE
+	exit 0
+fi
+
+# Send a text message
+if [ ! -z "$MESSAGE" ]; then
+	echo "Sending message to [$DEST]: $MESSAGE"
+	echo "msg $DEST $MESSAGE" | nc localhost $TELEGRAM_PORT
+	exit 0
+fi
+
+# Send a photo
+if [ ! -z "$PHOTO" ]; then
+	echo "Sending photo to [$DEST]: $PHOTO"
+	echo "send_photo $DEST $PHOTO" | nc localhost $TELEGRAM_PORT
+	exit 0
+fi
+
+# Send a audio
+if [ ! -z "$AUDIO" ]; then
+	echo "Sending audio to [$DEST]: $AUDIO"
+	echo "send_audio $DEST $AUDIO" | nc localhost $TELEGRAM_PORT
+	exit 0
+fi
+
+# Send a document
+if [ ! -z "$DOCUMENT" ]; then
+	echo "Sending document to [$DEST]: $DOCUMENT"
+	echo "send_document $DEST $DOCUMENT" | nc localhost $TELEGRAM_PORT
+	exit 0
+fi
+
+# Send a file
+if [ ! -z "$FILE" ]; then
+	echo "Sending file to [$DEST]: $FILE"
+	echo "send_file $DEST $FILE" | nc localhost $TELEGRAM_PORT
+	exit 0
+fi
+
