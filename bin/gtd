@@ -1,0 +1,32 @@
+#!/bin/bash
+
+GTD_FOLDER=${GTD_FOLDER:-~/GTD}
+GIT_UPDATE=${GIT_UPDATE:-1}
+
+# Edit TaskPaper file on that folder
+cd $GTD_FOLDER
+
+# Pull most recent updates from server
+[[ $GIT_UPDATE == 0 ]] || git pull
+
+# Edit the tasks file
+vim mytasks.taskpaper
+
+[[ $GIT_UPDATE == 1 ]] || exit 0
+
+# If the file has been updated: commit changes with current data
+CHANGED=$(git diff mytasks.taskpaper | wc -l)
+if [[ $CHANGED == 0 ]]; then
+	echo "task file not updted"
+	exit 0
+fi
+
+NOW=$(date "+%Y-%m-%d %H:%m:%S")
+echo "tasks file updated, commit changes as [$NOW]..."
+git add mytasks.taskpaper
+git commit -s -m "Update: $NOW"
+
+echo "push tasks to server..."
+git gc
+git push origin
+
