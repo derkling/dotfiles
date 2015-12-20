@@ -282,6 +282,32 @@ autocmd BufEnter *.tex,*.bib source ~/dotfiles/vim/plugins/latex.vim
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TaskPaper
+Bundle "davidoc/taskpaper.vim"
+autocmd BufEnter *.taskpaper set filetype=taskpaper
+let g:task_paper_date_format = "%Y-%m-%d %H:%M:%S%z"
+let g:task_paper_archive_project = "Completed"
+let g:task_paper_styles = {
+	\ 'waiton': 'ctermfg=Yellow guifg=Yellow',
+	\ 'next': 'ctermbg=Red guibg=Red',
+	\ }
+" Add function to setup custom commands
+function! s:taskpaper_setup()
+" URGENT: update task 'urgent' level
+nnoremap <buffer> <silent> <Leader>tu
+	\ :<C-u>call taskpaper#toggle_tag('urgent')<CR>
+" WAITON toggle the 'waiton' TAG
+nnoremap <buffer> <silent> <Leader>tw
+	\ :<C-u>call taskpaper#toggle_tag('waiton', '')<CR>
+endfunction
+" Load custom commands for all taskpaper files
+augroup vimrc-taskpaper
+autocmd!
+autocmd FileType taskpaper call s:taskpaper_setup()
+augroup END
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Global Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " This MUST be the last entry BEFORE the following custom configuration
