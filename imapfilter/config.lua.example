@@ -62,7 +62,7 @@ filter_messages = function(msgs)
 	newm = IMAPACCOUNT["INBOX"]:is_unseen()
 
 	-- All Cambridge
-	msgs = newm:contain_field('To', 'All-Cambridge')
+	msgs = newm:contain_field('To', 'All-Cambridge@arm.com')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_cambridge"], msgs)
 
 	-- OAK related messages
@@ -79,16 +79,18 @@ filter_messages = function(msgs)
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_italians"], msgs)
 
 	-- Linux-Eng
-	msgs = newm:contain_field('To', 'linux-eng')
-	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_linunx_eng"], msgs)
+	msgs = newm:contain_field('To', 'linux-eng') +
+	       newm:contain_field('Cc', 'linux-eng')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_linux_eng"], msgs)
 
 	-- Linaro SchedTools
-	msgs = newm:contain_field('To', 'sched-tools@linaro.org') +
-	       newm:contain_field('Cc', 'sched-tools@linaro.org')
+	msgs = newm:contain_field('To', 'sched-tools@lists.linaro.org') +
+	       newm:contain_field('Cc', 'sched-tools@lists.linaro.org')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/linaro_sched"], msgs)
 
 	-- LKML
-	msgs = newm:contain_field('To', 'linux-kernel@vreg.kernel.org')
+	msgs = newm:contain_field('To', 'linux-kernel@vger.kernel.org') +
+	       newm:contain_field('Cc', 'linux-kernel@vger.kernel.org')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/lkml_sched"], msgs)
 
 	-- Weekly Reports
@@ -100,6 +102,9 @@ filter_messages = function(msgs)
 	msgs = newm:contain_field('To', 'noreply@yammer.com')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/social"], msgs)
 
+	-- IMAPACCOUNT Internal
+	msgs = newm:match_field('From', 'internal-communications@arm.com')
+	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_cambridge"], msgs)
 
 end
 
