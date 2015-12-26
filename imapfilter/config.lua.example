@@ -48,6 +48,7 @@ options.expunge = true
 IMAPACCOUNT = IMAP {
   server = "IMAPSERVER",
   username = "IMAPUSERNAME",
+  ssl = "ssl3"
 }
 -- Add the password attribute in the previous dictionary to avoid password
 -- being asked when you start imapfilter.
