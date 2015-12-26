@@ -100,13 +100,7 @@ filter_messages = function(msgs)
 	msgs = newm:contain_field('To', 'noreply@yammer.com')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/social"], msgs)
 
-	-- EAS Group
-	msgs = newm:match_field('From', '.*(Randhawa|Redpath|Morten|Eggemann|Lelli).*')
-	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_eas"], msgs)
 
-	-- SSG Group
-	msgs = newm:match_field('From', '.*(Trofimov|Garcia-Tobin|Rickards|Eljuse|Pickard|Niven).*arm.com')
-	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_ssg"], msgs)
 end
 
 filter_all = function()
