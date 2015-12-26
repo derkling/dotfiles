@@ -39,17 +39,19 @@ options.expunge = true
 -- decrypted and the account passwords are set accordingly:
 -- status, output = pipe_from('openssl bf -d -in ~/passwords.enc')
 -- _, _, password1, password2 = string.find(output, '([%w%p]+)\n([%w%p]+)')
-
+--
 -- Read IMAP server password from encripted credentials file
-status, output = pipe_from('openssl bf -d -in ~/dotfiles/imapfilter/credentials.enc')
-_, _, passwd = string.find(output, '([%w%p]+)')
+-- status, output = pipe_from('openssl bf -d -in ~/dotfiles/imapfilter/credentials.enc')
+-- _, _, passwd = string.find(output, '([%w%p]+)')
 
 -- Configure ARM server
 IMAPACCOUNT = IMAP {
   server = "IMAPSERVER",
   username = "IMAPUSERNAME",
-  password = passwd
 }
+-- Add the password attribute in the previous dictionary to avoid password
+-- being asked when you start imapfilter.
+-- password = passwd
 
 -- Function to filter new messages from the INBOX folder
 --
