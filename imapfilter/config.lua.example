@@ -44,7 +44,7 @@ options.expunge = true
 -- status, output = pipe_from('openssl bf -d -in ~/dotfiles/imapfilter/credentials.enc')
 -- _, _, passwd = string.find(output, '([%w%p]+)')
 
--- Configure ARM server
+-- Configure IMAPACCOUNT server
 IMAPACCOUNT = IMAP {
   server = "IMAPSERVER",
   username = "IMAPUSERNAME",
@@ -56,7 +56,7 @@ IMAPACCOUNT = IMAP {
 
 -- Function to filter new messages from the INBOX folder
 --
-mailfilters = function()
+filter_messages = function(msgs)
 
 	-- Get list of new messages in INBOX
 	newm = IMAPACCOUNT["INBOX"]:is_unseen()
@@ -107,13 +107,26 @@ mailfilters = function()
 	-- SSG Group
 	msgs = newm:match_field('From', '.*(Trofimov|Garcia-Tobin|Rickards|Eljuse|Pickard|Niven).*arm.com')
 	IMAPACCOUNT["INBOX"]:move_messages(IMAPACCOUNT["ML/arm_ssg"], msgs)
-
-	-- Wait for next message into INBOX
-	update = IMAPACCOUNT['INBOX']:enter_idle()
 end
 
--- Execute in background in a loop
-become_daemon(1, mailfilters)
+filter_all = function()
+	-- Filter ALL messages in INBOX
+	allm = IMAPACCOUNT["INBOX"]:select_all()
+	filter_messages(allm)
+end
+
+filter_new = function()
+	-- Wait for next message into INBOX
+	update = IMAPACCOUNT['INBOX']:enter_idle()
+	-- Filter NEW messages in INBOX
+	newm = IMAPACCOUNT["INBOX"]:is_unseen()
+	filter_messages(newm)
+end
+
+-- Execute the first run in foreground to accept the server CERTIFICATE
+filter_all()
+-- Execute following run in background
+become_daemon(1, filter_new)
 
 -- -----------------------------------------------------------------------------
 -- --  Examples of Mailboxes rules                                            --
