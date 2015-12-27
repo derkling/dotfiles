@@ -20,6 +20,13 @@ options.subscribe = true
 -- immediately after being marked deleted.
 options.expunge = true
 
+-- Notification script is called after each filtering run has completed.
+-- Such a script could be used for example to trigger a desktop notification
+-- each time new messages have been received.
+-- The script is called with an additional parameter which is the path of a
+-- file containing the header of all new messages received.
+options.post_sync_hook = "~/dotfiles/bin/email_notify"
+
 -- Passwords could be extracted during execution time from an encrypted
 -- file.
 --
@@ -113,6 +120,11 @@ filter_messages = function(msgs)
 
 end
 
+notify_new = function(count)
+	local cmd = string.format("%s %d", options.post_sync_hook, count )
+	os.execute(cmd)
+end
+
 filter_all = function()
 	-- Filter ALL messages in INBOX
 	allm = IMAPACCOUNT["INBOX"]:select_all()
@@ -124,7 +136,18 @@ filter_new = function()
 	update = IMAPACCOUNT['INBOX']:enter_idle()
 	-- Filter NEW messages in INBOX
 	newm = IMAPACCOUNT["INBOX"]:is_unseen()
+
+	-- Get number of new messages
+	local count = 0
+	for _ in pairs(newm) do count = count + 1 end
+	if count == 0 then
+		return
+	end
+
+	-- Filter new messages
 	filter_messages(newm)
+	-- Call new messages hook
+	notify_new(count)
 end
 
 -- Execute the first run in foreground to accept the server CERTIFICATE
