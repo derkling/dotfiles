@@ -1,62 +1,58 @@
+
+################################################################################
+# General settings
+
 [general]
-ui = ttyui
-accounts = IMAPACCOUNT
-# Controls how many accounts may be synced simultaneously
-maxsyncaccounts = 1
+ui                 = ttyui
+accounts           = IMAPACCOUNT
 
-# IMAPACCOUNT Account
-# ------------
+# Sosurce the script to get authentication tokens
+# NOTE: that script has to be exectuted the first time from console to save the
+#       authentication tokens associated wach of the following accounts,
+#       e.g. you can use "imap_work" for the Work account
+pythonfile         = ~/dotfiles/bin/gnome_keyring.py
+
+# How many accounts synced simultaneously
+maxsyncaccounts    = 1
+
+################################################################################
+# IMAPACCOUNT account
+
 [Account IMAPACCOUNT]
-localrepository = IMAPACCOUNT-Local
-remoterepository = IMAPACCOUNT-Remote
-# Minutes between syncs
-autorefresh = 3
-# Number of quick-syncs between autorefreshes. Quick-syncs do not update if the
-# only changes were to IMAP flags
-quick = 10
+localrepository    = IMAPACCOUNT-Local
+remoterepository   = IMAPACCOUNT-Remote
 
-
-# IMAPACCOUNT Account - Local Folder
-# ---------------------------
+# Local folder -----------------------------------------------------------------
 [Repository IMAPACCOUNT-Local]
-type = Maildir
-localfolders = ~/Mail/IMAPACCOUNT
+type               = Maildir
+localfolders       = ~/Mail/IMAPACCOUNT
 
-# IMAPACCOUNT Account - Remote folder
-# ----------------------------
+# Remote folder ----------------------------------------------------------------
 [Repository IMAPACCOUNT-Remote]
-type = IMAP
-remotehost = IMAPSERVER
-remoteuser = IMAPUSERNAME
-realdelete = no
-maxconnections = 3
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+type               = IMAP
+remotehost         = IMAPSERVER
+remoteusereval     = get_username("imap_IMAPACCOUNT")
+remotepasseval     = get_password("imap_IMAPACCOUNT")
+ssl                = yes
+
+realdelete         = no
+maxconnections     = 3
+sslcacertfile      = /etc/ssl/certs/ca-certificates.crt
 
 # # Synchronize only the folders Inbox and Sent:
 # folderfilter = lambda foldername: foldername in ['Inbox', 'Sent']
 
-# Instead of closing the connection once a sync is complete, offlineimap will
-# send empty data to the server to hold the connection open. A value of 60
-# attempts to hold the connection for a minute between syncs (both quick and
-# autorefresh).This setting has no effect if autorefresh and holdconnectionopen
-# are not both set.
-keepalive = 60
-# OfflineIMAP normally closes IMAP server connections between refreshes if
-# the global option autorefresh is specified.  If you wish it to keep the
-# connection open, set this to true. This setting has no effect if autorefresh
-# is not set.
-holdconnectionopen = yes
-
+################################################################################
 # MUTT mailboxes autogeneration
-# ------------------------------
+
 # Mutt cannot be simply pointed to an IMAP or maildir directory and be expected
 # to guess which subdirectories happen to be the mailboxes, yet offlineimap can
 # generate a muttrc fragment containing the mailboxes that it syncs.
 [mbnames]
-enabled = yes
-filename = ~/.mutt/mailboxes
-header = "mailboxes "
-peritem = "+%(accountname)s/%(foldername)s"
-sep = " "
-footer = "\n"
+enabled            = yes
+filename           = ~/dotfiles/mutt/mailboxes
+header             = "mailboxes "
+peritem            = "+%(accountname)s/%(foldername)s"
+sep                = " "
+footer             = "\n"
 

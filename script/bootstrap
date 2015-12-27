@@ -201,6 +201,7 @@ setup_imap() {
 
   info 'Setup Offiline IMAP\n'
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
+      -e "s/IMAPSERVER/$imap_server/g" \
       offlineimap/offlineimaprc.symlink.example > offlineimaprc.symlink
   success 'OfflineIMAP'
 }
