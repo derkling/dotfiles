@@ -186,12 +186,11 @@ setup_imap() {
   read -e imap_server
   user ' - What is your IMAP username?'
   read -e imap_username
-  user ' - What is your IMAP password?'
-  read -e imap_password
+
+  info 'Setup autentication tokens using GNOME keyring\n'
+  ~/dotfiles/offlineimap/offlineimap.py "imap_$imap_account" $imap_username
 
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
-      -e "s/IMAPSERVER/$imap_server/g" \
-      -e "s/IMAPUSERNAME/$imap_username/g" \
       imapfilter/config.lua.example > imapfilter/config.lua
 
   echo > imapfilter/credentials.txt

@@ -43,11 +43,16 @@ options.expunge = true
 -- Read IMAP server password from encripted credentials file
 -- status, output = pipe_from('openssl bf -d -in ~/dotfiles/imapfilter/credentials.enc')
 -- _, _, passwd = string.find(output, '([%w%p]+)')
+--
+-- Read IMAP server credentials from GNOME keyring
+status, output = pipe_from('~/dotfiles/bin/gnome_keyring.py imap_IMAPACCOUNT')
+_, _, imap_user, imap_pass = string.find(output, '([%w%p]+) ([%w%p]+)')
 
 -- Configure IMAPACCOUNT server
 IMAPACCOUNT = IMAP {
   server = "IMAPSERVER",
-  username = "IMAPUSERNAME",
+  username = imap_user,
+  password = imap_pass,
   ssl = "ssl3"
 }
 -- Add the password attribute in the previous dictionary to avoid password
