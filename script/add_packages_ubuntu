@@ -133,6 +133,7 @@ PACKAGES="$PACKAGES \
 	python-matplotlib \
 	python-scipy \
 	python-pip \
+	python-gnomekeyring \
 "
 
 echo
