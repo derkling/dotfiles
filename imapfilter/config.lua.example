@@ -27,6 +27,16 @@ options.expunge = true
 -- file containing the header of all new messages received.
 options.post_sync_hook = "~/dotfiles/bin/email_notify"
 
+-- Set FALSE to disable filtering of new messages.
+-- This support is useful in case you have a main instance of imapfilter always
+-- running on a machine while on a secondary machine you still want to get
+-- notified every time new mails are available.
+-- The notification support provide by imapfilter is based on IMAP IDLE, thus
+-- is a convenient and effective support to trigger actions on new mails being
+-- available in the server, e.g. synchronize the local folder and/or send a
+-- notification to the user.
+options.enable_filtering = false
+
 -- Passwords could be extracted during execution time from an encrypted
 -- file.
 --
@@ -145,13 +155,18 @@ filter_new = function()
 	end
 
 	-- Filter new messages
-	filter_messages(newm)
+	if options.enable_filtering then
+		filter_messages(newm)
+	end
 	-- Call new messages hook
 	notify_new(count)
 end
 
 -- Execute the first run in foreground to accept the server CERTIFICATE
-filter_all()
+if options.enable_filtering then
+	filter_all()
+end
+
 -- Execute following run in background
 become_daemon(1, filter_new)
 
