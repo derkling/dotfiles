@@ -134,6 +134,7 @@ PACKAGES="$PACKAGES \
 	python-scipy \
 	python-pip \
 	python-gnomekeyring \
+	python-sqlite \
 "
 
 echo

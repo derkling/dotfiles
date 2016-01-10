@@ -21,6 +21,8 @@ maxsyncaccounts    = 1
 [Account IMAPACCOUNT]
 localrepository    = IMAPACCOUNT-Local
 remoterepository   = IMAPACCOUNT-Remote
+# Status cache. Default is plain, which eventually becomes huge and slow.
+status_backend     = sqlite
 
 # Local folder -----------------------------------------------------------------
 [Repository IMAPACCOUNT-Local]
