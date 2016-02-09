@@ -1,0 +1,1 @@
+git am -s ~/incoming/*.mbox

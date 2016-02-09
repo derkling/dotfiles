@@ -1,0 +1,2 @@
+git reset --hard HEAD
+rm -f ~/incoming/*

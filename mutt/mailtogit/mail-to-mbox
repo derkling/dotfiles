@@ -1,0 +1,2 @@
+formail -cds ~/dotfiles/mutt/mailtogit/procmail -
+ls -l ~/incoming/

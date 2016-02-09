@@ -100,7 +100,7 @@ PACKAGES="$PACKAGES \
 PACKAGES="$PACKAGES \
 	iproute iptables netcat-openbsd rsync tcpdump nmap \
 	openssh-client openssh-server \
-	mutt msmtp offlineimap imapfilter ldap-utils \
+	mutt msmtp offlineimap imapfilter ldap-utils procmail \
 	irssi \
 	curl wget axel \
 	links2 \

@@ -176,8 +176,17 @@ macro index,pager \CH <limit>all<enter> "show everything"
 macro index R "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 
 
-# Save tagged emails into /tmp/incoming folder
-macro index (t '~/dotfiles/mutt/mailtogit/mail-to-mbox^M'  "Dumps tagged patches into ~/incoming/*.mbox"
+# Macros for managing patches
+macro index (t '<tag-prefix><pipe-entry>~/dotfiles/mutt/mailtogit/mail-to-mbox<return>'  "Dumps tagged patches into ~/incoming/*.mbox"
+macro index (a '<tag-prefix><pipe-entry>~/dotfiles/mutt/mailtogit/git-apply-incoming<return>'  "git am ~/incoming/*.mbox"
+macro index (g '<tag-prefix><pipe-entry>~/dotfiles/mutt/mailtogit/git-apply<return>'  "git am tagged patches"
+macro index (c '<pipe-entry>~/dotfiles/mutt/mailtogit/checkpatch<return>' "Run checkpatch on ~/incoming/*"
+macro index (r '<pipe-entry>rm -f ~/incoming/*.mbox<return>'  "Nukes all ~/incoming/"
+macro index (l '<pipe-entry>ls -ltr ~/incoming/<return>'  "ls -l ~/incoming/"
+macro index ,t '<pipe-entry>~/dotfiles/mutt/mailtogit/mail-to-mbox<return>'  "Dumps currently viewed patch into ~/incoming/*.mbox"
+macro index ,g '<pipe-entry>~/dotfiles/mutt/mailtogit/git-apply<return>' "git am currently viewed patch"
+macro index ,a '<pipe-entry>~/dotfiles/mutt/mailtogit/git-abort<return>' "git am --abort"
+macro index ,r '<pipe-entry>~/dotfiles/mutt/mailtogit/git-reset<return>' "git-reset --hard origin"
 
 ################################################################################
 # Pager Settings

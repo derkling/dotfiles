@@ -1,0 +1,2 @@
+git am --abort
+rm -f ~/incoming/*
