@@ -257,6 +257,13 @@ let g:gist_open_browser_after_post = 1
 let g:gist_browser_command = 'chromium-browser %URL%'
 let g:gist_post_private = 1
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python Code folding
+Bundle 'tmhedberg/SimpylFold.git'
+let g:SimpylFold_docstring_preview = 1
+let g:SimpylFold_fold_docstring = 0
+
+Bundle 'vim-scripts/indentpython.vim'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MakeSetup
@@ -496,6 +503,15 @@ autocmd BufNewFile,BufRead *.dox set filetype=cpp.doxygen
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python
-autocmd BufEnter *.py set ai sw=4 ts=4 sta et fo=croql softtabstop=4
-
+" Use PEP8 indentation rules
+autocmd BufNewFile,BufRead *.py set
+    \ tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ textwidth=79
+    \ expandtab
+    \ autoindent
+    \ fileformat=unix
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
