@@ -21,6 +21,12 @@ set runtimepath+=~/dotfiles/vim/bundle/vundle
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Reloads VIM configuration each time is updated
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,vimrc.symlink so ~/.vimrc
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colorscheme (Solarized)
