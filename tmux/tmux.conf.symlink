@@ -33,6 +33,9 @@ set-option -g mouse-select-window on
 set-option -g mouse-resize-pane on
 set-window-option -g mode-mouse on
 
+# Disable window renaming
+set-option -g allow-rename off
+
 # Limit the amount of text that is printed in the console to prevent
 # tmux from freezing when seeing tons of output
 setw -g c0-change-trigger 10
