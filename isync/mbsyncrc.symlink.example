@@ -1,0 +1,23 @@
+
+### Work Emails
+IMAPStore work-remote
+  Host IMAPSERVER
+  User IMAPUSER
+  # Fetch password from gnome-keyring:
+  PassCmd "~/dotfiles/bin/gnome_keyring.py IMAPACCOUNT -p"
+  UseIMAPS yes
+  CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+MaildirStore work-local
+  Path  ~/Mail/Work/
+  Inbox ~/Mail/Work/INBOX
+
+Channel work
+  Master  :work-remote:
+  Slave   :work-local:
+  Patterns * !Calendar* !Contacts !Junk* !Journal !Outbox !Deleted* !RSS* !Sent !Sync*
+  Create  Both
+  Expunge Both
+  Sync    Pull Push
+  SyncState *
+

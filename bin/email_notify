@@ -3,7 +3,9 @@
 COUNT=${1:-"0"}
 
 # Trigger an update for offlineimap
-offlineimap
+# offlineimap
+# Sync local mailbox
+mbsync work
 
 # Show a notification to the user
 notify-send -t 60000 'New Mails' "$COUNT unread messages" --icon=dialog-information

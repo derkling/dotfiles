@@ -195,11 +195,19 @@ setup_imap() {
       imapfilter/config.lua.example > imapfilter/config.lua
   success 'IMAPFilter'
 
-  info 'Setup Offiline IMAP\n'
+  info 'Setup isync IMAP\n'
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
       -e "s/IMAPSERVER/$imap_server/g" \
-      offlineimap/offlineimaprc.symlink.example > offlineimaprc.symlink
-  success 'OfflineIMAP'
+      -e "s/IMAPUSER/$imap_username/g" \
+      isync/mbsyncrc.symlink.example > mbsyncrc.symlink.symlink
+  success 'IsyncIMAP'
+
+  # info 'Setup Offiline IMAP\n'
+  # sed -e "s/IMAPACCOUNT/$imap_account/g" \
+  #     -e "s/IMAPSERVER/$imap_server/g" \
+  #     offlineimap/offlineimaprc.symlink.example > offlineimaprc.symlink
+  # success 'OfflineIMAP'
+
 }
 
 setup_irssi() {
