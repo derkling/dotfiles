@@ -1,6 +1,29 @@
 #!/usr/bin/env python2
 
 import gnomekeyring as gkey
+import argparse
+
+parser = argparse.ArgumentParser(description='GNome Keyring Credentials Proxy')
+parser.add_argument('-u',
+                    dest='get_username',
+                    action='store_const',
+                    const=True,
+                    default=False,
+                    help='return the username')
+parser.add_argument('-p',
+                    dest='get_password',
+                    action='store_const',
+                    const=True,
+                    default=False,
+                    help='return the password')
+parser.add_argument('repo',
+                    nargs=1,
+                    type=str,
+                    help='repository to use')
+parser.add_argument('username',
+                    nargs='?',
+                    type=str,
+                    help='username to store')
 
 def set_credentials(repo, user, pw):
     KEYRING_NAME = "offlineimap"
@@ -25,20 +48,29 @@ if __name__ == "__main__":
     import os
     import getpass
 
-    if len(sys.argv) == 2:
-        repo = sys.argv[1]
-        credentials = get_credentials(repo)
-        print credentials[0], credentials[1]
+    # Parse command line args
+    args = parser.parse_args()
+
+    # Store credentials
+    if args.repo and args.username:
+        password = getpass.getpass("Enter password for user '%s': " % args.username)
+        password_confirmation = getpass.getpass("Confirm password: ")
+        if password != password_confirmation:
+            print "Error: password confirmation does not match"
+            sys.exit(1)
+        set_credentials(args.repo, args.username, password)
         sys.exit(0)
 
-    if len(sys.argv) != 3:
-        print "Usage: %s <repository> <username>" \
-            % (os.path.basename(sys.argv[0]))
+    # Get username
+    if args.repo and args.get_username:
+        print get_username(args.repo[0])
         sys.exit(0)
-    repo, username = sys.argv[1:]
-    password = getpass.getpass("Enter password for user '%s': " % username)
-    password_confirmation = getpass.getpass("Confirm password: ")
-    if password != password_confirmation:
-        print "Error: password confirmation does not match"
-        sys.exit(1)
-    set_credentials(repo, username, password)
+
+    # Get password
+    if args.repo and args.get_password:
+        print get_password(args.repo[0])
+        sys.exit(0)
+
+    # By default return complete credentials
+    credentials = get_credentials(args.repo[0])
+    print credentials[0], credentials[1]

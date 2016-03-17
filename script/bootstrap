@@ -188,7 +188,7 @@ setup_imap() {
   read -e imap_username
 
   info 'Setup autentication tokens using GNOME keyring\n'
-  ~/dotfiles/offlineimap/offlineimap.py "imap_$imap_account" $imap_username
+  ~/dotfiles/bin/gnome_keyring.py imap_$imap_account $imap_username
 
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
       imapfilter/config.lua.example > imapfilter/config.lua
