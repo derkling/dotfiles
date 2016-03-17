@@ -177,8 +177,7 @@ setup_mutt() {
 
 setup_imap() {
 
-  info 'Setup IMAP Filter\n'
-  ln -fs $DOTFILES_ROOT/imapfilter ~/.imapfilter
+  info 'Setup EMail account'
 
   user ' - What is the account name?'
   read -e imap_account
@@ -190,13 +189,10 @@ setup_imap() {
   info 'Setup autentication tokens using GNOME keyring\n'
   ~/dotfiles/bin/gnome_keyring.py imap_$imap_account $imap_username
 
+  info 'Setup IMAP Filter\n'
+  ln -fs $DOTFILES_ROOT/imapfilter ~/.imapfilter
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
       imapfilter/config.lua.example > imapfilter/config.lua
-
-  echo > imapfilter/credentials.txt
-  openssl bf -in imapfilter/credentials.txt -out imapfilter/credentials.enc
-  shred -u imapfilter/credentials.txt
-
   success 'IMAPFilter'
 
   info 'Setup Offiline IMAP\n'
