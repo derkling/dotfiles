@@ -55,3 +55,5 @@ alias ts='tmux new-session -s'
 
 alias ranger='ranger --confdir=~/dotfiles/ranger'
 
+alias confs='unity-control-center'
+alias sound='unity-control-center sound'
