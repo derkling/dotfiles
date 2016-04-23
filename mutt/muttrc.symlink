@@ -190,6 +190,9 @@ macro index ,r '<pipe-entry>~/dotfiles/mutt/mailtogit/git-reset<return>' "git-re
 # Sync email
 macro index S '<sync-mailbox><shell-escape>email_sync &<enter>'
 
+# Filter messages (help)
+macro index F '<shell-escape>cat ~/dotfiles/mutt/patters.txt; read KEY<enter>'
+
 ################################################################################
 # Pager Settings
 ################################################################################

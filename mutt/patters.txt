@@ -1,0 +1,31 @@
+Pattern		Description
+~A		all messages
+=b STRING	messages which contain STRING in the message body
+=B STRING	messages which contain STRING in the whole message
+~C EXPR		messages either to: or cc: EXPR
+~d [MIN]-[MAX]	messages with “date-sent” in a Date range
+~D		deleted messages
+~e EXPR		messages which contains EXPR in the “Sender” field
+~F		flagged messages
+~f EXPR		messages originating from EXPR
+=h STRING	messages which contain STRING in the message header
+~i EXPR		messages which match EXPR in the “Message-ID” field
+~L EXPR		messages either originated or received by EXPR
+~l		messages addressed to a known mailing list
+~m [MIN]-[MAX]	messages in the range MIN to MAX *)
+~N		new messages
+~O		old messages
+~p		messages addressed to you (consults alternates)
+~P		messages from you (consults alternates)
+~Q		messages which have been replied to
+~r [MIN]-[MAX]	messages with “date-received” in a Date range
+~R		read messages
+~s EXPR		messages having EXPR in the “Subject” field.
+~t EXPR		messages addressed to EXPR
+~T		tagged messages
+~u		messages addressed to a subscribed mailing list
+~U		unread messages
+~x EXPR		messages which contain EXPR in the “References” or “In-Reply-To” field
+~X [MIN]-[MAX]	messages with MIN to MAX attachments *)
+~z [MIN]-[MAX]	messages with a size in the range MIN to MAX *) **)
+~(PATTERN)	messages in threads containing messages matching PATTERN, e.g. all threads containing messages from you: ~(~P)
