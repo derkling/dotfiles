@@ -26,36 +26,47 @@ bind ^Up    resize-pane -U 5
 bind ^Right resize-pane -R 5
 bind ^Left  resize-pane -L 5
 
-# Sane scrolling
-set -g mode-mouse on
-set-option -g mouse-select-pane on
-set-option -g mouse-select-window on
-set-option -g mouse-resize-pane on
-set-window-option -g mode-mouse on
-
 # Disable window renaming
 set-option -g allow-rename off
 
-# Limit the amount of text that is printed in the console to prevent
-# tmux from freezing when seeing tons of output
-setw -g c0-change-trigger 10
-setw -g c0-change-interval 250
+# Mouse mode (on by default)
+set-option -g -q mouse on \
+# # Toggle mouse mode on and off
+# bind M set-option -g -q mouse on \
+#     display 'Mouse: ON'
+# bind m set-option -g -q mouse off \
+#     display 'Mouse: OFF'
 
-# Toggle mouse on
-bind M \
-    set -g mode-mouse on \;\
-    set -g mouse-resize-pane on \;\
-    set -g mouse-select-pane on \;\
-    set -g mouse-select-window on \;\
-    display 'Mouse: ON'
+# Scroll by PageUp/PageDown
+# Allows to press page up in normal mode and have it scroll back into the
+# history. If you page down back to the bottom of the history, it automatically
+# exits copy mode.
+# If there is an alternate screen (i.e. a full screen app like vim, less, mutt,
+# etc) then it does not enter copy mode, but passes through the key press. This
+# is because alternate screen apps usually handle page up/down itself and also
+# will have no scroll back.
+bind-key -T root PPage if-shell -F "#{alternate_on}" "send-keys PPage" "copy-mode -e; send-keys PPage"
+bind-key -t vi-copy PPage page-up
+bind-key -t vi-copy NPage page-down
 
-# Toggle mouse off
-bind m \
-    set -g mode-mouse off \;\
-    set -g mouse-resize-pane off \;\
-    set -g mouse-select-pane off \;\
-    set -g mouse-select-window off \;\
-    display 'Mouse: OFF'
+# Scross by mouse wheel
+# Very similar to page up, except for the mouse wheel. i.e. I just scroll back
+# and forward and if I scroll to the end of the history, copy mode
+# automatically exits.
+# Again, just pass through the click for alternate screens they often handle
+# the mouse themselves.
+bind-key -T root WheelUpPane if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; copy-mode -e; send-keys -M"
+bind-key -T root WheelDownPane if-shell -F -t = "#{alternate_on}" "send-keys -M" "select-pane -t =; send-keys -M"
+bind-key -t vi-copy WheelUpPane halfpage-up
+bind-key -t vi-copy WheelDownPane halfpage-down
+
+# Windows style
+# Allow do have different styles for active and non-active panes. I usually
+# have a black background, so now I set the non-active panes to slightly grey
+# so it is easy to pick the active pane at a glance.
+set-window-option -g window-style 'bg=#101010'
+set-window-option -g window-active-style 'bg=#000000'
+set-window-option -g pane-active-border-style ''
 
 # Zoom mode
 unbind +
