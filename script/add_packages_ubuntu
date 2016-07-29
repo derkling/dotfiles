@@ -96,6 +96,17 @@ PACKAGES="$PACKAGES \
 	nautilus-wipe \
 "
 
+# Awesome Window Manager
+PACKAGES="$PACKAGES \
+	awesome \
+	awesome-extra \
+	lxappearance \
+	xfce4 xfce4-goodies xfce4-panel xfce4-settings \
+"
+
+# lxappearance => setup icon theme for Thunar and other GTK based apps when
+#                 used from withint Awesome
+
 # Networking libraries
 PACKAGES="$PACKAGES \
 	iproute iptables netcat-openbsd rsync tcpdump nmap \
