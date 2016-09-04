@@ -27,8 +27,14 @@ parser.add_argument('username',
 
 def set_credentials(repo, user, pw):
     KEYRING_NAME = "offlineimap"
+    if isinstance(repo, list):
+        repo = repo[0]
+    if isinstance(user, list):
+        user = user[0]
     attrs = { "repo": repo, "user": user }
     keyring = gkey.get_default_keyring_sync()
+    print "Set password in keyring [{}] using {}"\
+           .format(KEYRING_NAME, attrs)
     gkey.item_create_sync(keyring, gkey.ITEM_NETWORK_PASSWORD,
         KEYRING_NAME, attrs, pw, True)
 
@@ -42,6 +48,9 @@ def get_username(repo):
     return get_credentials(repo)[0]
 def get_password(repo):
     return get_credentials(repo)[1]
+
+# NOTE: the content of the keyring can be inspected and manipulated using the
+# "seahorse" GUI under GNOME
 
 if __name__ == "__main__":
     import sys
