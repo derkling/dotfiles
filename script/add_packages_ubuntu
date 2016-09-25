@@ -101,11 +101,13 @@ PACKAGES="$PACKAGES \
 	awesome \
 	awesome-extra \
 	lxappearance \
+	i3lock xautolock \
 	xfce4 xfce4-goodies xfce4-panel xfce4-settings \
 "
 
 # lxappearance => setup icon theme for Thunar and other GTK based apps when
 #                 used from withint Awesome
+# i3lock xautolock => customizable lockscreen
 
 # Networking libraries
 PACKAGES="$PACKAGES \
