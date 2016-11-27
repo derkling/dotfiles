@@ -2,9 +2,9 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vundle Plugins Configuration
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vundle Plugins Configuration {{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
 " Available commands:
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
@@ -14,8 +14,6 @@ filetype off                   " required!
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle command are not allowed
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Setup Vundle scripts manager
 set runtimepath+=~/dotfiles/vim/bundle/vundle
 call vundle#rc()
@@ -27,9 +25,12 @@ augroup myvimrc
     au!
     au BufWritePost .vimrc,vimrc.symlink so ~/.vimrc
 augroup END
+" }}}
 
+
+" Colorscheme {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colorscheme (Solarized)
+" Solarized
 "Bundle 'altercation/vim-colors-solarized'
 "set background=light
 "set background=dark
@@ -37,32 +38,33 @@ augroup END
 "let g:solarized_visibility="high"
 "colorscheme solarized
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colorscheme (Molokai)
+" Molokai
 " Molokai is a Vim port of the monokai theme for TextMate originally created
 " by Wimer Hazenberg.
 Bundle 'vim-scripts/molokai'
 colorscheme molokai
+"}}}
 
 
+" Color and GUI Configuration {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Color and GUI Configuration
 syntax on
 set background=dark
 set laststatus=2
 set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
+"}}}
 
 
+" SnipMate {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SnipMate
 Bundle "msanders/snipmate.vim"
 let g:snips_author = 'Patrick Bellasi'
 ino  <C-j> <C-r>=TriggerSnippet()<cr>
+"}}}
 
 
+" EasyMotion {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" EasyMotion
 Bundle 'Lokaltog/vim-easymotion'
 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 let g:EasyMotion_smartcase = 1   " Case sensitivity
@@ -72,25 +74,28 @@ map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
+"}}}
 
 
+" Sessions Management {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Sessions Management
 Bundle "xolox/vim-misc.git"
 Bundle "xolox/vim-session"
 " Other interesting plugins from xolox:
 " http://www.vim.org/scripts/script.php?script_id=4597
+" }}}
 
 
+" PowerLine {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PowerLine
 " Bundle 'https://github.com/Lokaltog/vim-powerline'
 " set t_Co=256 " Explicitly tell Vim that the terminal supports 256 colors
 " let g:Powerline_symbols = 'fancy' " Enable usage of FANCY symbols
+" }}}
 
 
+" Airline {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline
 Bundle 'bling/vim-airline'
 " let g:airline_theme='kalisi'
 " let g:airline_theme='lucius'
@@ -99,16 +104,19 @@ Bundle 'bling/vim-airline'
 let g:airline_theme='ubaryd'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
+" }}}
 
+
+" Powerline Fonts {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Powerline Fonts
 " Bundle 'Lokaltog/powerline-fonts'
 " let g:airline_powerline_fonts=1
 " set guifont=Menlo
+" }}}
 
 
+" TMuxLine {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TMuxLine
 Bundle 'edkolev/tmuxline.vim'
 let g:airline#extensions#tmuxline#snapshot_file = '~/dotfiles/tmux/tmux-statusline-colors.conf'
 let g:tmuxline_separators = {
@@ -117,23 +125,26 @@ let g:tmuxline_separators = {
     \ 'right' : '',
     \ 'right_alt' : '<',
     \ 'space' : ' '}
+" }}}
 
 
+" CTags SideBar {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" CTags SideBar
 Bundle 'majutsushi/tagbar'
 let g:airline#extensions#tagbar#enabled = 1
+" }}}
 
 
+" tComment {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" tComment
 Bundle "tComment"
 nnoremap // :TComment<CR>
 vnoremap // :TComment<CR>
+" }}}
 
 
+" Command-T {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Command-T
 Bundle "wincent/Command-T"
 " let g:CommandTMatchWindowAtTop=1 " show window at top
 " set the PmenuSel color to be visible with black background
@@ -143,10 +154,11 @@ nnoremap <silent> <leader>zx :CommandT<CR>
 nnoremap <silent> <leader>zb :CommandTBuffer<CR>
 nnoremap <silent> <leader>zm :CommandTMRU<CR>
 nnoremap <silent> <leader>zt :CommandTTag<CR>
+" }}}
 
 
+" EasyGrep - Fast and Easy Find and Replace Across Multiple Files {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" EasyGrep - Fast and Easy Find and Replace Across Multiple Files
 " Default mappings:
 "   <Leader>vv  - Grep for the word under the cursor, match all occurences,
 "   <Leader>vV  - Grep for the word under the cursor, match whole word, like
@@ -158,10 +170,11 @@ nnoremap <silent> <leader>zt :CommandTTag<CR>
 Bundle 'dkprice/vim-easygrep'
 noremap <leader>go <esc>:GrepOption<cr>
 nnoremap go :GrepOption<cr>
+" }}}
 
 
+" QuickFix window management {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" QuickFix window management
 noremap <leader>fo <esc>:copen<cr>
 noremap <leader>fc <esc>:cclose<cr>
 noremap <leader>fn <esc>:cnext<cr>
@@ -170,32 +183,36 @@ nnoremap fo :copen<cr>
 nnoremap fc :cclose<cr>
 nnoremap fn :cnext<cr>
 nnoremap fp :cprevious<cr>
+ " }}}
 
 
+" CScope {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" CScope
 Bundle "derkling/cscope.vim"
+" }}}
 
 
+" Doxygen {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Doxygen
 Bundle "DoxygenToolkit.vim"
 map <LocalLeader>d :Dox<CR>
 map <LocalLeader>d :Dox<CR>
+" }}}
 
 
+" NERDTree {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree
 " https://github.com/jistr/vim-nerdtree-tabs/blob/master/README.md
 Bundle "scrooloose/nerdtree"
 Bundle "jistr/vim-nerdtree-tabs"
 noremap <silent> <F12> :NERDTreeToggle<CR>
 noremap! <silent> <F12> <ESC>:NERDTreeToggle<CR>
 let g:NERDTreeDirArrows=0 " use ASCII chars
+" }}}
 
 
+" Syntax and errors highlighter {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntax and errors highlighter
 " External language specific syntax checkers are required, look at:
 " syntax_checkers/<filetype>/*.vim
 Bundle 'scrooloose/syntastic'
@@ -208,10 +225,11 @@ let g:syntastic_check_on_wq = 0
 let g:airline#extensions#whitespace#checks = []
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+" }}}
 
 
+" Highlight trailing whitespaces {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Highlight trailing whitespaces
 " http://www.vim.org/scripts/script.php?script_id=3966
 Bundle 'ShowTrailingWhitespace'
 highlight ShowTrailingWhitespace ctermbg=Blue guibg=Blue
@@ -221,10 +239,11 @@ nnoremap <silent> <Leader>tw
 		\ ? 'Show trailing whitespace'
 		\ : 'Not showing trailing whitespace'
 	\ )<CR>
+" }}}
 
 
+" Delete trailing whitespaces {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Delete trailing whitespaces
 " http://www.vim.org/scripts/script.php?script_id=3967
 Bundle 'DeleteTrailingWhitespace'
 let g:DeleteTrailingWhitespace = 0
@@ -232,23 +251,34 @@ let g:DeleteTrailingWhitespace_Action = 'ask'
 let g:DeleteTrailingWhitespace_ChoiceAffectsHighlighting = 1
 nnoremap <Leader>dw :<C-u>%DeleteTrailingWhitespace<CR>
 vnoremap <Leader>dw :DeleteTrailingWhitespace<CR>
+" }}}
 
 
+" GIT Fugitive {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" GIT Fugitive
 Bundle 'tpope/vim-fugitive'
+" }}}
 
+
+" Magit {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Show GIT diff in the 'gutter' (sign column)
+Bundle 'jreybert/vimagit'
+" }}}
+
+
+" Show GIT diff in the 'gutter' (sign column) {{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'airblade/vim-gitgutter'
 nnoremap <Leader>tg  :GitGutterToggle<CR>
 nnoremap <Leader>tgh :GitGutterLineHighlightsToggle<CR>
 nnoremap <Leader>dgs :GitGutterStageHunk<CR>
 nnoremap <Leader>dgr :GitGutterRevertHunk<CR>
 let g:airline#extensions#hunks#enabled = 1
+" }}}
 
+
+" Github GIST {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Github GIST
 " NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'}
 Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
@@ -256,37 +286,43 @@ let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 let g:gist_browser_command = 'chromium-browser %URL%'
 let g:gist_post_private = 1
+" }}}
 
+
+" Python Code folding {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Python Code folding
+Bundle 'vim-scripts/indentpython.vim'
 Bundle 'tmhedberg/SimpylFold.git'
 let g:SimpylFold_docstring_preview = 1
 let g:SimpylFold_fold_docstring = 0
+" }}}
 
-Bundle 'vim-scripts/indentpython.vim'
 
+" MakeSetup {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MakeSetup
 Bundle 'derkling/vim-makesetup'
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
+" }}}
 
 
+" Documentation viewer {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Documentation viewer
 Bundle 'powerman/vim-plugin-viewdoc'
 let g:viewdoc_open='new'
 let g:viewdoc_only=1
+" }}}
 
 
+" LaTeX {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" LaTeX
 Bundle "vim-latex/vim-latex.github.com.git"
 autocmd BufEnter *.tex,*.bib source ~/dotfiles/vim/plugins/latex.vim
+" }}}
 
 
+" TaskPaper {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TaskPaper
 Bundle "davidoc/taskpaper.vim"
 autocmd BufEnter *.taskpaper set filetype=taskpaper
 let g:task_paper_date_format = "%Y-%m-%d %H:%M:%S%z"
@@ -309,16 +345,18 @@ augroup vimrc-taskpaper
 autocmd!
 autocmd FileType taskpaper call s:taskpaper_setup()
 augroup END
+" }}}
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Global Configuration
+" Global Configuration {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " This MUST be the last entry BEFORE the following custom configuration
 filetype plugin indent plugin on
+" }}}
 
+
+" Confiugrations which cause vim to behave a lot differently from regular Vi {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Confiugrations which cause vim to behave a lot differently from regular Vi
 set nocompatible	" vim defaults, not vi!
 set showcmd		" Show (partial) command in status line.
 set showmatch		" Show matching brackets.
@@ -331,38 +369,45 @@ set mouse=a		" Enable mouse usage (all modes) in terminals
 set nobackup		" Disable creation of backup (*.ext~) files
 set laststatus=2	" Always show the statusline
 set encoding=utf-8	" Necessary to show Unicode glyphs
+" }}}
 
+
+" Set GVim configuration {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set GVim configuration
 if has("gui_running")
 	if has("gui_gtk2")
 		set guifont=Monospace\ 8 " Set 8pt font
 		set lines=75 columns=180 " Maximize window
 	endif
 endif
+" }}}
 
+
+" Jump to the last position when reopening a file {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Jump to the last position when reopening a file
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
+" }}}
 
 
+" Incremental search with results highlight {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Incremental search with results highlight
 set incsearch
 set hlsearch
 " Ctrl-L clears the highlight from the last search
 noremap  <C-l> :nohlsearch<CR><C-l>
 noremap! <C-l> <ESC>:nohlsearch<CR><C-l>
+" }}}
 
 
+" Smart backspace {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Smart backspace
 set backspace=start,indent,eol
+" }}}
 
 
+" Better TAB completion for files (like the shell) {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Better TAB completion for files (like the shell)
 if has("wildmenu")
     set wildmenu
     set wildmode=longest,list
@@ -372,16 +417,18 @@ if has("wildmenu")
     set wildignore+=.DS_Store,.git,.hg,.svn
     set wildignore+=*~,*.swp,*.tmp
 endif
+" }}}
 
 
+" TAB and Shift-TAB in command mode cycle buffers {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" TAB and Shift-TAB in command mode cycle buffers
 "nmap <Tab>   :bn<CR>
 "nmap <S-Tab> :bp<CR>
+" }}}
 
 
+" Resize vsplit panes on VIM window resize events {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Resize vsplit panes on VIM window resize events
 autocmd VimResized * exe "normal! \<c-w>="
 " Easier split navigation
 nnoremap <C-J> <C-W><C-J>
@@ -391,15 +438,14 @@ nnoremap <C-H> <C-W><C-H>
 " More natural split opening
 set splitbelow
 set splitright
+" }}}
 
 
-
+" Function KEYs Mapping {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Function KEYs Mapping
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F2 - Toggle auto-indenting for code paste
+" F2 - Toggle auto-indenting for code paste {{{2
+"""""""""""""""""""""""""""""""""""""""""""
 " pressing F2 in normal mode will invert the 'paste' option
 nnoremap <F2> :set invpaste paste?<CR>
 " press F2 when in insert mode, to toggle 'paste' on and off
@@ -408,13 +454,13 @@ set pastetoggle=<F2>
 set showmode
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F3 - Toggle text wrapping
+" F3 - Toggle text wrapping {{{2
+""""""""""""""""""""""""""""""""
 noremap <F3> :set nowrap!<CR>
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F4 - Line numbering
+" F4 - Line numbering {{{2
+""""""""""""""""""""""""""
 :set number		" display line numbers along the left side of a window
 :set numberwidth=5	" change the width of the 'gutter' column used for numbering
 :set cpoptions+=n	" use the number column for the text of wrapped lines
@@ -436,13 +482,13 @@ autocmd InsertLeave * :set relativenumber
 noremap <F4> :set nonumber!<CR>
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F5 - Remove thrailing whitespaces
+" F5 - Remove thrailing whitespaces {{{2
+""""""""""""""""""""""""""""""""""""""""
 noremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F6 - Highlight all instances of word under cursor, when idle.
+" F6 - Highlight all instances of word under cursor, when idle. {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! AutoHighlightToggle()
   let @/ = ''
   if exists('#auto_highlight')
@@ -464,8 +510,8 @@ endfunction
 nnoremap <F6> :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F7 - Spell Checking with multi-language support
+" F7 - Spell Checking with multi-language support {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:myLang=0
 let g:myLangList=["nospell","en_us","en_gb","it"]
 function! ToggleSpell()
@@ -481,28 +527,29 @@ endfunction
 nnoremap <silent> <F7> :call ToggleSpell()<CR>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" F8 - Toggle CTags bar
+" F8 - Toggle CTags bar {{{2
+""""""""""""""""""""""""""""
 nnoremap <F8> :TagbarToggle<CR>
 
 
+" }}}
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Filetype Specific Configurations
+
+" Filetype Specific Configurations {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Makefiles
+" Makefiles {{{2
+""""""""""""""""
 autocmd FileType make setlocal noexpandtab
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" C/C++
+" C/C++ {{{2
+""""""""""""
 autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S source ~/dotfiles/vim/plugins/c.vim
 autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S normal zR
 autocmd BufNewFile,BufRead *.dox set filetype=cpp.doxygen
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Python
+" Python {{{2
+"""""""""""""
 " Use PEP8 indentation rules
 autocmd BufNewFile,BufRead *.py set
     \ tabstop=4
@@ -515,3 +562,4 @@ autocmd BufNewFile,BufRead *.py set
 autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
 autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
+" vim: set foldmethod=marker :
