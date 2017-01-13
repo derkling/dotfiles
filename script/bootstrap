@@ -216,6 +216,12 @@ setup_irssi() {
   ln -fs ~/dotfiles/irssi ~/.irssi
 }
 
+setup_weechat() {
+  info 'Setup WeeChat configuration'
+  [ -d ~/.weechat ] && rm -rf ~/.weechat
+  ln -fs ~/dotfiles/weechat ~/.weechat
+}
+
 link_files () {
   ln -s $1 $2
   success "linked $1 to $2"
@@ -314,6 +320,7 @@ setup_gpg
 setup_mutt
 setup_imap
 setup_irssi
+setup_weechat
 setup_python
 setup_ranger
 install_dotfiles

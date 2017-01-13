@@ -114,7 +114,7 @@ PACKAGES="$PACKAGES \
 	iproute iptables netcat-openbsd rsync tcpdump nmap \
 	openssh-client openssh-server \
 	mutt msmtp offlineimap imapfilter ldap-utils procmail isync \
-	irssi \
+	irssi weechat \
 	curl wget axel \
 	links2 \
 	transmission \
