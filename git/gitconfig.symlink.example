@@ -8,11 +8,22 @@
   helper = GIT_CREDENTIAL_HELPER
 
 [alias]
+  bv = branch --sort=-committerdate -av
   co = checkout
+  cb = checkout -b
+  ri = rebase -i
+
   promote = !$ZSH/bin/git-promote
   wtf     = !$ZSH/bin/git-wtf
   rank-contributors = !$ZSH/bin/git-rank-contributors
   count   = !git shortlog -sn
+
+  lg = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --abbrev-commit --date=short
+  lgs = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --abbrev-commit --date=short -n50
+  check-series = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/checkpatch.pl --strict -'
+  check-series-arm64 = rebase --interactive --exec 'make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j16 >/dev/null'
+  check-maintainer = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/get_maintainer.pl'
+  list-patches = cherry -v
 
 [color]
   diff = auto
@@ -47,11 +58,40 @@
   smtpserver = smtp.gmail.com
   from = AUTHORNAME <AUTHOREMAIL>
   bcc = AUTHOREMAIL
+  confirm = always
+  multiedit = false
   smtpserverport = 587
   smtpencryption = tls
   smtpuser = AUTHOREMAIL
 
+[http]
+	cookiefile = /home/patbel01/.gitcookies
+
+[github]
+	user = GITHUBUSER
+
+[diff]
+	tool = vimdiff
+
+[gui]
+	fontui = -family \"Liberation Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"Liberation Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+
 [tig "bind"]
   status = C !git commit -s
+  # Create a new branch:
+  refs = n !@git branch "%(prompt Enter branch name: )"
+  # Tag the selected commit:
+  main = T !@git tag %(prompt) %(commit)
+  # Start an interactive rebase from the current commit
+  main = R !@git rebase -i %(commit)
+
+[url "https://chromium.googlesource.com/a/"]
+  insteadOf = https://chromium.googlesource.com/a/
+  insteadOf = https://chromium.googlesource.com/
+
+[rerere]
+	autoupdate = true
+	enabled = true
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=gitconfig
