@@ -102,6 +102,15 @@ folder-hook . 'set record = "^"' # Keep sent messages in the current folder
 push <show-version>                            # Shows mutt version at startup
 source ~/dotfiles/mutt/vombatidae.mutt         # Wombat-like Color Scheme
 
+# Color inline patches ---------------------------------------------------------
+color body green color234 "^diff \-.*"
+color body green color234 "^index [a-f0-9].*"
+color body green color234 "^\-\-\- .*"
+color body green color234 "^[\+]{3} .*"
+color body cyan  color234 "^[\+][^\+]+.*"
+color body red   color234 "^\-[^\-]+.*"
+color body brightblue color234 "^@@ .*"
+
 
 ################################################################################
 # Sidebar settings
@@ -113,7 +122,7 @@ set sidebar_width   = 36
 set sidebar_delim   = ' |'
 set sidebar_sort    = yes
 # color of folders with new mail
-color sidebar_new yellow default
+color sidebar_new yellow color234
 # Folders selection shortcuts --------------------------------------------------
 bind index \CP sidebar-prev    # prev folder
 bind index \CN sidebar-next    # next folder
