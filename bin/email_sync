@@ -1,9 +1,40 @@
 #!/bin/bash
 
-# Trigger an update of the local mailbox
+POLLTIME_S=${POLLTIME_S:-180}
+VERBOSE=${VERBOSE:-0}
+LOCKFILE=/tmp/email_sync.lock
+
+function clean_up {
+	rm -f $LOCKFILE
+	exit
+}
+
+trap clean_up SIGHUP SIGINT SIGTERM SIGKILL
+
+echo "Locking..."
+lockfile -r 0 $LOCKFILE || exit 1
+
 while [ 1 ]; do
-	mbsync work &>/dev/null
-	[ $? -eq 1 ] || break
-	sleep 1
+
+	# Trigger an update of the local mailbox
+	while [ 1 ]; do
+
+		if [ $VERBOSE -eq 1 ]; then
+			echo "Verbose update... "
+			mbsync work
+		else
+			echo "Silent update... "
+			mbsync work &>/dev/null
+		fi
+		# Return when all messages have been fetched without errors
+		[ $? -eq 1 ] || break
+
+		echo "Fetch errors, retrying... "
+		sleep 1
+	done
+
+	# Refresh periodically
+	sleep $POLLTIME_S
 done
 
+clean_up
