@@ -155,7 +155,7 @@ set sort         = threads                     # like gmail
 set sort_aux     = reverse-last-date-received  # like gmail
 set strict_threads = "yes"                     # threads based on "In-Reply-To" and "References"
 set uncollapse_jump                            # jump to next unread in uncollapsed threads
-unset collapse_unread                          # do not collapse on unread messages
+set collapse_unread                            # allow to collapse threads with unread messages
 
 # How to sort entries in the file browser
 set sort_browser = "alpha"                     # sort files by name
