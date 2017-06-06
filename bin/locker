@@ -1,5 +1,16 @@
 #!/bin/sh
 
+LOCKFILE=/tmp/i3lock.lock
+
+function clean_up {
+	rm -f $LOCKFILE
+	exit
+}
+
+trap clean_up SIGHUP SIGINT SIGTERM SIGKILL
+
+lockfile -r 0 $LOCKFILE || exit 1
+
 LOCKCMD="i3lock -d -c 333333"
 if [ $# -eq 1 ]; then
   LOCKCMD="$LOCKCMD -t -i $1"
@@ -11,3 +22,4 @@ exec xautolock -detectsleep \
   -notify 30 \
   -notifier "notify-send -u critical -t 10000 -- 'LOCKING screen in 30 seconds'"
 
+clean_up
