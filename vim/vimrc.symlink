@@ -96,12 +96,13 @@ Bundle "xolox/vim-session"
 
 " Airline {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Bundle 'bling/vim-airline'
-" let g:airline_theme='kalisi'
+Bundle 'vim-airline/vim-airline'
+Bundle 'vim-airline/vim-airline-themes'
+let g:airline_theme='kalisi'
 " let g:airline_theme='lucius'
 " let g:airline_theme='molokai'
 " let g:airline_theme='powerlineish'
-let g:airline_theme='ubaryd'
+" let g:airline_theme='ubaryd'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 " }}}
