@@ -2,7 +2,7 @@
 
 LOCKFILE=/tmp/i3lock.lock
 
-function clean_up {
+clean_up() {
 	rm -f $LOCKFILE
 	exit
 }
@@ -18,8 +18,8 @@ fi
 
 exec xautolock -detectsleep \
   -time 3 -locker "$LOCKCMD" \
-  -corners +00- -cornerdelay 1 -cornerredelay 10 \
-  -notify 30 \
-  -notifier "notify-send -u critical -t 10000 -- 'LOCKING screen in 30 seconds'"
+  -corners +00- -cornerdelay 15 -cornerredelay 10 \
+  -notify 15 \
+  -notifier "notify-send -u critical -t 13000 -- 'LOCKING screen in 15 seconds'"
 
 clean_up
