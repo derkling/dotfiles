@@ -16,5 +16,11 @@ set main-options = -n 200
 # Don't show staged and unstaged changes in the main view
 # set show-changes = no
 
+# Always split in vertical
+set vertical-split = yes
+
+# Sort branches by date
+set refs-view = line-number:no id:yes date:relative-compact author:abbreviated ref commit-title
+
 # Optionally, use the old and faster but less acurate graph renderer
 # set main-view-commit-title-graph = v1
