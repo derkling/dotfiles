@@ -310,6 +310,11 @@ Bundle 'tpope/vim-fugitive'
 " Magit {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'jreybert/vimagit'
+nnoremap <Leader>go :Magit<CR>
+" Add useful tags as macro
+map <Leader>gs oSigned-off-by: Patrick Bellasi <patrick.bellasi@arm.com><CR><ESC>
+map <Leader>gt oTested-by: Patrick Bellasi <patrick.bellasi@arm.com><CR><ESC>
+map <Leader>gr oReviewed-by: Patrick Bellasi <patrick.bellasi@arm.com><CR><ESC>
 " }}}
 
 
