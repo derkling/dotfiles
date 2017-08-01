@@ -26,6 +26,7 @@
 
   lg = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --abbrev-commit --date=short
   lgs = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --abbrev-commit --date=short -n50
+  refresh-sha1s = rebase --interactive --exec 'git commit --amend --no-edit'
   check-series = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/checkpatch.pl --strict -'
   check-series-arm64 = rebase --interactive --exec 'make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j16 >/dev/null'
   check-maintainer = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/get_maintainer.pl'
