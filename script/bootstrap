@@ -73,11 +73,14 @@ setup_gitconfig () {
   read -e git_authorkey
   user ' - What is your GitHub username?'
   read -e git_github_username
+  user ' - What is your system username?'
+  read -e git_username
 
   sed -e "s/AUTHORNAME/$git_authorname/g" \
       -e "s/AUTHOREMAIL/$git_authoremail/g" \
       -e "s/AUTHORKEY/$git_authorkey/g" \
       -e "s/GITHUBUSER/$git_github_username/g" \
+      -e "s/USERNAME/$git_username/g" \
       -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
       git/gitconfig.symlink.example > git/gitconfig.symlink
 

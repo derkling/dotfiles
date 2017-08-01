@@ -7,6 +7,12 @@
 [credential]
   helper = GIT_CREDENTIAL_HELPER
 
+[http]
+	cookiefile = /home/USERNAME/.gitcookies
+
+[github]
+	user = GITHUBUSER
+
 [alias]
   bv = branch --sort=-committerdate -av
   co = checkout
@@ -64,11 +70,6 @@
   smtpencryption = tls
   smtpuser = AUTHOREMAIL
 
-[http]
-	cookiefile = /home/patbel01/.gitcookies
-
-[github]
-	user = GITHUBUSER
 
 [diff]
 	tool = vimdiff
