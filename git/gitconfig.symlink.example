@@ -71,6 +71,35 @@
   smtpencryption = tls
   smtpuser = AUTHOREMAIL
 
+[tig "bind"]
+  # View manipulation
+  generic = Meta-m view-main
+  generic = Meta-s view-status
+  generic = _ :set vertical-split = no
+  generic = | :set vertical-split = yes
+
+  main = <C-f>  ?git commit --amend
+  main = <C-b>  !git branch -f "%(prompt Enter branch name: )" $(commit)
+  main = <Esc>r ?git reset %(commit)
+  main = <Esc>R ?git reset --hard %(commit)
+  main = <C-b>  !@git branch -f %(prompt) %(commit)
+  main = <C-d>  !@git branch -D %(prompt)
+  main = <C-s>  !@git stash save "%(prompt)"
+  main =    c   !@git checkout %(branch)
+  main =    C   !@git checkout %(commit)
+  main =    s   !@git checkout %(prompt)
+  main =    F   !git commit --fixup=%(commit)
+  main =    P   !git cherry-pick %(commit)
+  main =    R   !git rebase -i %(commit)
+  main =    T   !@git tag %(prompt) %(commit)
+  main =    !   !@git revert %(commit)
+  main =    F   !git commit --fixup=%(commit)
+  main =    f   !@git format-patch -o /tmp/ %(commit) -1
+
+  status = C !git commit -s
+  status = R !git checkout %(file)
+
+  refs = n !@git branch %(prompt Enter branch name: )
 
 [diff]
 	tool = vimdiff
