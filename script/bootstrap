@@ -316,6 +316,15 @@ setup_ranger() {
   ln -s ~/dotfiles/ranger ~/.config/ranger
 }
 
+setup_gist() {
+  info 'Installing Gist'
+  sudo getm install gist
+
+  info 'Login to your gist account'
+  gist --login
+
+}
+
 setup_fzf() {
   info 'Setup FuzzyFinder'
 
@@ -337,6 +346,7 @@ setup_irssi
 setup_weechat
 setup_python
 setup_ranger
+setup_gist
 setup_fzf
 install_dotfiles
 
