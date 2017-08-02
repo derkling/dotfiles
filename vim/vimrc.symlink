@@ -415,11 +415,103 @@ let g:SimpylFold_fold_docstring = 0
 " }}}
 
 
-" MakeSetup {{{
+" " MakeSetup {{{
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Bundle 'derkling/vim-makesetup'
+" autocmd QuickFixCmdPost [^l]* nested cwindow
+" autocmd QuickFixCmdPost    l* nested lwindow
+" " }}}
+
+
+" NeoMake {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Bundle 'derkling/vim-makesetup'
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
+Bundle 'neomake/neomake'
+let g:neomake_open_list = 1
+let g:neomake_error_sign = { 'text' : 'E', 'texthl': 'NeomakeErrorSign' }
+let g:neomake_warning_sign = { 'text' : 'W', 'texthl': 'NeomakeWarningSign' }
+let g:neomake_message_sign = { 'text' : 'M', 'texthl': 'NeomakeMessageSign' }
+let g:neomake_info_sign = { 'text' : 'I', 'texthl': 'NeomakeInfoSign' }
+hi NeomakeErrorSign	ctermfg=red
+hi NeomakeWarningSign	ctermfg=yellow
+hi NeomakeMessageSign	ctermfg=white
+hi NeomakeInfoSign	ctermfg=lightblue
+let g:neomake_highlight_lines = 0
+
+let g:neomake_c_krnimg_maker = {
+	\ 'exe': 'make',
+	\ 'args': ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', '-j32', 'Image'],
+        \ 'errorformat':
+            \ '%-G%f:%s:,' .
+            \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+            \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+            \ '%-GIn file included%.%#,' .
+            \ '%-G %#from %f:%l\,,' .
+            \ '%f:%l:%c: %trror: %m,' .
+            \ '%f:%l:%c: %tarning: %m,' .
+            \ '%I%f:%l:%c: note: %m,' .
+            \ '%f:%l:%c: %m,' .
+            \ '%f:%l: %trror: %m,' .
+            \ '%f:%l: %tarning: %m,'.
+            \ '%I%f:%l: note: %m,'.
+            \ '%f:%l: %m',
+	\ }
+let g:neomake_c_krnsrc_maker = {
+	\ 'exe': 'make',
+	\ 'args': ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', '-j32', '%:r.o'],
+        \ 'errorformat':
+            \ '%-G%f:%s:,' .
+            \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+            \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+            \ '%-GIn file included%.%#,' .
+            \ '%-G %#from %f:%l\,,' .
+            \ '%f:%l:%c: %trror: %m,' .
+            \ '%f:%l:%c: %tarning: %m,' .
+            \ '%I%f:%l:%c: note: %m,' .
+            \ '%f:%l:%c: %m,' .
+            \ '%f:%l: %trror: %m,' .
+            \ '%f:%l: %tarning: %m,'.
+            \ '%I%f:%l: note: %m,'.
+            \ '%f:%l: %m',
+	\ }
+let g:neomake_c_andsrc_maker = {
+	\ 'exe': 'make',
+	\ 'args': ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-android-', '-j32', '%:r.o'],
+        \ 'errorformat':
+            \ '%f:%l:%c: %trror: %m,'.
+            \ '%I%f:%l:%c: note: %m,',
+	\ }
+let g:neomake_c_aospmm_maker = {
+	\ 'exe': 'mm',
+	\ 'args': ['-j32'],
+        \ 'errorformat':
+            \ '%-G%f:%s:,' .
+            \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+            \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+            \ '%-GIn file included%.%#,' .
+            \ '%-G %#from %f:%l\,,' .
+            \ '%f:%l:%c: %trror: %m,' .
+            \ '%f:%l:%c: %tarning: %m,' .
+            \ '%I%f:%l:%c: note: %m,' .
+            \ '%f:%l:%c: %m,' .
+            \ '%f:%l: %trror: %m,' .
+            \ '%f:%l: %tarning: %m,'.
+            \ '%I%f:%l: note: %m,'.
+            \ '%f:%l: %m',
+	\ }
+let g:neomake_c_enabled_makers = ['gcc', 'krnimg', 'krnsrc', 'andsrc', 'aospmm']
+
+nnoremap <Leader>bi :Neomake krnimg<CR>
+nnoremap <Leader>bs :Neomake krnsrc<CR>
+nnoremap <Leader>ba :Neomake andsrc<CR>
+nnoremap lo :lopen<CR>
+nnoremap lc :lclose<CR>
+nnoremap ln :lnext<CR>
+nnoremap lp :lprev<CR>
+
+let g:neomake_logfile = '/tmp/neomake.log'
+let g:neomake_verbose = 2
+
+:nnoremap fn :lnext
 " }}}
 
 
