@@ -316,6 +316,14 @@ setup_ranger() {
   ln -s ~/dotfiles/ranger ~/.config/ranger
 }
 
+setup_fzf() {
+  info 'Setup FuzzyFinder'
+
+  git clone https://github.com/junegunn/fzf.git --depth 1 ~/dotfiles/fzf
+  ln -s ~/dotfiles/fzf ~/.fzf
+  ~/.fzf/install
+}
+
 install_packages
 install_dotfiles
 setup_gitconfig
@@ -329,6 +337,7 @@ setup_irssi
 setup_weechat
 setup_python
 setup_ranger
+setup_fzf
 install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
