@@ -413,6 +413,19 @@ let g:gist_post_private = 1
 " }}}
 
 
+"  EnhancedDiff {{{
+Bundle 'chrisbra/vim-diff-enhanced'
+if &diff
+    " enable the patience diff algorithm when starting as vimdiff/git difftool
+    let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
+    nnoremap p dp
+    nnoremap o do
+    nnoremap ] ]c
+    nnoremap [ [c
+endif
+" }}}
+
+
 " Python Code folding {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'vim-scripts/indentpython.vim'
