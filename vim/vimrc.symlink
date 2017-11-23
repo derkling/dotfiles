@@ -261,10 +261,15 @@ nnoremap fp :cprevious<cr>
 
 " CScope {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" a: Add cscope db
-map <C-\>a :cs add .<CR>
-" r: Refresh db
-map <C-\>r :!cscope -Rb<CR>:cs reset<CR><CR>
+Bundle 'erig0/cscope_dynamic'
+let g:cscopedb_resolve_links=3
+
+nmap <C-\>r <Plug>CscopeDBInit
+
+" " a: Add cscope db
+" map <C-\>a :cs add .<CR>
+" " r: Refresh db
+" map <C-\>r :!cscope -Rb<CR>:cs reset<CR><CR>
 
 " s: Find this C symbol
 map <C-\>s :cs f s <cword><CR>

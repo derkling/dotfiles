@@ -58,7 +58,9 @@ PACKAGES="$PACKAGES \
 	zsh \
 	aterm screen tmux terminator \
 	gawk sed moreutils \
-	ranger autojump bc \
+	ranger	\
+	highlight caca-utils atool exiftool mediainfo odt2txt \
+	autojump bc \
 	htop iotop hwloc pv \
 	powertop \
 	x11-xserver-utils arandr xdotool xsel \
