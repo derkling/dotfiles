@@ -540,6 +540,17 @@ let g:neomake_verbose = 2
 " }}}
 
 
+" Clipboard CopyAndPaste {{{
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PRIMARY: Copy-on-select, and can be pasted with the middle mouse button.
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+" CLIPBOARD: Copy-on-^C, and pasted with ^V
+noremap <Leader>Y "+y
+noremap <Leader>P "+p
+" }}}
+
+
 " Documentation viewer {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'powerman/vim-plugin-viewdoc'
