@@ -22,5 +22,8 @@ set vertical-split = yes
 # Sort branches by date
 set refs-view = line-number:no id:yes date:relative-compact author:abbreviated ref commit-title
 
+# Show SHA1
+set main-view = line-number:no,interval=5 id:yes date:default author:full commit-title:yes,graph,refs,overflow=no
+
 # Optionally, use the old and faster but less acurate graph renderer
 # set main-view-commit-title-graph = v1
