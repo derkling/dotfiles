@@ -107,6 +107,11 @@ PACKAGES="$PACKAGES \
 	xfce4 xfce4-goodies xfce4-panel xfce4-settings \
 "
 
+# i3 Window Manager
+PACKAGES="$PACKAGES \
+	i3-wm \
+"
+
 # lxappearance => setup icon theme for Thunar and other GTK based apps when
 #                 used from withint Awesome
 # i3lock xautolock => customizable lockscreen
