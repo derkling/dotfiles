@@ -71,6 +71,7 @@ PACKAGES="$PACKAGES \
 	figlet \
 	inxi \
 	hexdump ghex \
+	highlight \
 	silversearcher-ag \
 	ttyrec \
 "
