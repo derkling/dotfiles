@@ -108,3 +108,5 @@ export ZSH=$HOME/dotfiles
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Remove alias which affect other system commands
+unalias ag

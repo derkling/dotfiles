@@ -71,11 +71,13 @@ PACKAGES="$PACKAGES \
 	figlet \
 	inxi \
 	hexdump ghex \
+	silversearcher-ag \
 	ttyrec \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
 # sysfsutils => systool
+# silversearcher-ag => ag
 # inxi => inxi -v4 -c6 OR inxi -bDc 6
 
 # GNOME utils
