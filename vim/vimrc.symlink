@@ -491,7 +491,7 @@ let g:SimpylFold_fold_docstring = 0
 " NeoMake {{{
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'neomake/neomake'
-let g:neomake_open_list = 1
+let g:neomake_open_list = 0
 let g:neomake_error_sign = { 'text' : 'E', 'texthl': 'NeomakeErrorSign' }
 let g:neomake_warning_sign = { 'text' : 'W', 'texthl': 'NeomakeWarningSign' }
 let g:neomake_message_sign = { 'text' : 'M', 'texthl': 'NeomakeMessageSign' }
@@ -595,7 +595,6 @@ nnoremap lp :lprev<CR>
 let g:neomake_logfile = '/tmp/neomake.log'
 let g:neomake_verbose = 2
 
-:nnoremap fn :lnext
 " }}}
 
 
