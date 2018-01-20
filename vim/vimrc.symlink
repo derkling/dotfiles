@@ -502,6 +502,24 @@ hi NeomakeMessageSign	ctermfg=white
 hi NeomakeInfoSign	ctermfg=lightblue
 let g:neomake_highlight_lines = 0
 
+let g:neomake_c_csrc_maker = {
+	\ 'exe': 'gcc',
+	\ 'args': ['-Wall', '-o', '%:r'],
+        \ 'errorformat':
+            \ '%-G%f:%s:,' .
+            \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+            \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+            \ '%-GIn file included%.%#,' .
+            \ '%-G %#from %f:%l\,,' .
+            \ '%f:%l:%c: %trror: %m,' .
+            \ '%f:%l:%c: %tarning: %m,' .
+            \ '%I%f:%l:%c: note: %m,' .
+            \ '%f:%l:%c: %m,' .
+            \ '%f:%l: %trror: %m,' .
+            \ '%f:%l: %tarning: %m,'.
+            \ '%I%f:%l: note: %m,'.
+            \ '%f:%l: %m',
+	\ }
 let g:neomake_c_krnimg_maker = {
 	\ 'exe': 'make',
 	\ 'args': ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', '-j32', 'Image'],
@@ -563,8 +581,9 @@ let g:neomake_c_aospmm_maker = {
             \ '%I%f:%l: note: %m,'.
             \ '%f:%l: %m',
 	\ }
-let g:neomake_c_enabled_makers = ['gcc', 'krnimg', 'krnsrc', 'andsrc', 'aospmm']
+let g:neomake_c_enabled_makers = ['gcc', 'csrc', 'krnimg', 'krnsrc', 'andsrc', 'aospmm']
 
+nnoremap <Leader>bc :Neomake csrc<CR>
 nnoremap <Leader>bi :Neomake krnimg<CR>
 nnoremap <Leader>bs :Neomake krnsrc<CR>
 nnoremap <Leader>ba :Neomake andsrc<CR>
