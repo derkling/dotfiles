@@ -731,12 +731,12 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 " enables displaying whether 'paste' is turned on in insert mode
 set showmode
-
+" 2}}}
 
 " F3 - Toggle text wrapping {{{2
 """"""""""""""""""""""""""""""""
 noremap <F3> :set nowrap!<CR>
-
+" 2}}}
 
 " F4 - Line numbering {{{2
 """"""""""""""""""""""""""
@@ -759,6 +759,7 @@ autocmd InsertEnter * :set number
 autocmd InsertLeave * :set relativenumber
 " Toggle line numbering
 noremap <F4> :set nonumber!<CR>
+" 2}}}
 
 " F6 - Highlight all instances of word under cursor, when idle. {{{2
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -781,7 +782,7 @@ function! AutoHighlightToggle()
   endif
 endfunction
 nnoremap <F6> :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
-
+" 2}}}
 
 " F7 - Spell Checking with multi-language support {{{2
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -798,12 +799,12 @@ function! ToggleSpell()
 	echo "spell checking language:" g:myLangList[g:myLang]
 endfunction
 nnoremap <silent> <F7> :call ToggleSpell()<CR>
-
+" 2}}}
 
 " F8 - Toggle CTags bar {{{2
 """"""""""""""""""""""""""""
 nnoremap <F8> :TagbarToggle<CR>
-
+" 2}}}
 
 " }}}
 
@@ -814,12 +815,14 @@ nnoremap <F8> :TagbarToggle<CR>
 " Makefiles {{{2
 """"""""""""""""
 autocmd FileType make setlocal noexpandtab
+" 2}}}
 
 " C/C++ {{{2
 """"""""""""
 autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S source ~/dotfiles/vim/plugins/c.vim
 autocmd BufRead *.c,*.h,*.cc,*.hh,*.cpp,*.hpp,*.S normal zR
 autocmd BufNewFile,BufRead *.dox set filetype=cpp.doxygen
+" 2}}}
 
 " Python {{{2
 """""""""""""
@@ -834,5 +837,8 @@ autocmd BufNewFile,BufRead *.py set
     \ fileformat=unix
 autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
 autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+" 2}}}
+
+" }}}
 
 " vim: set foldmethod=marker :
