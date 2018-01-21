@@ -25,7 +25,7 @@ PACKAGES="$PACKAGES \
 	byacc flex bison \
 	ltrace strace \
 	git gitk git-gui tig git-flow \
-	cscope \
+	cscope ctags-exuberant \
 	mercurial \
 	intel-gpu-tools \
 	python \
