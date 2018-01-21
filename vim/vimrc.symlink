@@ -65,8 +65,8 @@ Bundle 'honza/vim-snippets'
 " Actual extension
 Bundle 'garbas/vim-snipmate'
 let g:snips_author = 'Patrick Bellasi'
-imap <C-J> <Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
+imap <Tab>      <Plug>snipMateNextOrTrigger
+imap <C-r><Tab> <Plug>snipMateShow
 "}}}
 
 
