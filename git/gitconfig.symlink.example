@@ -101,6 +101,8 @@
 
   refs = n !@git branch %(prompt Enter branch name: )
 
+  tree = l !git log %(file)
+
 [diff]
   tool = vimdiff
 
