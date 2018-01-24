@@ -178,8 +178,8 @@ macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
 
 # Limit visualization to current thread or all threads
 # http://thetarpit.org/posts/y00/00a-conversation-view-in-mutt.html
-macro index,pager \CL <tag-thread><limit>~T<enter><tag-thread> "show only current thread"
-macro index,pager \CH <limit>all<enter> "show everything"
+macro index,pager \CL ':set sort="threads"<enter><tag-thread><limit>~T<enter><tag-thread>' "show only current thread"
+macro index,pager \CH ':set sort="reverse-date"<enter><limit>all<enter> "show everything"
 
 # R to mark all (filtered messages) as read
 macro index R "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
