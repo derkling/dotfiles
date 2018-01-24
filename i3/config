@@ -224,6 +224,9 @@ bindsym $mod+Escape mode $sysmenu
 # Autostart programs
 exec --no-startup-id nm-applet
 
+# Autostart redshift
+exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
+
 # Multimedia key control
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+ #increase sound volume

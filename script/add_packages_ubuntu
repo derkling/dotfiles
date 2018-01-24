@@ -74,6 +74,7 @@ PACKAGES="$PACKAGES \
 	highlight \
 	silversearcher-ag \
 	ttyrec \
+	redshift \
 "
 # hwloc => lstopo|hwloc-ls
 # x11-xserver-utils => xrandr
