@@ -298,6 +298,9 @@ let g:cscopedb_resolve_links=3
 
 nmap <C-\>r <Plug>CscopeDBInit
 
+map <C-\>n :tnext<CR>
+map <C-\>p :tprev<CR>
+
 " " a: Add cscope db
 " map <C-\>a :cs add .<CR>
 " " r: Refresh db
