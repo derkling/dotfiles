@@ -106,10 +106,10 @@ bindsym $mod+2 workspace number $WS_GIT
 bindsym $mod+3 workspace number $WS_WEB
 bindsym $mod+4 workspace number $WS_IM
 bindsym $mod+5 workspace number $WS_MAIL
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number $WS_SYS
 
 # move focused container to workspace
@@ -219,7 +219,7 @@ mode $sysmenu {
     bindsym Return    mode "default"
     bindsym Escape    mode "default"
 }
-bindsym $mod+Delete mode $sysmenu
+bindsym $mod+Escape mode $sysmenu
 
 # Autostart programs
 exec --no-startup-id nm-applet
