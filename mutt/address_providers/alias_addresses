@@ -1,0 +1,20 @@
+#!/bin/bash
+
+QUERY=$1
+
+# Return matching lines from different local aliases DBs
+for DB in aliases aliases_ldap; do
+# Skip alias sources not availables
+[ -f $DB ] || continue
+# Exclude all lines which are comments (#) or mail groups (,)
+grep -v '[#,]' $DB | \
+grep "$QUERY" | \
+	awk '{ \
+		gsub("[<>]", "", $NF); \
+		printf("%s\t", $NF); \
+		for(c=3;c<NF-1;++c) \
+			printf("%s ",$c); \
+			printf("%s\t", $(NF-1)); \
+		printf("%s\n", $2); \
+	}'
+done

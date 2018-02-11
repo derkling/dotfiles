@@ -58,6 +58,7 @@ PACKAGES="$PACKAGES \
 	zsh \
 	aterm screen tmux terminator \
 	gawk sed moreutils \
+	debianutils \
 	ranger	\
 	highlight caca-utils atool exiftool mediainfo odt2txt \
 	autojump bc \
@@ -81,6 +82,7 @@ PACKAGES="$PACKAGES \
 # sysfsutils => systool
 # silversearcher-ag => ag
 # inxi => inxi -v4 -c6 OR inxi -bDc 6
+# debianutils => run-parts
 
 # GNOME utils
 PACKAGES="$PACKAGES \
