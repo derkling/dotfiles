@@ -7,7 +7,7 @@ clean_up() {
 	exit
 }
 
-trap clean_up SIGHUP SIGINT SIGTERM SIGKILL
+trap clean_up SIGINT SIGTERM SIGKILL
 
 lockfile -r 0 $LOCKFILE || exit 1
 
