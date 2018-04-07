@@ -1,0 +1,16 @@
+#!/bin/bash
+
+TIMESTAMP="$(date +%Y-%m-%d_%H-%M-%S)"
+TARGETDIR="$HOME/Pictures"
+
+[ -d $TARGETDIR ] || mkdir -p $TARGETDIR
+[ -d $TARGETDIR ] || exit 1
+
+FILENAME="$TARGETDIR/Screenshot_${TIMESTAMP}.png"
+if [ $# -eq 2 -a $1=="-w" ]; then
+  import -window $2 $FILENAME
+else
+  import $FILENAME
+fi
+echo "Screenshot saved to [$FILENAME]"
+
