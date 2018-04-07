@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo
+echo "Available output:"
+xrandr -q 
+
+echo
+echo "Configure selected output with a command like:"
+echo "xrandr --output OUTPUT --mode 1280x1024 --right-of eDP1"
+echo
