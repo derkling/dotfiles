@@ -1,0 +1,10 @@
+[options]
+default=LKML
+
+[LKML]
+url= https://patchwork.kernel.org/xmlrpc/
+[linux-pm]
+url= https://patchwork.kernel.org/xmlrpc/
+[linux-arm-kernel]
+url= https://patchwork.kernel.org/xmlrpc/
+
