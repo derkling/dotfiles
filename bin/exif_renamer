@@ -1,0 +1,40 @@
+#/bin/bash
+
+BASENAME=${1:-}
+
+cat >/tmp/exif_renamer.awk <<EOF
+/File Name/{filename=\$4}
+/Create Date/{
+	gsub(":", "", \$4);
+	gsub(":", "", \$5);
+	datetime=\$4"_"\$5
+}
+/F Number/{fnumber=\$4}
+/Exposure Time/{gsub("/", "-", \$4); exposure=\$4}
+/^ISO/{iso=\$3}
+/Focal Length/{
+	focal=\$4;
+	focal35=\$9;
+}
+END{
+	printf("%s_%s%05.1fmm_F%04.1f_iso%06d_T%s_%s",
+		datetime, basename, focal, fnumber, iso, exposure, filename)
+}
+EOF
+
+exifString() {
+	IMAGE=$1
+	BASENAME=${2:-''}
+	exiftool $IMAGE | awk -v basename="$BASENAME" -f /tmp/exif_renamer.awk
+}
+
+if [ "x$BASENAME" != "x" ]; then
+	BASENAME=$BASENAME"_"
+fi
+echo "Renaming files..."
+while read IMAGE; do
+  	new_name="$(exifString $IMAGE $BASENAME)"
+  	echo "$IMAGE => $new_name"
+	mv $IMAGE $new_name
+done </dev/stdin
+
