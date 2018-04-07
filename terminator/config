@@ -1,0 +1,36 @@
+[global_config]
+  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  handle_size = 1
+  inactive_color_offset = 0.7
+  tab_position = bottom
+  title_inactive_bg_color = "#000000"
+  title_inactive_fg_color = "#f7f7f7"
+  title_receive_bg_color = "#c91a00"
+  title_transmit_bg_color = "#a3a3a3"
+  title_transmit_fg_color = "#000000"
+[keybindings]
+  split_horiz = <Primary><Shift>Left
+  split_vert = <Primary><Shift>Down
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    audible_bell = True
+    background_darkness = 0.73
+    background_image = None
+    copy_on_selection = True
+    font = Monospace 9
+    foreground_color = "#ffffff"
+    scrollback_lines = 102400
+    show_titlebar = False
+    urgent_bell = True
+    use_system_font = False
+    visible_bell = True
