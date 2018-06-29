@@ -86,6 +86,11 @@ bindsym $mod+Shift+space floating toggle
 # toggle sticky window
 bindsym $mod+Shift+s sticky toggle
 
+# Move to scratchpad
+bindsym $mod+Shift+minus move scratchpad
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
