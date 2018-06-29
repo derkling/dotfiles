@@ -246,10 +246,13 @@ exec --no-startup-id nm-applet
 exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
 
 # Multimedia key control
-# Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+ #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5- #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle # mute sound
+bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle
+# Pulse Audio controls (laptop)
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5-
+# # Pulse Audio controls (desktop)
+# bindsym Ctrl+KP_9 exec --no-startup-id amixer -c2 set PCM 5+
+# bindsym Ctrl+KP_3 exec --no-startup-id amixer -c2 set PCM 5-
 
 # Sreen brightness controls
 # NOTE: With Ubuntu >=17.04 the command to use is:
