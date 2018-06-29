@@ -811,6 +811,13 @@ function! ToggleSpell()
 	echo "spell checking language:" g:myLangList[g:myLang]
 endfunction
 nnoremap <silent> <F7> :call ToggleSpell()<CR>
+" Set up so that:
+" - zg (or 1zg) adds the current word to your default spellfile
+" - 2zg would add the current word to a file called oneoff.utf-8.add, in the
+"   same directory as the file that you are working on.
+"   If the file doesn't exist, Vim will try to create it for you.
+:setlocal spellfile+=~/dotfiles/vim/spell_en.utf-8.add
+:setlocal spellfile+=oneoff.utf-8.add
 " 2}}}
 
 " F8 - Toggle CTags bar {{{2
