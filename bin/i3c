@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo $(grep -e '^[^#]*bind' ~/dotfiles/i3/config | fzf | cut -d\  -f3-)
+
