@@ -268,7 +268,7 @@ bindsym $mod+F7 exec synclient TouchpadOff=1
 bindsym $mod+Shift+F7 exec synclient TouchpadOff=0
 
 # Start lockscreen daemon
-exec --no-startup-id ~/dotfiles/bin/locker
+exec --no-startup-id ~/dotfiles/bin/locker ~/dotfiles/wallpapers/current
 # bindsym $mod+p exec ~/dotfiles/i3/i3lock-fancy-multimonitor/lock
 
 # Window assignment to workspaces

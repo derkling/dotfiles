@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
+BACKGROUND=$1
 LOCKFILE=/tmp/i3lock.lock
 
 clean_up() {
@@ -7,16 +8,16 @@ clean_up() {
 	exit
 }
 
-trap clean_up SIGINT SIGTERM SIGKILL
+trap clean_up SIGHUP SIGINT SIGTERM SIGKILL
 
 lockfile -r 0 $LOCKFILE || exit 1
 
 LOCKCMD="i3lock -d -c 333333"
 if [ $# -eq 1 ]; then
-  LOCKCMD="$LOCKCMD -t -i $1"
+  LOCKCMD="$LOCKCMD -t -i $BACKGROUND"
 fi
 
-exec xautolock -detectsleep \
+xautolock -detectsleep \
   -time 3 -locker "$LOCKCMD" \
   -corners +00- -cornerdelay 15 -cornerredelay 10 \
   -notify 15 \
