@@ -5,9 +5,9 @@ QUERY=$1
 # Return matching lines from different local aliases DBs
 for DB in aliases aliases_ldap; do
 # Skip alias sources not availables
-[ -f $DB ] || continue
+[ -f ~/dotfiles/mutt/$DB ] || continue
 # Exclude all lines which are comments (#) or mail groups (,)
-grep -v '[#,]' $DB | \
+grep -v '[#,]' ~/dotfiles/mutt/$DB | \
 grep "$QUERY" | \
 	awk '{ \
 		gsub("[<>]", "", $NF); \
