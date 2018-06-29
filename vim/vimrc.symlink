@@ -18,6 +18,9 @@ filetype off                   " required!
 set runtimepath+=~/dotfiles/vim/bundle/vundle
 call vundle#rc()
 Bundle 'gmarik/vundle'
+" Ensure plugins always use a BASH shell, some of them (e.g. cscope_dynamic)
+" could not work properly is other bash are in use.
+set shell=/bin/bash
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Reloads VIM configuration each time is updated
