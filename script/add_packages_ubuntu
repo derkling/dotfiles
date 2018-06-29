@@ -116,6 +116,7 @@ PACKAGES="$PACKAGES \
 # i3 Window Manager
 PACKAGES="$PACKAGES \
 	i3-wm \
+	dunst \
 "
 
 # lxappearance => setup icon theme for Thunar and other GTK based apps when
