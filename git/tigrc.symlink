@@ -30,3 +30,28 @@ set main-view = line-number:no,interval=5 id:yes date:default author:full commit
 
 # Show SHA1
 set main-view = line-number:no,interval=5 id:yes date:default author:full commit-title:yes,graph,refs,overflow=no
+
+# Main keybindings
+bind main <C-f>		?git commit --amend
+bind main <C-b>		!git branch -f "%(prompt Enter branch name: )" $(commit)
+bind main <Esc>r	?git reset %(commit)
+bind main <Esc>R	?git reset --hard %(commit)
+bind main <C-b>  	!@git branch -f %(prompt) %(commit)
+bind main <C-d>  	!@git branch -D %(prompt)
+bind main <C-s>  	!@git stash save "%(prompt Stash name: )"
+bind main    c   	!@git checkout %(branch)
+bind main    C   	!@git checkout %(commit)
+bind main <C-c>  	!@git checkout "%(prompt Branch name: )"
+bind main    F   	!git commit --fixup=%(commit)
+bind main    P   	!git cherry-pick %(commit)
+bind main    R   	!git rebase -i %(commit)
+bind main    T   	!@git tag "%(prompt Tag to create: )" %(commit)
+bind main <C-t>  	!@git tag -d "%(prompt Tag to delete: )"
+bind main    !   	!@git revert %(commit)
+
+bind main F   		!git commit --fixup=%(commit)
+bind main f		!git format-patch -o /tmp --suffix=."%(prompt Enter patch suffix: )" %(commit) 0
+
+bind status C 		!git commit -s
+bind status R 		!git checkout %(file)
+
