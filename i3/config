@@ -109,16 +109,16 @@ set $WS_MAIL "5: Mail"
 set $WS_SYS  "10: System"
 
 # switch to workspace
-bindsym $mod+1 workspace number $WS_MAIN
-bindsym $mod+2 workspace number $WS_GIT
-bindsym $mod+3 workspace number $WS_WEB
-bindsym $mod+4 workspace number $WS_IM
-bindsym $mod+5 workspace number $WS_MAIL
-bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7
-bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace number 9
-bindsym $mod+0 workspace number $WS_SYS
+bindsym $mod+1 workspace $WS_MAIN
+bindsym $mod+2 workspace $WS_GIT
+bindsym $mod+3 workspace $WS_WEB
+bindsym $mod+4 workspace $WS_IM
+bindsym $mod+5 workspace $WS_MAIL
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace $WS_SYS
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $WS_MAIN
