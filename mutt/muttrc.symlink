@@ -119,8 +119,6 @@ color body brightblue color234 "^@@ .*"
 # Style and colors -------------------------------------------------------------
 set sidebar_visible = yes
 set sidebar_width   = 36
-set sidebar_delim   = ' |'
-set sidebar_sort    = yes
 # color of folders with new mail
 color sidebar_new yellow color234
 # Folders selection shortcuts --------------------------------------------------
@@ -165,6 +163,7 @@ set sort_browser = "alpha"                     # sort files by name
 # Index Key Bindings ---------------------------------
 bind index k  previous-entry
 bind index j  next-entry
+bind index g  noop
 bind index gg first-entry
 bind index G  last-entry
 
@@ -219,9 +218,10 @@ hdr_order From: To: Cc: Date: Subject: Message-ID:  # in this order
 unhdr_order * # some distros order things by default
 
 
-# Key Bindings ---------------------------------
+# Pager Key Bindings ---------------------------------
 bind pager k  previous-line
 bind pager j  next-line
+bind pager g  noop # the group-reply will be mapped to the r key instead
 bind pager gg top
 bind pager G  bottom
 bind index K  previous-entry
