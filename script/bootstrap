@@ -2,12 +2,13 @@
 #
 # bootstrap installs things.
 
+PACKAGE=${1:-'all'}
 DOTFILES_ROOT="`pwd`"
 
 set -e
 
-echo ''
-
+# Utility Functions {{{
+################################################################################
 info () {
   printf "  [ \033[00;34mInfo\033[0m ] $1"
 }
@@ -30,35 +31,51 @@ fail () {
   exit
 }
 
-install_packages () {
-
-DISTRO_ID=$(lsb_release -si)
-DISTRO_VERSION=$(lsb_release -sr)
-DISTRO_CODENAME=$(lsb_release -sc)
-SCRIPT="$HOME/dotfiles/script/add_packages_${DISTRO_ID,,}"
-
-info "Looking for [$SCRIPT]...\n"
-if [ ! -f $SCRIPT ]; then
-  fail "Distribution [$DISTRO_ID] not supported"
-  warn "You should provide a [$SCRIPT] installation script"
-  return
-fi
-
-info "Found [$SCRIPT]...\n"
-user "Do you want to download additional $DISTRO_ID packages? [N/y]: "
-read RESP
-[ x${RESP,,} == xy ] || return
-
-# Checking for distro specific installation script
-info "Installing additional $DISTRO_ID packages...\n"
-sudo $SCRIPT
-
+not_installed() {
+  NAME=$1
+  FILE=$2
+  if [[ -e $FILE ]]; then
+	  echo
+	  warn "Module [$NAME] already configured\n"
+	  success "Module [$NAME] installation: COMPLETED\n"
+	  return 1
+  fi
+  return 0
 }
 
-setup_gitconfig () {
-  [ -f git/gitconfig.symlink ] && return
-  info 'Setup gitconfig'
+is_installed() {
+  NAME=$1
+  FILE=$2
+  if [[ -e $FILE ]]; then
+	  echo
+	  success "Module [$NAME] installation: COMPLETED\n"
+	  return 0
+  fi
+  warn "Module [$NAME] installation: FAILED\n"
+  return 1
+}
 
+config_link() {
+  FOLDER=$1
+  [[ -d ~/.config ]] || mkdir ~/.config
+  ln -s $FOLDER ~/.config/
+}
+# }}}
+
+# Modules {{{
+
+# Git {{{
+################################################################################
+setup_git () {
+  [ ! -f git/gitconfig.symlink ] || return 0
+  echo
+
+  info "Setup git tools...\n"
+  sudo aptitude install \
+	git gitk git-gui \
+	tig git-flow \
+
+  info "Setup gitconfig...\n"
   git_credential='cache'
   if [ "$(uname -s)" == "Darwin" ]
   then
@@ -84,20 +101,31 @@ setup_gitconfig () {
       -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
       git/gitconfig.symlink.example > git/gitconfig.symlink
 
-  success 'gitconfig'
+  success 'git'
 }
+# }}}
 
-setup_zshell() {
-[ -d zsh/oh-my-zsh ] && return
-info 'Setup ZShell\n'
-git clone git://github.com/robbyrussell/oh-my-zsh.git zsh/oh-my-zsh
-success 'ZShell'
+# Shell {{{
+################################################################################
+setup_zsh() {
+  [ ! -d zsh/oh-my-zsh ] || return 0
+  echo
+
+  info "Setup ZShell...\n"
+  sudo aptitude install zsh
+  git clone git://github.com/robbyrussell/oh-my-zsh.git zsh/oh-my-zsh
+
+  info "Seting [$(which zsh)] as deafult shell..."
+  chsh -s $(which zsh)
+
+  success "zsh"
 }
 
 setup_fonts() {
+echo
 echo -n 'Do you want to download patched fonts? [N/y]: '
 read RESP
-[ x${RESP,,} == xy ] || return
+[ x${RESP,,} == xy ] || return 0
 echo 'Download patched fonts...'
 [ -d $DOTFILES_ROOT/fonts ] || mkdir $DOTFILES_ROOT/fonts
 cd $DOTFILES_ROOT/fonts
@@ -113,39 +141,55 @@ echo 'Setup fontconfig...'$DOTFILES_ROOT/tmux/
 ln -fs $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.fonts.conf.d/10-powerline-symbols.conf
 ln -fs $DOTFILES_ROOT/tmux/10-powerline-symbols.conf ~/.config/fontconfig/conf.d/10-powerline-symbols.conf
 }
+# }}}
 
+# VIM {{{
+################################################################################
 setup_vim() {
-[ -d $DOTFILES_ROOT/vim/bundle/vundle ] && return
-info 'Setup VIM (using vundle)\n'
-[ -d $DOTFILES_ROOT/vim/bundle ] || mkdir $DOTFILES_ROOT/vim/bundle
-cd $DOTFILES_ROOT/vim/bundle
-git clone https://github.com/gmarik/vundle.git
-cd $DOTFILES_ROOT
-ln -fs $DOTFILES_ROOT/vim ~/.vim
-vim +BundleInstall +qall
-success 'VIM'
-info 'Build CommandT binary component'
-cd $DOTFILES_ROOT/vim/bundle/command-t/ruby/command-t
-ruby extconf.rb
-make
-success 'VIM'
-}
+  [ ! -d $DOTFILES_ROOT/vim/bundle/vundle ] || return 0
+  echo
 
+  info 'Setup VIM (using vundle)\n'
+  [ -d $DOTFILES_ROOT/vim/bundle ] || mkdir $DOTFILES_ROOT/vim/bundle
+  cd $DOTFILES_ROOT/vim/bundle
+  git clone https://github.com/gmarik/vundle.git
+
+  cd $DOTFILES_ROOT
+  ln -fs $DOTFILES_ROOT/vim ~/.vim
+  vim +BundleInstall +qall
+
+  success 'vim'
+}
+# }}}
+
+# GunPG {{{
+################################################################################
 setup_gpg() {
+  echo
+
   info 'Setup GPG\n'
   if [ -f ~/.gnupg/secring.gpg ]; then
-    info "Using existing GPG keyring [~/.gnupg/secring.gpg]"
-    echo
+    info "Using existing GPG keyring [~/.gnupg/secring.gpg]\n"
     gpg -K
   else
-    info "Setting up new GPG keyring..."
+    info "Setting up new GPG keyring...\n"
     gpg --gen-key
   fi
-  success 'GPG'
-}
 
+  success 'gpg'
+}
+# }}}
+
+# Mail {{{
+################################################################################
 setup_mutt() {
   info 'Setup MUTT\n'
+
+  sudo aptitde install \
+	mutt msmtp \
+  	offlineimap imapfilter \
+  	isync \
+	ldap-utils procmail
 
   # Setup your accounts
   info 'Setup MUTT configuration...'
@@ -195,18 +239,18 @@ setup_imap() {
   info 'Setup autentication tokens using GNOME keyring\n'
   ~/dotfiles/bin/gnome_keyring.py imap_$imap_account $imap_username
 
-  info 'Setup IMAP Filter\n'
-  ln -fs $DOTFILES_ROOT/imapfilter ~/.imapfilter
-  sed -e "s/IMAPACCOUNT/$imap_account/g" \
-      imapfilter/config.lua.example > imapfilter/config.lua
-  success 'IMAPFilter'
+  # info 'Setup IMAP Filter\n'
+  # ln -fs $DOTFILES_ROOT/imapfilter ~/.imapfilter
+  # sed -e "s/IMAPACCOUNT/$imap_account/g" \
+  #     imapfilter/config.lua.example > imapfilter/config.lua
+  # success 'imapfilter'
 
   info 'Setup isync IMAP\n'
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
       -e "s/IMAPSERVER/$imap_server/g" \
       -e "s/IMAPUSER/$imap_username/g" \
       isync/mbsyncrc.symlink.example > mbsyncrc.symlink.symlink
-  success 'IsyncIMAP'
+  success 'isync'
 
   # info 'Setup Offiline IMAP\n'
   # sed -e "s/IMAPACCOUNT/$imap_account/g" \
@@ -215,9 +259,12 @@ setup_imap() {
   # success 'OfflineIMAP'
 
 }
+# }}}
 
+# IRC {{{
+################################################################################
 setup_irssi() {
-  info 'Setup IRSSI configuration'
+  info 'Setup IRSSI configuration...\n'
   [ -d ~/.irssi ] && rm -rf ~/.irssi
   ln -fs ~/dotfiles/irssi ~/.irssi
 }
@@ -227,93 +274,20 @@ setup_weechat() {
   [ -d ~/.weechat ] && rm -rf ~/.weechat
   ln -fs ~/dotfiles/weechat ~/.weechat
 }
+# }}}
 
-link_files () {
-  ln -s $1 $2
-  success "linked $1 to $2"
-}
-
-install_dotfiles () {
-  info 'installing dotfiles'
-
-  overwrite_all=false
-  backup_all=false
-  skip_all=false
-
-  for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
-  do
-    dest="$HOME/.`basename \"${source%.*}\"`"
-
-    if [ -f $dest ] || [ -d $dest ]
-    then
-
-      overwrite=false
-      backup=false
-      skip=false
-
-      if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-      then
-        user "File already exists: `basename $source`, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
-
-        case "$action" in
-          o )
-            overwrite=true;;
-          O )
-            overwrite_all=true;;
-          b )
-            backup=true;;
-          B )
-            backup_all=true;;
-          s )
-            skip=true;;
-          S )
-            skip_all=true;;
-          * )
-            ;;
-        esac
-      fi
-
-      if [ "$overwrite" == "true" ] || [ "$overwrite_all" == "true" ]
-      then
-        rm -rf $dest
-        success "removed $dest"
-      fi
-
-      if [ "$backup" == "true" ] || [ "$backup_all" == "true" ]
-      then
-        mv $dest $dest\.backup
-        success "moved $dest to $dest.backup"
-      fi
-
-      if [ "$skip" == "false" ] && [ "$skip_all" == "false" ]
-      then
-        link_files $source $dest
-      else
-        success "skipped $source"
-      fi
-
-    else
-      link_files $source $dest
-    fi
-
-  done
-
-  # Symlink dotfile root to home directory
-  [ -L ~/dotfiles ] || ln -fs $DOTFILES_ROOT ~/dotfiles
-
-}
-
-setup_python() {
-  info 'installing additional python packages via PIP'
-  sudo pip install --upgrade pyzmq jinja2 tornado ipython jupyter notebooktools numpy pandas markupsafe jsonschema
-}
-
+# Console tools {{{
+################################################################################
 setup_ranger() {
-  info 'Setup RANGER configuration'
-  [ -d ~/.config/ranger ] && rm -rf ~/.config/ranger
+  [[ ! -f ~/.config/ranger ]] || return 0
+  echo
+  info 'Setup RANGER configuration...\n'
+
+  [ ! -d ~/.config/ranger ] || rm -rf ~/.config/ranger
   [ -d ~/.config ] || mkdir ~/.config
   ln -s ~/dotfiles/ranger ~/.config/ranger
+
+  success "ranger"
 }
 
 setup_gist() {
@@ -323,45 +297,179 @@ setup_gist() {
   info 'Login to your gist account'
   gist --login
 
+  success "gist"
+
 }
 
 setup_fzf() {
+  [ ! -d ~/dotfiles/fzf ] || return 0
+  echo
   info 'Setup FuzzyFinder'
 
   git clone https://github.com/junegunn/fzf.git --depth 1 ~/dotfiles/fzf
   ln -s ~/dotfiles/fzf ~/.fzf
   ~/.fzf/install
+
+  success "fzf"
 }
 
-install_packages
-install_dotfiles
-setup_gitconfig
-setup_zshell
-setup_fonts
-setup_vim
-setup_gpg
-setup_mutt
-setup_imap
-setup_irssi
-setup_weechat
-setup_python
-setup_ranger
-setup_gist
-setup_fzf
-install_dotfiles
+setup_console_tools() {
+  not_installed console_tools ~/.config/terminator || return 0
+  echo
+  info "Install console tools...\n"
 
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
-  info "installing dependencies"
-  if . bin/dot > /tmp/dotfiles-dot 2>&1
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
+ # hwloc => lstopo|hwloc-ls
+ # x11-xserver-utils => xrandr
+ # sysfsutils => systool
+ # silversearcher-ag => ag
+ # inxi => inxi -v4 -c6 OR inxi -bDc 6
+ # debianutils => run-parts
+
+ sudo aptitude install \
+	aterm screen tmux terminator \
+	gawk sed moreutils \
+	ranger	\
+	debianutils \
+	highlight caca-utils atool mediainfo odt2txt \
+	autojump bc \
+	htop iotop hwloc pv \
+	powertop \
+	x11-xserver-utils arandr xdotool xsel \
+	usbutils \
+	smartmontools \
+	sysfsutils \
+	tree \
+	figlet \
+	inxi \
+	ttyrec \
+	redshift \
+
+  config_link ~/dotfiles/terminator
+
+  is_installed console_tools ~/.config/terminator || return 0
+
+}
+# }}}
+
+# Window Manager {{{
+################################################################################
+setup_i3() {
+  not_installed i3 ~/.config/i3 || return 0
+  echo
+  info "Setup i3 Window Manager...\n"
+
+  # procmail => lockfile
+  sudo aptitude install \
+	  i3-wm i3status suckless-tools \
+	  lxappearance \
+	  i3lock xautolock procmail \
+	  redshift
+
+  config_link ~/dotfiles/i3
+  config_link ~/dotfiles/i3/i3status
+
+  I3BAR_DISPLAY=$(xrandr | awk '/connected primary/{print $1}')
+  info "Setting default display to $I3BAR_DISPLAY...\n"
+  sed -i "s/ eDP1/ $I3BAR_DISPLAY/"
+
+  for CARD in $(cat /sys/class/sound/card*/number); do
+	  amixer -c $CARD get Speaker &>/dev/null || continue
+	  [[ $? -ne 0 ]] || break
+  done
+
+  info "Map audio keys to card$CARD...\n"
+  if [[ $CARD -ne 0 ]]; then
+  	sed -i "s/amixer -c 0/amixer -c $CARD/" ~/dotfiles/i3/config
+  	sed -i "s/amixer -c 0/amixer -c $CARD/" ~/dotfiles/bin/volume_toggle
   fi
+
+  is_installed i3 ~/.config/i3 || return 0
+}
+# }}}
+
+# Development {{{
+################################################################################
+setup_compile_tools() {
+  echo
+  info "Install host compiler...\n"
+  sudo aptitude install \
+	  build-essential \
+	  autoconf automake libtool \
+	  cmake ccache \
+	  help2man
+
+  success "compile_tools"
+}
+
+setup_python() {
+  [[ $(dpkg -l | grep python-pip) ]] && return 0
+  echo
+  info 'Installing Python PIP'
+  sudo aptitude install python-pip
+  info 'installing additional python packages via PIP'
+  sudo pip install --upgrade pyzmq jinja2 tornado ipython jupyter notebooktools numpy pandas markupsafe jsonschema gnomekeyring
+}
+# }}}
+
+# Networking {{{
+################################################################################
+setup_vpn() {
+  echo
+  info "Install Juniper VPN...\n"
+
+  sudo aptitude install \
+	  openconnect \
+	  python-netifaces \
+	  python-pyasn1 \
+	  python-pyasn1-modules \
+	  python-mechanize \
+	  python-urlgrabber \
+	  python-pycurl \
+
+  success "vpn"
+}
+
+
+setup_nettools() {
+  echo
+  info "Installing networking tools...\n"
+
+  # uml-utilities => tunctl
+
+  sudo aptitude install \
+	iproute2 iptables netcat-openbsd \
+	rsync tcpdump nmap \
+	openssh-client openssh-server \
+	curl wget axel \
+	links2 \
+	transmission \
+
+  success "nettools"
+
+}
+# }}}
+
+# Multimedia {{{
+################################################################################
+setup_multimedia() {
+
+	sudo aptitude install \
+		smplayer sox \
+		gimp gimp-data-extras gimp-normalmap gimp-texturize \
+
+	is_installed multimedia ~/dotfiles
+
+}
+# }}}
+
+# }}} Modules
+
+# Main {{{
+################################################################################
+if [[ $PACKAGE != 'all' ]]; then
+	setup_$PACKAGE
+	exit $?
 fi
+# }}}
 
-
-echo ''
-echo '  All installed!'
+# vim: set foldmethod=marker :

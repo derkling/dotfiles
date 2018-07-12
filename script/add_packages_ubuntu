@@ -16,6 +16,10 @@ PACKAGES="$PACKAGES \
 	gcc-arm-linux-androideabi \
 	android-tools-adb android-tools-adbd android-tools-fastboot android-tools-fsutils \
 	\
+"
+
+# Hacking utilities
+PACKAGES="$PACKAGES \
 	colorgcc \
 	autoconf automake libtool \
 	cmake \
@@ -30,29 +34,33 @@ PACKAGES="$PACKAGES \
 	intel-gpu-tools \
 	python \
 	ruby ruby-dev \
+"
+
+# Hacking utilities
+PACKAGES="$PACKAGES \
 	linaro-boot-utils linaro-image-tools \
 	\
 	qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
 	qemu-launcher qemuctl \
 "
+#
+## 32bit tools
+#PACKAGES="$PACKAGES \
+#	libncurses5:i386 \
+#"
 
-# 32bit tools
-PACKAGES="$PACKAGES \
-	libncurses5:i386 \
-"
-
-# Text tools and utilties
-PACKAGES="$PACKAGES \
-	vim-nox \
-	texinfo \
-	texlive-latex-base texlive-latex-recommended texlive-latex-extra \
-	texlive-fonts-recommended \
-	texlive-lang-english texlive-lang-italian \
-	latex-beamer \
-	latex-make latex-mk latexmk \
-	vim-latexsuite \
-"
-
+## Text tools and utilties
+#PACKAGES="$PACKAGES \
+#	vim-nox \
+#	texinfo \
+#	texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+#	texlive-fonts-recommended \
+#	texlive-lang-english texlive-lang-italian \
+#	latex-beamer \
+#	latex-make latex-mk latexmk \
+#	vim-latexsuite \
+#"
+#
 # Unix utils
 PACKAGES="$PACKAGES \
 	zsh \
@@ -60,7 +68,7 @@ PACKAGES="$PACKAGES \
 	gawk sed moreutils \
 	debianutils \
 	ranger	\
-	highlight caca-utils atool exiftool mediainfo odt2txt \
+	highlight caca-utils atool mediainfo odt2txt \
 	autojump bc \
 	htop iotop hwloc pv \
 	powertop \
@@ -71,7 +79,6 @@ PACKAGES="$PACKAGES \
 	tree \
 	figlet \
 	inxi \
-	hexdump ghex \
 	highlight \
 	silversearcher-ag \
 	ttyrec \
@@ -84,30 +91,38 @@ PACKAGES="$PACKAGES \
 # inxi => inxi -v4 -c6 OR inxi -bDc 6
 # debianutils => run-parts
 
-# GNOME utils
-PACKAGES="$PACKAGES \
-	nautilus-actions \
-	nautilus-compare \
-	nautilus-emblems \
-	nautilus-filename-repairer \
-	nautilus-gtkhash \
-	nautilus-ideviceinfo \
-	nautilus-image-converter \
-	nautilus-image-manipulator \
-	nautilus-open-terminal \
-	nautilus-pastebin \
-	nautilus-qdigidoc \
-	nautilus-script-audio-convert \
-	nautilus-scripts-manager \
-	nautilus-sendto \
-	nautilus-share \
-	nautilus-wipe \
-"
+## GNOME utils
+#PACKAGES="$PACKAGES \
+#	nautilus-actions \
+#	nautilus-compare \
+#	nautilus-emblems \
+#	nautilus-filename-repairer \
+#	nautilus-gtkhash \
+#	nautilus-ideviceinfo \
+#	nautilus-image-converter \
+#	nautilus-image-manipulator \
+#	nautilus-open-terminal \
+#	nautilus-pastebin \
+#	nautilus-qdigidoc \
+#	nautilus-script-audio-convert \
+#	nautilus-scripts-manager \
+#	nautilus-sendto \
+#	nautilus-share \
+#	nautilus-wipe \
+#"
 
-# Awesome Window Manager
+# # Awesome Window Manager
+# PACKAGES="$PACKAGES \
+# 	awesome \
+# 	awesome-extra \
+# 	lxappearance \
+# 	i3lock xautolock \
+# 	xfce4 xfce4-goodies xfce4-panel xfce4-settings \
+# "
+
+# i3 Window Manager
 PACKAGES="$PACKAGES \
-	awesome \
-	awesome-extra \
+	i3-wm \
 	lxappearance \
 	i3lock xautolock \
 	xfce4 xfce4-goodies xfce4-panel xfce4-settings \
@@ -123,52 +138,52 @@ PACKAGES="$PACKAGES \
 #                 used from withint Awesome
 # i3lock xautolock => customizable lockscreen
 
-# Networking libraries
-PACKAGES="$PACKAGES \
-	iproute iptables netcat-openbsd rsync tcpdump nmap \
-	openssh-client openssh-server \
-	mutt msmtp offlineimap imapfilter ldap-utils procmail isync \
-	irssi weechat \
-	curl wget axel \
-	links2 \
-	transmission \
-	uml-utilities\
-"
+## Networking libraries
+#PACKAGES="$PACKAGES \
+#	iproute iptables netcat-openbsd rsync tcpdump nmap \
+#	openssh-client openssh-server \
+#	mutt msmtp offlineimap imapfilter ldap-utils procmail isync \
+#	irssi weechat \
+#	curl wget axel \
+#	links2 \
+#	transmission \
+#	uml-utilities\
+#"
 # uml-utilities => tunctl
 
-# Multimedia libraries
-PACKAGES="$PACKAGES \
-	smplayer sox \
-	gimp gimp-data-extras gimp-flegita gimp-gutenprint \
-	gimp-normalmap gimp-plugin-registry gimp-texturize \
-	gcolor2 \
-"
+## Multimedia libraries
+#PACKAGES="$PACKAGES \
+#	smplayer sox \
+#	gimp gimp-data-extras gimp-flegita gimp-gutenprint \
+#	gimp-normalmap gimp-plugin-registry gimp-texturize \
+#	gcolor2 \
+#"
+#
+## Development libraries
+#PACKAGES="$PACKAGES \
+#	ncurses-dev \
+#"
 
-# Development libraries
-PACKAGES="$PACKAGES \
-	ncurses-dev \
-"
+## Archive utilities
+#PACKAGES="$PACKAGES \
+#	atool unrar \
+#"
+#
+## Python packages
+#PACKAGES="$PACKAGES \
+#	python-dev \
+#	python-matplotlib \
+#	python-scipy \
+#	python-pip \
+#	python-gnomekeyring \
+#	python-sqlite \
+#"
 
-# Archive utilities
-PACKAGES="$PACKAGES \
-	atool unrar \
-"
-
-# Python packages
-PACKAGES="$PACKAGES \
-	python-dev \
-	python-matplotlib \
-	python-scipy \
-	python-pip \
-	python-gnomekeyring \
-	python-sqlite \
-"
-
-echo
-echo
-echo "Adding Linaro PPA"
-echo
-sudo add-apt-repository ppa:linaro-maintainers/tools
+#echo
+#echo
+#echo "Adding Linaro PPA"
+#echo
+#sudo add-apt-repository ppa:linaro-maintainers/tools
 
 echo
 echo
@@ -181,6 +196,6 @@ sudo apt-get update
 sudo apt-get install aptitude
 sudo aptitude install $PACKAGES
 
-# Restart nautilus session to enable extensions
-nautilus -q
+## Restart nautilus session to enable extensions
+#nautilus -q
 
