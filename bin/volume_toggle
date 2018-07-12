@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # Check speaker mute status
-amixer -c 0 get Speaker | grep off >/dev/null
+amixer -c 1 get Speaker | grep off >/dev/null
 if [ $? -eq 1 ]; then
 	CMD=mute
 else
 	CMD=unmute
 fi
 
-amixer -c 0 set Speaker $CMD
-amixer -c 0 set Master $CMD
+amixer -c 1 set Speaker $CMD
+amixer -c 1 set Master $CMD
 
 # Update i3status immediately
 killall -USR1 i3status

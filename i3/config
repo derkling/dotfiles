@@ -209,14 +209,14 @@ exec --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/current
 # Launch mode, one app per key.
 set $launchmenu "Launch: [b]rowser [t]hunar [c]alculator [s]creenshot [m]ail [i]rc [T]elegram s[k]ype [S]ettings"
 mode $launchmenu {
-    bindsym b exec chromium-browser ; mode "default"
+    bindsym b exec google-chrome ; mode "default"
     bindsym t exec thunar ; mode "default"
     bindsym c exec gnome-calculator ; mode "default"
     bindsym s exec xfce4-screenshooter ; mode "default"
     bindsym m exec gnome-terminal --hide-menubar -e mutt ; mode "default"
     bindsym Shift+t exec /opt/Telegram/Telegram ; mode "default"
     bindsym k exec /usr/bin/skypeforlinux ; mode "default"
-    bindsym Shift+s exec XDG_CURRENT_DESKTOP=Unity /usr/bin/unity-control-center ; mode "default"
+    bindsym Shift+s exec XDG_CURRENT_DESKTOP=GNOME gnome-control-center ; mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -246,19 +246,24 @@ exec --no-startup-id nm-applet
 exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
 
 # Multimedia key control
-bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle
-# Pulse Audio controls (laptop)
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5-
-# # Pulse Audio controls (desktop)
-# bindsym Ctrl+KP_9 exec --no-startup-id amixer -c2 set PCM 5+
-# bindsym Ctrl+KP_3 exec --no-startup-id amixer -c2 set PCM 5-
+# bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle
+# # Pulse Audio controls (laptop)
+# bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+
+# bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5-
+# # # Pulse Audio controls (desktop)
+# # bindsym Ctrl+KP_9 exec --no-startup-id amixer -c2 set PCM 5+
+# # bindsym Ctrl+KP_3 exec --no-startup-id amixer -c2 set PCM 5-
+
+# Pulse Audio controls
+bindsym $mod+F3 exec --no-startup-id amixer -c 1 set Master 5+ #increase sound volume
+bindsym $mod+F2 exec --no-startup-id amixer -c 1 set Master 6- #decrease sound volume
+bindsym $mod+F1 exec --no-startup-id ~/dotfiles/bin/volume_toggle # mute sound
 
 # Sreen brightness controls
 # NOTE: With Ubuntu >=17.04 the command to use is:
 #  https://cialu.net/brightness-control-not-work-i3wm/
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym $mod+F12 exec light -A 10 # increase screen brightness
+bindsym $mod+F11 exec light -U 10 # decrease screen brightness
 
 # Take a screenshot upon pressing $mod+x (select an area)
 bindsym --release $mod+Print exec --no-startup-id import /tmp/latest-screenshot.png
