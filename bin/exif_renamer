@@ -3,7 +3,6 @@
 BASENAME=${1:-}
 
 cat >/tmp/exif_renamer.awk <<EOF
-/File Name/{filename=\$4}
 /Create Date/{
 	gsub(":", "", \$4);
 	gsub(":", "", \$5);
@@ -25,7 +24,11 @@ EOF
 exifString() {
 	IMAGE=$1
 	BASENAME=${2:-''}
-	exiftool $IMAGE | awk -v basename="$BASENAME" -f /tmp/exif_renamer.awk
+	FILENAME=$(echo $IMAGE | cut -d_ -f8)
+	exiftool $IMAGE | awk \
+		-v filename="$FILENAME" \
+		-v basename="$BASENAME" \
+		-f /tmp/exif_renamer.awk
 }
 
 if [ "x$BASENAME" != "x" ]; then
