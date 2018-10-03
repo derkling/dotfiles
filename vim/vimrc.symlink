@@ -298,6 +298,16 @@ nnoremap fp :cprevious<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Bundle 'erig0/cscope_dynamic'
 let g:cscopedb_resolve_links=3
+let g:cscopedb_find_extra_opts  = ''
+
+" AOSP folders to ignore
+let g:cscopedb_find_extra_opts .= '-and -not \( '
+let g:cscopedb_find_extra_opts .= '   -path "./out/*" '
+let g:cscopedb_find_extra_opts .= '-o -path "./prebuilts/*" '
+let g:cscopedb_find_extra_opts .= '-o -path "./external/*" '
+let g:cscopedb_find_extra_opts .= '-o -path "./dalvik/*" '
+let g:cscopedb_find_extra_opts .= '-o -path "./ndk/*" '
+let g:cscopedb_find_extra_opts .= '\)'
 
 nmap <C-\>r <Plug>CscopeDBInit
 
