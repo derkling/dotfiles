@@ -96,7 +96,27 @@ ZSH_THEME="blinks"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump battery cmake command-not-found debian dircycle encode64 git git-extra git-flow screen tmux web-search)
+plugins=(
+	autojump
+	battery
+	colored-man-pages
+	colorize
+	command-not-found
+	debian dircycle
+	encode64
+	git git-extras git-flow
+	screen tmux
+	vi-mode
+	web-search
+	ssh-agent)
+
+# SSH Agent Settings
+# enable agent forwarding support
+zstyle :omz:plugins:ssh-agent agent-forwarding on
+# load multiple identities
+zstyle :omz:plugins:ssh-agent identities
+# set the maximum lifetime of the identitie
+zstyle :omz:plugins:ssh-agent lifetime 4h
 
 source $ZSH/oh-my-zsh.sh
 
