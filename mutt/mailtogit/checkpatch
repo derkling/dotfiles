@@ -1,2 +1,6 @@
-cd ~/Code/linux-kernel
+if [ ! -f scripts/checkpatch.pl ]; then
+   echo
+   echo "ERROR: mutt working directory is not a kernel root tree"
+   exit -1
+fi
 scripts/checkpatch.pl ~/incoming/*
