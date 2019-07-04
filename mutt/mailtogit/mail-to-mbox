@@ -1,2 +1,13 @@
-formail -cds ~/dotfiles/mutt/mailtogit/procmail -
-ls -l ~/incoming/
+
+[ -d ~/incoming ] || mkdir ~/incoming
+cat > ~/incoming/patch
+
+# Rename file based on
+FILENAME=$(awk '/Subject: /{
+				gsub("Subject: ", "");
+				gsub("[/ ]", "-");
+				gsub("[:()\\[\\]]", "");
+				print $0".patch"
+				}' \
+	~/incoming/patch)
+mv ~/incoming/patch ~/incoming/$FILENAME

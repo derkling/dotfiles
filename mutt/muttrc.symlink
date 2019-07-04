@@ -184,17 +184,13 @@ macro index,pager \CH ':set sort="reverse-date"<enter><limit>all<enter> "show ev
 macro index R "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 
 # Actions for all tag selected messages
-macro index  (a  '<tag-prefix><pipe-entry>  ~/dotfiles/mutt/mailtogit/git-apply<return>'     "Apply selected patches"
-macro index  (e  '<tag-prefix><pipe-entry>  ~/dotfiles/mutt/mailtogit/mail-to-mbox<return>'  "Export selected patches"
-macro index  (l  '<pipe-entry>              ls -ltr ~/incoming/*<return>'                    "List exported patches"
-macro index  (c  '<pipe-entry>              ~/dotfiles/mutt/mailtogit/checkpatch<return>'    "Check exported patches"
-macro index  (d  '<pipe-entry>              rm -f ~/incoming/*.mbox<return>'                 "Delete exported patches"
-
-# Actions for currently selected message
-macro index  ,a  '<pipe-entry>   ~/dotfiles/mutt/mailtogit/git-abort<return>'                " Abort applying patches"
-macro index  ,e  '<pipe-entry>   ~/dotfiles/mutt/mailtogit/mail-to-mbox<return>'             " Export selected patch"
-macro index  ,g  '<pipe-entry>   ~/dotfiles/mutt/mailtogit/git-apply<return>'                " Apply selected patch"
-macro index  ,r  '<pipe-entry>   ~/dotfiles/mutt/mailtogit/git-reset<return>'                " git-reset --hard origin"
+macro index  (e  '<enter-command>set pipe_split<enter><tag-prefix><pipe-message>~/dotfiles/mutt/mailtogit/mail-to-mbox<enter>'  "Export selected patches"
+macro index  (l  '<shell-escape> ~/dotfiles/mutt/mailtogit/git-patches-list<enter>'	"List exported patches"
+macro index  (c  '<shell-escape> ~/dotfiles/mutt/mailtogit/git-patches-check<enter>'	"Checkpatch exported patches"
+macro index  (d  '<shell-escape> rm -f ~/incoming/*.patch<return>'			"Delete exported patches"
+macro index  (a  '<shell-escape> git am ~/incoming/*.patch<return>'			"Apply exported patches to local git tree"
+macro index  (t  '<shell-escape> tig -n100<enter>'					"List exported patches"
+macro index  (g  '<shell-escape> tig -n100<enter>'					"List exported patches"
 
 # Sync email
 macro index S '<sync-mailbox><shell-escape>email_sync >/dev/null  &<enter>'
