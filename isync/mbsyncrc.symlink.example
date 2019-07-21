@@ -6,18 +6,51 @@ IMAPStore work-remote
   # Fetch password from gnome-keyring:
   PassCmd "~/dotfiles/bin/gnome_keyring.py IMAPACCOUNT -p"
   UseIMAPS yes
+  SSLType IMAPS
+  SSLVersions TLSv1.2
   CertificateFile /etc/ssl/certs/ca-certificates.crt
+  PipelineDepth 10
 
 MaildirStore work-local
   Path  ~/Mail/Work/
   Inbox ~/Mail/Work/INBOX
+  AltMap yes
+  SubFolders Verbatim
 
-Channel work
+Channel main
   Master  :work-remote:
   Slave   :work-local:
-  Patterns * !Calendar* !Contacts !Junk* !Journal !Outbox !Deleted* !RSS* !Sent !Sync*
-  Create  Both
+  Patterns * !Archive !Calendar* !Contacts !Junk* !Journal !Outbox !Deleted* !RSS* !Sent !Sync* !ML*
+  Create  Slave
   Expunge Both
-  Sync    Pull Push
+  Sync    Push Pull All
   SyncState *
+  CopyArrivalDate yes 
+
+Channel archive
+  Master  :work-remote:
+  Slave   :work-local:
+  Patterns Archive*
+  Create  Slave
+  Expunge Both
+  MaxMessages 1000
+  ExpireUnread yes
+  Sync Push Pull All
+  SyncState *
+  CopyArrivalDate yes 
+
+Channel ml
+  Master  :work-remote:
+  Slave   :work-local:
+  Patterns ML*
+  Create  Slave
+  Expunge Both
+  MaxMessages 5000
+  ExpireUnread yes
+  #Sync    Pull All Push Flags
+  Sync Push Pull All
+  SyncState *
+  CopyArrivalDate yes 
+
+Group work main ml archive
 
