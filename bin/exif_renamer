@@ -1,6 +1,8 @@
-#/bin/bash
+#!/bin/bash
 
-BASENAME=${1:-}
+BASEDIR=${PWD##*/}
+EVENT=${BASEDIR##*_}
+BASENAME=${1:-$EVENT}
 
 cat >/tmp/exif_renamer.awk <<EOF
 /Create Date/{
@@ -16,7 +18,7 @@ cat >/tmp/exif_renamer.awk <<EOF
 	focal35=\$9;
 }
 END{
-	printf("%s_%s%05.1fmm_F%04.1f_iso%06d_T%s_%s",
+	printf("%s_%s%05.1fmm_F%04.1f_iso%06d_T%s%s",
 		datetime, basename, focal, fnumber, iso, exposure, filename)
 }
 EOF
@@ -24,7 +26,17 @@ EOF
 exifString() {
 	IMAGE=$1
 	BASENAME=${2:-''}
-	FILENAME=$(echo $IMAGE | cut -d_ -f8)
+	# Get the original machine filename (in case the file has been already renamed)
+	FILENAME="$(echo $IMAGE | cut -d_ -f8)"
+	if [ "x$FILENAME" == "x" ]; then
+		# Unknowen original filename, we keep the extension
+		FILENAME="${IMAGE##*/}"
+		EXTENSION="${FILENAME##*.}"
+		FILENAME=".$EXTENSION"
+	else
+		# File already renamed, append original name to the exif string
+		FILENAME="_$FILENAME"
+	fi
 	exiftool $IMAGE | awk \
 		-v filename="$FILENAME" \
 		-v basename="$BASENAME" \
@@ -35,9 +47,12 @@ if [ "x$BASENAME" != "x" ]; then
 	BASENAME=$BASENAME"_"
 fi
 echo "Renaming files..."
+ls *.RAF *.JPG | \
 while read IMAGE; do
   	new_name="$(exifString $IMAGE $BASENAME)"
   	echo "$IMAGE => $new_name"
 	mv $IMAGE $new_name
+	# Rename Darktable sidecar files if present
+	[ ! -f $IMAGE.xmp ] || mv $IMAGE.xmp $new_name.xpm
 done </dev/stdin
 

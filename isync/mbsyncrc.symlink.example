@@ -1,11 +1,14 @@
 
 ### Work Emails
 IMAPStore work-remote
-  Host IMAPSERVER
-  User IMAPUSER
+  Host outlook.office365.com
+  User patrick.bellasi@arm.com
+  # Use hardcoded password
+  Pass yrnqvtylzxngxhnn
   # Fetch password from gnome-keyring:
-  PassCmd "~/dotfiles/bin/gnome_keyring.py IMAPACCOUNT -p"
-  UseIMAPS yes
+  # PassCmd "~/dotfiles/bin/gnome_keyring.py imap_ARM -p"
+  # Fetch password from a gpg-encrypted file:
+  #PassCmd "gpg --quiet --for-your-eyes-only --decrypt $HOME/imappassword.gpg"
   SSLType IMAPS
   SSLVersions TLSv1.2
   CertificateFile /etc/ssl/certs/ca-certificates.crt

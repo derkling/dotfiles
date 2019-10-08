@@ -200,7 +200,7 @@ macro index  ,r  '<pipe-entry>   ~/dotfiles/mutt/mailtogit/git-reset<return>'   
 macro index S '<sync-mailbox><shell-escape>email_sync >/dev/null  &<enter>'
 
 # Filter messages (help)
-macro index F '<shell-escape>cat ~/dotfiles/mutt/patters.txt; read KEY<enter>'
+# macro index F '<shell-escape>cat ~/dotfiles/mutt/patters.txt; read KEY<enter>'
 
 ################################################################################
 # Pager Settings

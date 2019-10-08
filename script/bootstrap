@@ -60,6 +60,15 @@ config_link() {
   [[ -d ~/.config ]] || mkdir ~/.config
   ln -s $FOLDER ~/.config/
 }
+
+home_link() {
+  DIR=${1:-"./"}
+  for CF in $(find $DIR -name "*.symlink"); do
+	FPATH=$(realpath $CF)
+	FNAME=$(basename ${CF//.symlink})
+	ln -fs $FPATH ~/.$FNAME
+  done
+}
 # }}}
 
 # Modules {{{
@@ -118,7 +127,7 @@ setup_zsh() {
   info "Seting [$(which zsh)] as deafult shell..."
   chsh -s $(which zsh)
 
-  success "zsh"
+  ln -fs $DOTFILES_ROOT/zsh/.zshrc.symlink ~/.zshrc
 }
 
 setup_fonts() {
@@ -156,9 +165,25 @@ setup_vim() {
 
   cd $DOTFILES_ROOT
   ln -fs $DOTFILES_ROOT/vim ~/.vim
+  ln -fs $DOTFILES_ROOT/vim/vimrc.symlink ~/.vimrc
   vim +BundleInstall +qall
 
   success 'vim'
+}
+# }}}
+
+# emacs {{{
+################################################################################
+setup_emacs() {
+  [ ! -d ~/.emacs.d ] || return 0
+  echo
+
+  info 'Setup Emacs\n'
+
+  sudo aptitude install --upgrade \
+	  emacs25-nox \
+
+  ln -s $DOTFILES_ROOT/emacs ~/.emacs.d
 }
 # }}}
 
@@ -183,13 +208,11 @@ setup_gpg() {
 # Mail {{{
 ################################################################################
 setup_mutt() {
-  info 'Setup MUTT\n'
+  [ ! -f  ~/dotfiles/mutt/.muttrc ] || return 0
+  info 'Setup MUTT'
 
-  sudo aptitde install \
-	mutt msmtp \
-  	offlineimap imapfilter \
-  	isync \
-	ldap-utils procmail
+  sudo aptitude install \
+	mutt msmtp
 
   # Setup your accounts
   info 'Setup MUTT configuration...'
@@ -222,12 +245,17 @@ setup_mutt() {
   umask 077
   mkdir -p ~/.mutt/cache
 
+  ln -fs ~/dotfiles/mutt/muttrc.symlink ~/.muttrc
   success 'MUTT'
 }
 
 setup_imap() {
+  info 'Setup IMAP account'
 
-  info 'Setup EMail account'
+  sudo aptitude install \
+  	offlineimap imapfilter \
+  	isync \
+	ldap-utils procmail
 
   user ' - What is the account name?'
   read -e imap_account
@@ -245,11 +273,12 @@ setup_imap() {
   #     imapfilter/config.lua.example > imapfilter/config.lua
   # success 'imapfilter'
 
-  info 'Setup isync IMAP\n'
+  info 'Setup isync\n'
+
   sed -e "s/IMAPACCOUNT/$imap_account/g" \
       -e "s/IMAPSERVER/$imap_server/g" \
       -e "s/IMAPUSER/$imap_username/g" \
-      isync/mbsyncrc.symlink.example > mbsyncrc.symlink.symlink
+      isync/mbsyncrc.symlink.example > mbsyncrc.symlink
   success 'isync'
 
   # info 'Setup Offiline IMAP\n'
@@ -283,6 +312,8 @@ setup_ranger() {
   echo
   info 'Setup RANGER configuration...\n'
 
+  sudo aptitude install ranger
+
   [ ! -d ~/.config/ranger ] || rm -rf ~/.config/ranger
   [ -d ~/.config ] || mkdir ~/.config
   ln -s ~/dotfiles/ranger ~/.config/ranger
@@ -299,6 +330,13 @@ setup_gist() {
 
   success "gist"
 
+}
+
+setup_cscope() {
+  info "Installing cscope"
+  sudo aptitude install cscope
+
+  success "cscope"
 }
 
 setup_fzf() {
@@ -344,7 +382,9 @@ setup_console_tools() {
 	ttyrec \
 	redshift \
 
+  echo "Configure terminator..."
   config_link ~/dotfiles/terminator
+  pip install requests
 
   is_installed console_tools ~/.config/terminator || return 0
 
@@ -363,14 +403,13 @@ setup_i3() {
 	  i3-wm i3status suckless-tools \
 	  lxappearance \
 	  i3lock xautolock procmail \
+	  nitrogen \
+	  dunst \
 	  redshift
-
-  config_link ~/dotfiles/i3
-  config_link ~/dotfiles/i3/i3status
 
   I3BAR_DISPLAY=$(xrandr | awk '/connected primary/{print $1}')
   info "Setting default display to $I3BAR_DISPLAY...\n"
-  sed -i "s/ eDP1/ $I3BAR_DISPLAY/"
+  sed -i "s/ eDP-1/ $I3BAR_DISPLAY/" ~/dotfiles/i3/config
 
   for CARD in $(cat /sys/class/sound/card*/number); do
 	  amixer -c $CARD get Speaker &>/dev/null || continue
@@ -382,6 +421,19 @@ setup_i3() {
   	sed -i "s/amixer -c 0/amixer -c $CARD/" ~/dotfiles/i3/config
   	sed -i "s/amixer -c 0/amixer -c $CARD/" ~/dotfiles/bin/volume_toggle
   fi
+
+  info "Setup dunst configuration...\n"
+  config_link ~/dotfiles/i3/dunst
+
+  info "Setup i3 workspace switcher with XFCE..."
+  sudo add-apt-repository ppa:aacebedo/libi3ipc-glib
+  sudo add-apt-repository ppa:aacebedo/xfce4-i3-workspaces-plugin
+  sudo aptitude update
+  sudo aptitude install libi3ipc-glib xfce4-i3-workspaces-plugin
+
+
+  config_link ~/dotfiles/i3/i3status
+  config_link ~/dotfiles/i3
 
   is_installed i3 ~/.config/i3 || return 0
 }
@@ -395,6 +447,7 @@ setup_compile_tools() {
   sudo aptitude install \
 	  build-essential \
 	  autoconf automake libtool \
+	  bison bisonc++ flex \
 	  cmake ccache \
 	  help2man
 
@@ -414,19 +467,36 @@ setup_python() {
 # Networking {{{
 ################################################################################
 setup_vpn() {
-  echo
-  info "Install Juniper VPN...\n"
+  info 'Setup Juniperr/Openconnect\n'
 
+  [ ! -d vpn/juniper-vpn-py ] || return 0
+
+  info 'Installing required dependencies...'
   sudo aptitude install \
-	  openconnect \
-	  python-netifaces \
-	  python-pyasn1 \
-	  python-pyasn1-modules \
-	  python-mechanize \
-	  python-urlgrabber \
-	  python-pycurl \
+	openconnect ocproxy \
+	python-netifaces python-pyasn1 \
+	python-pyasn1-modules python-mechanize \
+	python-urlgrabber
 
-  success "vpn"
+  info 'Cloning juniper-vpn-py...'
+  cd vpn
+  git clone https://github.com/chrisdiamand/juniper-vpn-py.git
+  cd -
+
+  user ' - What is your VPN username?'
+  read -e vpn_username
+  user ' - What is your work machine hostname?'
+  read -e vpn_machine
+
+cat >vpn/proxy.template  <<EOF
+[vpn]
+username = $vpn_username
+host = __PULSE_SERVER__
+stdin = DSID=%DSID%
+action = openconnect --juniper %HOST% --cookie-on-stdin --script-tun --script 'ocproxy -D 8080 -L 10022:$vpn_machine.cambridge.arm.com:22 -L 10080:$vpn_machine.cambridge.arm.com:8888'
+EOF
+
+  success 'VPN'
 }
 
 
@@ -456,6 +526,7 @@ setup_multimedia() {
 	sudo aptitude install \
 		smplayer sox \
 		gimp gimp-data-extras gimp-normalmap gimp-texturize \
+		darktable libimage-exiftool-perl \
 
 	is_installed multimedia ~/dotfiles
 

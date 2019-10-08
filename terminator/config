@@ -1,5 +1,5 @@
 [global_config]
-  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  enabled_plugins = TerminatorThemes, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   handle_size = 1
   inactive_color_offset = 0.7
   tab_position = bottom
@@ -15,7 +15,7 @@
   [[default]]
     [[[child1]]]
       parent = window0
-      profile = default
+      profile = Monokai Soda
       type = Terminal
     [[[window0]]]
       parent = ""
@@ -25,11 +25,27 @@
   [[default]]
     audible_bell = True
     background_darkness = 0.73
-    background_image = None
     copy_on_selection = True
+    cursor_color = "#ffffff"
     font = Monospace 9
     foreground_color = "#ffffff"
     scrollback_lines = 102400
+    scrollbar_position = hidden
+    show_titlebar = False
+    urgent_bell = True
+    use_system_font = False
+    visible_bell = True
+  [[Monokai Soda]]
+    audible_bell = True
+    background_color = "#1a1a1a"
+    background_darkness = 0.73
+    copy_on_selection = True
+    cursor_color = "#f6f7ec"
+    font = Monospace 9
+    foreground_color = "#c4c5b5"
+    palette = "#1a1a1a:#f4005f:#98e024:#fa8419:#9d65ff:#f4005f:#58d1eb:#c4c5b5:#625e4c:#f4005f:#98e024:#e0d561:#9d65ff:#f4005f:#58d1eb:#f6f6ef"
+    scrollback_lines = 102400
+    scrollbar_position = hidden
     show_titlebar = False
     urgent_bell = True
     use_system_font = False

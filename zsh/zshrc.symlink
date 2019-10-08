@@ -97,18 +97,22 @@ ZSH_THEME="blinks"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
-	autojump
-	battery
-	colored-man-pages
-	colorize
-	command-not-found
-	debian dircycle
-	encode64
-	git git-extras git-flow
-	screen tmux
-	vi-mode
-	web-search
-	ssh-agent)
+  autojump
+  battery
+  cmake
+  colored-man-pages
+  colorize
+  command-not-found
+  debiandircycle
+  encode64
+  golang
+  git git-extras git-flow
+  screen
+  ssh-agent
+  tmux
+  vi-mode
+  web-search
+)
 
 # SSH Agent Settings
 # enable agent forwarding support
@@ -129,4 +133,8 @@ export ZSH=$HOME/dotfiles
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Remove alias which affect other system commands
-unalias ag
+# unalias ag
+
+# Setup Go Language
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:/usr/local/go/bin:$PATH

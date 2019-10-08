@@ -1,3 +1,4 @@
-text/html;		links2 -g -dump %s;	nametemplate=%s.html; copiousoutput
+# text/html;		links2 -g -dump %s;	nametemplate=%s.html; copiousoutput
+text/html;		mv %s %s.html && qutebrowser %s.html >/dev/null 2>/dev/null; needsterminal;
 image/*;        	mutt_bgrun geeqie %s;
 application/pdf;	mutt_bgrun evince %s;

@@ -187,7 +187,7 @@ bindsym $mod+r mode "resize"
 
 # Single status bar (laptop configuration)
 bar {
-	output eDP1
+	output eDP-1
         status_command i3status
         tray_output primary
 }
@@ -202,6 +202,10 @@ bar {
 # bar {
 # 	output DP-2
 # }
+
+# Use dunst for notifications
+exec killall -q xfce4-notifyd
+exec --no-startup-id dunst -c ~/dotfiles/i3/dunst/dunstrc
 
 # Set Wallpaper
 exec --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/current
@@ -255,18 +259,18 @@ exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
 # # bindsym Ctrl+KP_3 exec --no-startup-id amixer -c2 set PCM 5-
 
 # Pulse Audio controls
-bindsym $mod+F3 exec --no-startup-id amixer -c 1 set Master 5+ #increase sound volume
-bindsym $mod+F2 exec --no-startup-id amixer -c 1 set Master 6- #decrease sound volume
-bindsym $mod+F1 exec --no-startup-id ~/dotfiles/bin/volume_toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -c 1 set Master 5+ #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -c 1 set Master 5- #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle # mute sound
 
 # Sreen brightness controls
 # NOTE: With Ubuntu >=17.04 the command to use is:
 #  https://cialu.net/brightness-control-not-work-i3wm/
-bindsym $mod+F12 exec light -A 10 # increase screen brightness
-bindsym $mod+F11 exec light -U 10 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec light -A 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 10 # decrease screen brightness
 
 # Take a screenshot upon pressing $mod+x (select an area)
-bindsym --release $mod+Print exec --no-startup-id import /tmp/latest-screenshot.png
+bindsym --release $mod+Print exec --no-startup-id ~/dotfiles/bin/screenshot
 
 # Enable/Disable touchpad
 bindsym $mod+F7 exec synclient TouchpadOff=1
@@ -281,12 +285,13 @@ assign [class="^Chromium-browser$"] $WS_WEB
 assign [class="^Gitk$"] $WS_GIT
 assign [class="^Git-gui$"] $WS_GIT
 assign [class="^TelegramDesktop$" title="Telegram"] $WS_IM
+assign [class="^WhatsApp$" title="WhatsApp Web"] $WS_IM
 assign [class="^skypeforlinux$" title="Skype"] $WS_IM
 bindsym $mod+m [class="TelegramDesktop" title="Telegram"] focus
 assign [class="^Gnome-terminal$" title="^$"] $WS_MAIL
 assign [class="^X-terminal-emulator$" title="^htop$"] $WS_SYS
 
 # External Screen Management
-bindsym $mod+Shift+m exec xrandr --output DP1 --auto --left-of eDP1
+bindsym $mod+Shift+m exec xrandr --output DP1 --auto --left-of eDP-1
 bindsym $mod+Shift+p move workspace to output leftq
 
