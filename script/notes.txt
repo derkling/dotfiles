@@ -1,0 +1,4 @@
+
+# Fix BCM4352 802.11ac Wireless Network Adapter
+https://forum.ubuntuusers.de/topic/wlan-ubuntu-16-04-bcm4352-802-11ac-wireless-ne/
+

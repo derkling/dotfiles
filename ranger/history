@@ -1,0 +1,19 @@
+mkdir Tara
+search 
+mkdir Stars
+shell s
+open_with 
+rename Falko
+rename Estefy
+rename CatGoddess
+rename PedoMoms
+open_with vim
+rename
+open_with ename
+rename 1 - N'to - Utopia.mp4
+rename 2019 - Utopia-N'to
+rename 2019 - Worakls-N'to
+delete
+rename 2017 - Jimmi Sax - 2 hourse with Jimmi Sax
+rename 2017
+bulkrename 

@@ -1,0 +1,31 @@
+;; -*- mode: emacs-lisp; lexical-binding: t; eval: (evil-close-folds); -*-
+
+(setq-default
+  dotspacemacs-configuration-layers
+ '(
+   auto-completion
+   better-defaults
+   c-c++
+   cscope
+   emacs-lisp
+   emoji
+   git
+   go
+   gtags
+   helm
+   html
+   javascript
+   markdown
+   (mu4e :variables
+   mu4e-installation-path "/usr/local/share/emacs/site-lisp/mu4e"
+   )
+   org
+   ranger
+   shell
+   spell-checking
+   syntax-checking
+   python
+   version-control
+   yaml
+   )
+)

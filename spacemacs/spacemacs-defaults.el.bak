@@ -1,0 +1,9 @@
+;; -*- mode: emacs-lisp; lexical-binding: t; eval: (evil-close-folds); -*-
+
+(setq-default
+ dotspacemacs-distribution 'spacemacs
+ dotspacemacs-enable-lazy-installation 'unused
+ dotspacemacs-ask-for-lazy-installation t
+ dotspacemacs-configuration-layer-path '()
+ dotspacemacs-install-packages 'used-only
+)

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+SERVER=${1:-'C1'}
+CLIENT=${2:-'Juniper'}
+
+case $SERVER in
+'C1')
+	PULSE_SERVER=sslvpn1.cambridge.arm.com
+	PULSE_R=cam
+	;;
+'C2')
+	PULSE_SERVER=sslvpn2.cambridge.arm.com
+	PULSE_R=cam
+	;;
+'A1')
+	PULSE_SERVER=sslvpn1.austin.arm.com
+	PULSE_R=asu
+	;;
+'A2')
+	PULSE_SERVER=sslvpn2.austin.arm.com
+	PULSE_R=asu
+	;;
+*)
+	echo "Server $SERVER must be in ['A1', 'A2', 'C1', 'C2']"
+	exit -1
+esac
+
+echo
+echo "Selected server: $PULSE_SERVER"
+
+# Check if the (preferred) juniper client is available
+if [[ $CLIENT == "Juniper" ]]; then
+	JUN=~/dotfiles/vpn/juniper-vpn-py/juniper-vpn.py
+	TMP=~/dotfiles/vpn/proxy.template
+	CFG=~/dotfiles/vpn/proxy.cfg
+
+	echo
+	echo "Connecting via Juniperr/Openconnect (proxy mode)"
+	echo
+	echo "When asked for a Password insert your:"
+	echo "A) for OTA received by SMS:"
+	echo "   - Pulse PIN (6 numbers not starting by 0) "
+	echo "   - followed by the one-time SMS code"
+	echo "B) for RSA SecureID Token:"
+	echo "   - the currently generated token"
+	echo
+	echo "You can access your machine with:"
+	echo "   ssh -p 10022 patbel01@localhost"
+	echo "or using the pulse_derkpc alias"
+	echo
+	echo "You can access the intranet via the SOCKS proxy on port 8080"
+	echo
+	# Set selected server into the configuraiton file
+	sed "s/__PULSE_SERVER__/$PULSE_SERVER/" $TMP > $CFG
+	$JUN -c $CFG
+fi
+
+if [[ $CLIENT == "Pulse" ]]; then
+	echo
+	echo "Connecting via Pulse client"
+	echo
+	echo "When asked for a VPN Password, insert your:"
+	echo "- Pulse PIN (6 numbers not starting by 0) "
+	echo "- followed by the one-time HW token"
+	echo
+	echo "IMC username: 24573-pbellasi"
+	echo "IMC passcode: PulsePIN + HWToken"
+	echo
+	echo "Starting pulse..."
+	/usr/local/pulse/PulseClient.sh \
+		-h ${PULSE_SERVER} \
+		-u patbel01 \
+		-r ${PULSE_R}-user-auth-home-pulse \
+		-U https://${PULSE_SERVER}/homepulse
+fi
+
