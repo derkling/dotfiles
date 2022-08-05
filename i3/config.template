@@ -36,11 +36,11 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+# bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus left
@@ -100,37 +100,29 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-# Named workspaces
-set $WS_MAIN "1: Main"
-set $WS_GIT  "2: Git"
-set $WS_WEB  "3: Web"
-set $WS_IM   "4: IM"
-set $WS_MAIL "5: Mail"
-set $WS_SYS  "10: System"
-
 # switch to workspace
-bindsym $mod+1 workspace $WS_MAIN
-bindsym $mod+2 workspace $WS_GIT
-bindsym $mod+3 workspace $WS_WEB
-bindsym $mod+4 workspace $WS_IM
-bindsym $mod+5 workspace $WS_MAIL
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace $WS_SYS
+bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace number $WS_MAIN
-bindsym $mod+Shift+2 move container to workspace number $WS_GIT
-bindsym $mod+Shift+3 move container to workspace number $WS_WEB
-bindsym $mod+Shift+4 move container to workspace number $WS_IM
-bindsym $mod+Shift+5 move container to workspace number $WS_MAIL
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
 bindsym $mod+Shift+6 move container to workspace number 6
 bindsym $mod+Shift+7 move container to workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
-bindsym $mod+Shift+0 move container to workspace number $WS_SYS
+bindsym $mod+Shift+0 move container to workspace number 10
 
 # allows to rename a workspace
 bindsym $mod+Ctrl+r exec (i3-input -F 'rename workspace to "%s"' -P 'New workspace name: ')
@@ -155,7 +147,7 @@ bindsym $mod+Shift+T unmark
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r exec "nohup ~/dotfiles/i3/config_setup"
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -185,38 +177,21 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Single status bar (laptop configuration)
-bar {
-	output eDP1
-        status_command i3status
-        tray_output primary
-}
-# # Dual status bar (multi monitor configuration)
-# # Main monitor
-# bar {
-# 	output DP-1
-#         status_command i3status
-#         tray_output primary
-# }
-# # Secondary monitor
-# bar {
-# 	output DP-2
-# }
-
 # Set Wallpaper
 exec --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/current
 
 # Launch mode, one app per key.
-set $launchmenu "Launch: [b]rowser [t]hunar [c]alculator [s]creenshot [m]ail [i]rc [T]elegram s[k]ype [S]ettings"
+set $launchmenu "Launch: [b]rowser [t]hunar [c]alculator [s]creenshot [m]usic [i]rc [T]elegram [S]ettings"
 mode $launchmenu {
-    bindsym b exec chromium-browser ; mode "default"
-    bindsym t exec thunar ; mode "default"
+    bindsym b exec google-chrome; mode "default"
+    bindsym t exec nemo ; mode "default"
     bindsym c exec gnome-calculator ; mode "default"
-    bindsym s exec xfce4-screenshooter ; mode "default"
-    bindsym m exec gnome-terminal --hide-menubar -e mutt ; mode "default"
-    bindsym Shift+t exec /opt/Telegram/Telegram ; mode "default"
-    bindsym k exec /usr/bin/skypeforlinux ; mode "default"
-    bindsym Shift+s exec XDG_CURRENT_DESKTOP=Unity /usr/bin/unity-control-center ; mode "default"
+    bindsym s exec /home/derkling/dotfiles/bin/screenshot ; mode "default"
+    #bindsym m exec gnome-terminal --hide-menubar -e mutt ; mode "default"
+    bindsym m exec google-chrome \
+	--profile-directory=Default \
+	--app-id=cinhimbnkkaeohfgghhklpknlkffjgod
+    bindsym Shift+s exec cinnamon-settings --hide-menubar -e mutt ; mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -227,8 +202,9 @@ bindsym $mod+Tab mode $launchmenu
 # System control menu
 set $sysmenu "System: Lock Suspend lOgout Reload Poweroff reBoot"
 mode $sysmenu {
-    bindsym l         exec xautolock -locknow ; mode "default"
-    bindsym s         exec (sync && xautolock -locknow && systemctl suspend) ; mode "default"
+    # bindsym l         exec xautolock -locknow ; mode "default"
+    bindsym l         exec xflock4 ; mode "default"
+    bindsym s         exec (sync && xflock4 && systemctl suspend) ; mode "default"
     bindsym r         restart
     bindsym o         exit
     bindsym p         exec shutdown -P now
@@ -239,49 +215,77 @@ mode $sysmenu {
 }
 bindsym $mod+Escape mode $sysmenu
 
-# Autostart programs
-exec --no-startup-id nm-applet
-
-# Autostart redshift
-exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
+## Autostart programs
+#exec --no-startup-id nm-applet
+#
+## Autostart redshift
+#exec --no-startup-id redshift -l 52.182607:0.179454 -t 5500:3700
 
 # Multimedia key control
-bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle
+# bindsym XF86AudioMute exec --no-startup-id ~/dotfiles/bin/volume_toggle
 # Pulse Audio controls (laptop)
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5-
+# bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5+
+# bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5-
 # # Pulse Audio controls (desktop)
 # bindsym Ctrl+KP_9 exec --no-startup-id amixer -c2 set PCM 5+
 # bindsym Ctrl+KP_3 exec --no-startup-id amixer -c2 set PCM 5-
+# gLinux Setup
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -SIGUSR1 i3status
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -SIGUSR1 i3status
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle && killall -SIGUSR1 i3status
 
 # Sreen brightness controls
 # NOTE: With Ubuntu >=17.04 the command to use is:
 #  https://cialu.net/brightness-control-not-work-i3wm/
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 # decrease screen brightness
 
 # Take a screenshot upon pressing $mod+x (select an area)
-bindsym --release $mod+Print exec --no-startup-id import /tmp/latest-screenshot.png
+# bindsym --release $mod+Print exec --no-startup-id import /tmp/latest-screenshot.png
+bindsym --release $mod+Print exec --no-startup-id /home/derkling/dotfiles/bin/screenshot
 
 # Enable/Disable touchpad
-bindsym $mod+F7 exec synclient TouchpadOff=1
-bindsym $mod+Shift+F7 exec synclient TouchpadOff=0
+#bindsym $mod+F7 exec synclient TouchpadOff=1
+#bindsym $mod+Shift+F7 exec synclient TouchpadOff=0
 
 # Start lockscreen daemon
-exec --no-startup-id ~/dotfiles/bin/locker ~/dotfiles/wallpapers/current
-# bindsym $mod+p exec ~/dotfiles/i3/i3lock-fancy-multimonitor/lock
+#exec --no-startup-id env LOCKED_BY_SESSION_IDLE=true xautolock -time 1 -locker /usr/share/goobuntu-desktop-files/xsecurelock.sh
 
-# Window assignment to workspaces
-assign [class="^Chromium-browser$"] $WS_WEB
-assign [class="^Gitk$"] $WS_GIT
-assign [class="^Git-gui$"] $WS_GIT
-assign [class="^TelegramDesktop$" title="Telegram"] $WS_IM
-assign [class="^skypeforlinux$" title="Skype"] $WS_IM
-bindsym $mod+m [class="TelegramDesktop" title="Telegram"] focus
-assign [class="^Gnome-terminal$" title="^$"] $WS_MAIL
-assign [class="^X-terminal-emulator$" title="^htop$"] $WS_SYS
+## Window assignment to workspaces
+#assign [class="^Chrome-browser$"] $WS_PROJECT
+#assign [class="^Gitk$"] $WS_TICKETS
+#assign [class="^Git-gui$"] $WS_TICKETS
+#assign [class="^TelegramDesktop$" title="Telegram"] $WS_IM
+#assign [class="^skypeforlinux$" title="Skype"] $WS_IM
+#bindsym $mod+m [class="TelegramDesktop" title="Telegram"] focus
+#assign [class="^Gnome-terminal$" title="^$"] $WS_MAIL
+#assign [class="^X-terminal-emulator$" title="^htop$"] $WS_PERSONAL
 
-# External Screen Management
-bindsym $mod+Shift+m exec xrandr --output DP1 --auto --left-of eDP1
-bindsym $mod+Shift+p move workspace to output leftq
+# Start Google specific apps
+## gMenu - Monitor your workstation's health
+#exec --no-startup-id /usr/share/goobuntu-indicator/goobuntu_indicator.py
+## Cinnamon Settings Daemon - xrandr
+#exec --no-startup-id csd-xrandr
+## Blueman Bluetooth Manager
+#exec --no-startup-id blueman-applet
+## Mount Google Drive File Stream
+#exec --no-startup-id /opt/google/drive-file-stream/drive_fs_open %F
+## Start the PipeWire media server
+#exec --no-startup-id pipewire
+## Start the PulseAudio Sound System
+#exec --no-startup-id start-pulseaudio-x11
+## An Applet for PulseAudio
+#exec --no-startup-id pasystray
+## Start up daemonized pulseaudio
+#exec --no-startup-id /usr/bin/pulseaudio --daemonize=yes
+
+# Internal monitor configuration
+set $imontr eDP1
+bindsym $mod+Shift+p move workspace to output $imontr
+bar {
+	output $imontr
+        status_command i3status
+        tray_output $imontr
+}
 

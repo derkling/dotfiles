@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Get external moniotr connected (if any) and use it to replace the config file template token
+read -r -a results <<< $(xrandr | awk '/eDP1/{next}/ connected/{d=$1;p=1;next}{if(p){gsub("x", " ", $1); print d" "$1;p=0}}')
+EXT_MONITOR=${results[0]}
+EXT_XRES=${results[1]}
+EXT_YRES=${results[2]}
+
+echo "Switching off all disconnected monitors..."
+OPTIONS=""
+for MONITOR in $(xrandr | awk '/disconnected/{print $1}'); do
+	OPTIONS="$OPTIONS --output $MONITOR --off"
+done
+xrandr $OPTIONS
+echo "Switching off all monitors with unknown connection..."
+OPTIONS=""
+for MONITOR in $(xrandr | awk '/unknown/{print $1}'); do
+	OPTIONS="$OPTIONS --output $MONITOR --off"
+done
+xrandr $OPTIONS
+
+SLEEP_LONG=2
+SLEEP_SHORT=.5
+
+OPTIONS="--output eDP1 --primary --mode 1920x1080 --rotate normal"
+if [[ ! -z $EXT_MONITOR ]]; then
+	echo "Configuring external monitor [$EXT_MONITOR]..."
+	EXT_XPOS=$(((EXT_XRES-1920)/2))
+	EXT_YPOS=$EXT_YRES
+	OPTIONS="$OPTIONS --pos ${EXT_XPOS}x${EXT_YPOS} --output $EXT_MONITOR --mode ${EXT_XRES}x${EXT_YRES} --pos 0x0 --rotate normal"
+fi
+xrandr $OPTIONS
+sleep ${SLEEP_LONG:?}
+
+echo "Update i3 config..."
+cp ~/dotfiles/i3/config.template ~/dotfiles/i3/config
+if [[ ! -z $EXT_MONITOR ]]; then
+	cat <<EOF >> ~/dotfiles/i3/config
+# External Screen Management
+set \$emontr ${EXT_MONITOR}
+bindsym \$mod+Shift+o move workspace to output \$emontr
+bar {
+        output \$emontr
+        tray_output none
+}
+EOF
+fi
+
+echo "Restarting i3 to load the new configs..."
+i3-msg restart >/dev/null
+sleep ${SLEEP_LONG:?}
+
+echo "Move all workspaces to the external monitor..."
+i3-msg '[class=".*"] move workspace to output '${EXT_MONITOR} &>/dev/null
+sleep ${SLEEP_SHORT:?}
+echo "Bring back workspace 4 to main monitor..."
+i3-msg workspace 4 &>/dev/null; sleep ${SLEEP_SHORT:?}; i3-msg move workspace to output eDP1 &>/dev/null
+echo "Switch to screen 5 (emails)..."
+i3-msg workspace 5 &>/dev/null
+
+echo "Restart network systray applet..."
+nohup nm-applet &>/dev/null &
+
+echo "Update wallpaper..."
+feh --bg-scale ~/dotfiles/wallpapers/current
+
+echo "Fixing up PiperWire Audio if required..."
+# PLay first a sound to notify we are up and running with working audio
+paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+systemctl --user --now status pipewire pipewire-pulse wireplumber | cat
+# Following commands to be fixed next time audio should break and the previous
+# command will allow us to detect that by filtering its audio.
+#sudo aptitude install pipewire pipewire-pulse wireplumber
+#systemctl --user --now enable pipewire pipewire-pulse wireplumber
+#systemctl --user --now restart pipewire pipewire-pulse wireplumber
+nohup blueman-applet &>/dev/null &
+[[ $(ps -aux | grep pasystray | grep -v grep  | wc -l) -eq 1 ]] || nohup pasystray &>/dev/null &
+

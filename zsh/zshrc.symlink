@@ -137,5 +137,7 @@ zle -N edit-command-line
 # Vi style (edit with: 'ESC v')
 bindkey -M vicmd v edit-command-line
 
+alias i3-setup=~/.config/i3/config_setup
+
 # Remove alias which affect other system commands
 unalias ag
