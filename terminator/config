@@ -1,16 +1,29 @@
 [global_config]
-  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   handle_size = 1
-  inactive_color_offset = 0.7
   tab_position = bottom
-  title_inactive_bg_color = "#000000"
-  title_inactive_fg_color = "#f7f7f7"
-  title_receive_bg_color = "#c91a00"
-  title_transmit_bg_color = "#a3a3a3"
   title_transmit_fg_color = "#000000"
+  title_transmit_bg_color = "#a3a3a3"
+  title_receive_bg_color = "#c91a00"
+  title_inactive_fg_color = "#f7f7f7"
+  title_inactive_bg_color = "#000000"
+  inactive_color_offset = 0.7
+  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
 [keybindings]
   split_horiz = <Primary><Shift>Left
   split_vert = <Primary><Shift>Down
+[profiles]
+  [[default]]
+    audible_bell = True
+    visible_bell = True
+    urgent_bell = True
+    background_darkness = 0.73
+    cursor_color = "#ffffff"
+    font = Monospace 9
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollback_lines = 102400
+    use_system_font = False
+    copy_on_selection = True
 [layouts]
   [[default]]
     [[[child1]]]
@@ -21,16 +34,3 @@
       parent = ""
       type = Window
 [plugins]
-[profiles]
-  [[default]]
-    audible_bell = True
-    background_darkness = 0.73
-    background_image = None
-    copy_on_selection = True
-    font = Monospace 9
-    foreground_color = "#ffffff"
-    scrollback_lines = 102400
-    show_titlebar = False
-    urgent_bell = True
-    use_system_font = False
-    visible_bell = True
