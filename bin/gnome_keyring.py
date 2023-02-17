@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import gnomekeyring as gkey
 import argparse
@@ -33,8 +33,7 @@ def set_credentials(repo, user, pw):
         user = user[0]
     attrs = { "repo": repo, "user": user }
     keyring = gkey.get_default_keyring_sync()
-    print "Set password in keyring [{}] using {}"\
-           .format(KEYRING_NAME, attrs)
+    print("Set password in keyring [%s] using %s" % (KEYRING_NAME, attrs))
     gkey.item_create_sync(keyring, gkey.ITEM_NETWORK_PASSWORD,
         KEYRING_NAME, attrs, pw, True)
 
@@ -65,21 +64,21 @@ if __name__ == "__main__":
         password = getpass.getpass("Enter password for user '%s': " % args.username)
         password_confirmation = getpass.getpass("Confirm password: ")
         if password != password_confirmation:
-            print "Error: password confirmation does not match"
+            print("Error: password confirmation does not match")
             sys.exit(1)
         set_credentials(args.repo, args.username, password)
         sys.exit(0)
 
     # Get username
     if args.repo and args.get_username:
-        print get_username(args.repo[0])
+        print(get_username(args.repo[0]))
         sys.exit(0)
 
     # Get password
     if args.repo and args.get_password:
-        print get_password(args.repo[0])
+        print(get_password(args.repo[0]))
         sys.exit(0)
 
     # By default return complete credentials
     credentials = get_credentials(args.repo[0])
-    print credentials[0], credentials[1]
+    print(credentials[0], credentials[1])
