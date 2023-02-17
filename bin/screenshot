@@ -13,4 +13,5 @@ else
   import $FILENAME
 fi
 echo "Screenshot saved to [$FILENAME]"
+xdg-open $FILENAME
 
