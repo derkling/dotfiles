@@ -4,11 +4,36 @@
 set -euo pipefail
 
 ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
+FONT_DIR="$HOME/.local/share/fonts"
 
 # Check if the config file exists
 if [ ! -f "$ALACRITTY_CONFIG" ]; then
     echo "Alacritty config file not found at: $ALACRITTY_CONFIG"
     exit 1
+fi
+
+# Ask the user if they want to download more fonts
+echo "More fonts available for download from: https://www.programmingfonts.org/"
+read -p "Would you like to check for new fonts to download? (y/N) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "Please download new font zip files to $FONT_DIR"
+    echo "Press any key to continue after you have downloaded the files."
+    read -n 1 -s -r
+
+    # Check for new zip files and unzip them
+    if ls "$FONT_DIR"/*.zip 1> /dev/null 2>&1; then
+        echo "New zip files found. Unzipping..."
+        for zip_file in "$FONT_DIR"/*.zip; do
+            unzip -o "$zip_file" -d "$FONT_DIR"
+            rm "$zip_file"
+        done
+        echo "Rebuilding font cache..."
+        fc-cache -fv
+        echo "Font cache rebuilt."
+    else
+        echo "No new zip files found in $FONT_DIR."
+    fi
 fi
 
 # Get the current font from the config file
