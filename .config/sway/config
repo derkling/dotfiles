@@ -42,79 +42,13 @@ client.background       #F8F8F2
 include /etc/sway/config-vars.d/*
 
 ################################################################################
-### Output configuration
-################################################################################
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-# Use the "wdisplays" GUI to find out the cooors for different monitors.
-
-### Integrated monitor
-# NOTE: Negative positions don't work with Xwayland. Thus, the primary/internal
-# screen has to be displaed below the (possibly) available external one.
-# NOTE: position has to compensate for scaling to ensure workspace areas are
-# contiguous, otherwise the mouse pointer will not be able to cross screen
-# boundaries.
+### Machine-specific settings
 #
-# Internal alone
-# output eDP-1 resolution 3840x2400 pos 3840 790 scale 1.3
-# Internal below (of a 4K):
-# output eDP-1 resolution 3840x2400 pos 0 1440 scale 1.5
-# Internal on the right (of a 4k):
-output eDP-1 resolution 3840x2400 pos 3840 790 scale 2
-# Internal on the left (of a 4k):
-# output eDP-1 resolution 3840x2400 pos 0 960 scale 2
-# Internal on the right side (of a 2k):
-# output eDP-1 resolution 3840x2400 pos 3202 601 scale 2
-# Move workspace to internal monitor
-bindsym $mod+Shift+p move workspace to output eDP-1
-
-
-### External monitor(s)
-# Home
-set $extH "Lenovo Group Limited LEN T32p-20 VNA5088K"
-output $extH resolution 3840x2160@60Hz pos 0 0 scale 1
-bindsym $mod+Shift+h move workspace to output $extH
-
-# Office
-set $extO "Lenovo Group Limited LEN P32p-20 VNA7394D"
-output $extO resolution 3840x2160@60Hz pos 0 0 scale 1
-bindsym $mod+Shift+o move workspace to output $extO
-
-set $extB "Dell Inc. DELL U2518D 3C4YP99OBPEL"
-output $extB resolution 3840x2160@60Hz pos 0 0 scale 1.2
-bindsym $mod+Shift+b move workspace to output $extB
-
-# Mouse stuttering after upgrade to sway 1.5
-# https://github.com/swaywm/sway/issues/5591#issuecomment-1715956464
-output * { max_render_time 1 }
-
-#set $ext2 "????????"
-#output $ext2 resolution 3840x2160@60Hz pos 0 0 scale 1
-#bindsym $mod+Shift+o move workspace to output $ext2
-
-# Propagate general wayland variables back into your systemd session
-# This can fix things like xdg-desktop-portal (launched via systemd) defaulting
-# to gnome or not picking a backend
-# TODO: ensure we set all the variable we need to forward with the following command
-exec --no-startup-id dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway
-exec --no-startup-id systemctl --user status xdg-desktop-portal.service
-
-### SSH Agent Setup
-# NOTE: ssh-agent works out of the box, as of Sept 2025.
-# gLinux: From go/SwayWM (Session wide ssh-agent bring up)
-#         go/gcert-on-sway
-# exec "ssh-agent -a $SSH_AUTH_SOCK"
-
-### Wallpaper
-output * bg ~/Pictures/Wallpapers/current fill
-
-### Idle configuration
-exec swayidle -w \
-    timeout 290 'notify-send -t 5000 "Screen locking in 10 seconds..."' \
-    timeout 300 'sway-lock' \
-    timeout 360 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    before-sleep 'sway-lock'
-
+# Machine-specific settings are applied by the sway-host-setup script.
+# This script is executed every time the sway configuration is reloaded.
+#
+exec_always --no-startup-id ~/.local/bin/sway-host-setup
+include ~/.config/sway/.temp_host_config
 
 
 ## Status Bar
@@ -125,26 +59,6 @@ bar {
 
 # hide/unhide bar
 bindsym $mod+m bar mode toggle
-
-### Input configuration
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
-set $keyboard "6058:20564:ThinkPad_Extra_Buttons"
-input $keyboard {
-    repeat_delay 1000
-    repeat_rate 60
-}
-
-set $touchpad "1739:52841:SYNA8013:00_06CB:CE69_Touchpad"
-input $touchpad {
-    tap enabled
-    tap_button_map lrm
-    natural_scroll disabled
-    #dwt enabled
-    #accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
-    #pointer_accel 0.5 # set mouse sensitivity (between -1 and 1)
-}
 
 ### Key bindings
 

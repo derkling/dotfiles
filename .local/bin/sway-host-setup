@@ -1,0 +1,96 @@
+#!/bin/bash -x
+
+# This script applies machine-specific sway settings and generates
+# a temporary config file with binds and variables.
+# It is executed every time the sway configuration is reloaded.
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+# Use the "wdisplays" GUI to find out the cooors for different monitors.
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+#
+# ==============================================================================
+# IMPORTANT:
+# The hostname of the current machine is used to select the correct settings.
+# This script will try to get the hostname from the system, but if it's running
+# in a toolbox, it might not be correct.
+#
+# PLEASE SET THE HOSTNAME MANUALLY IF NEEDED. For example:
+# hostname="darkstar"
+# ==============================================================================
+hostname=$(hostname)
+
+TEMP_CONFIG_FILE="$HOME/.config/sway/.temp_host_config"
+# Ensure the directory exists
+mkdir -p "$(dirname "$TEMP_CONFIG_FILE")"
+# Clear the temporary config file
+> "$TEMP_CONFIG_FILE"
+
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+# Use the "wdisplays" GUI to find out the cooors for different monitors.
+
+case $hostname in
+    "darkstar")
+        # Input configuration for Dell Laptop
+        swaymsg 'input "1:1:AT_Translated_Set_2_keyboard" xkb_layout "gb,us,it"'
+        swaymsg 'input "1:1:AT_Translated_Set_2_keyboard" repeat_delay 1000'
+        swaymsg 'input "1:1:AT_Translated_Set_2_keyboard" repeat_rate 60'
+
+        swaymsg 'input "1739:30381:DLL0665:01_06CB:76AD_Touchpad" tap enabled'
+        swaymsg 'input "1739:30381:DLL0665:01_06CB:76AD_Touchpad" tap_button_map lrm'
+        swaymsg 'input "1739:30381:DLL0665:01_06CB:76AD_Touchpad" natural_scroll disabled'
+
+	# Wallpaper
+        swaymsg 'output "*" bg "~/Pictures/Wallpapers/current" fill'
+
+        # Output configuration for Dell Laptop
+        swaymsg 'output "eDP-1" resolution 1920x1080 pos 0 0 scale 1'
+        ;;
+
+    "derkling")
+        # Input configuration for ThinkPad
+        swaymsg 'input "6058:20564:ThinkPad_Extra_Buttons" xkb_layout "gb,us,it"'
+        swaymsg 'input "6058:20564:ThinkPad_Extra_Buttons" repeat_delay 1000'
+        swaymsg 'input "6058:20564:ThinkPad_Extra_Buttons" repeat_rate 60'
+
+        swaymsg 'input "1739:52841:SYNA8013:00_06CB:CE69_Touchpad" tap enabled'
+
+	# Wallpaper
+        swaymsg 'output "*" bg "~/Pictures/Wallpapers/current" fill'
+
+        # Output configuration for ThinkPad
+        swaymsg 'output "eDP-1" resolution 3840x2400 pos 0 0 scale 2'
+
+        # Variables and bindings for ThinkPad
+        echo '#### External monitor(s)' >> "$TEMP_CONFIG_FILE"
+
+        echo '# Home' >> "$TEMP_CONFIG_FILE"
+        echo 'set $extH "Lenovo Group Limited LEN T32p-20 VNA5088K"' >> "$TEMP_CONFIG_FILE"
+        echo 'output $extH resolution 3840x2160@60Hz pos 0 0 scale 1' >> "$TEMP_CONFIG_FILE"
+        echo 'bindsym $mod+Shift+h move workspace to output $extH' >> "$TEMP_CONFIG_FILE"
+
+        echo '# Office' >> "$TEMP_CONFIG_FILE"
+        echo 'set $extO "Lenovo Group Limited LEN P32p-20 VNA7394D"' >> "$TEMP_CONFIG_FILE"
+        echo 'output $extO resolution 3840x2160@60Hz pos 0 0 scale 1' >> "$TEMP_CONFIG_FILE"
+        echo 'bindsym $mod+Shift+o move workspace to output $extO' >> "$TEMP_CONFIG_FILE"
+
+        echo '# Parents' >> "$TEMP_CONFIG_FILE"
+        echo 'set $extB "Dell Inc. DELL U2518D 3C4YP99OBPEL"' >> "$TEMP_CONFIG_FILE"
+        echo 'output $extB resolution 3840x2160@60Hz pos 0 0 scale 1.2' >> "$TEMP_CONFIG_FILE"
+        echo 'bindsym $mod+Shift+b move workspace to output $extB' >> "$TEMP_CONFIG_FILE"
+
+        # Variables and bindings for derkling
+        echo '# NOTE: Negative positions do not work with Xwayland. Thus, the primary/internal' >> "$TEMP_CONFIG_FILE"
+        echo '# screen has to be displaed below the (possibly) available external one.' >> "$TEMP_CONFIG_FILE"
+        echo '# NOTE: position has to compensate for scaling to ensure workspace areas are' >> "$TEMP_CONFIG_FILE"
+        echo '# contiguous, otherwise the mouse pointer will not be able to cross screen' >> "$TEMP_CONFIG_FILE"
+        echo '# boundaries.' >> "$TEMP_CONFIG_FILE"
+
+	# Move back to internal monitor
+        echo 'bindsym $mod+Shift+p move workspace to output eDP-1' >> "$TEMP_CONFIG_FILE"
+        ;;
+esac
+
+# Common swaymsg settings for all machines
+swaymsg 'output "*" max_render_time 1'
