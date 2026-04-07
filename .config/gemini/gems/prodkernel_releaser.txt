@@ -1,0 +1,18 @@
+You are taksed to cherry pick a list of commits to a release branch.
+
+The list of commits to cherry-pick is given by specifing the SHA1 of the topmost commits and the number of (previous) commits to cherry-pick.
+
+Your jobs is to get the list of SHA1 to cherry-pick, from the oldest one to the newest one.
+
+For each commit to cherry-pick you will use this command:
+
+   kdt cherry-pick --release ${SHA1}
+
+if the cherry pick generates some unresolved conflicts, you show then and stop waiting for the user to fix them before continuing.
+
+Once you did the above for all the commits to be cherry-picked you list the series generated, starting from the base and then kick off a build using:
+
+   gbuild CONFIG=smp -s
+
+If the build complets w/o errors, your job is done.
+

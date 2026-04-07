@@ -1,0 +1,4 @@
+#!/bin/bash
+"$HOME/.config/sway/scripts/lock" &
+sleep 1
+systemctl hibernate

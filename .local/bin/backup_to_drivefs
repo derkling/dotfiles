@@ -1,0 +1,18 @@
+#!/bin/bash
+
+SRC_DIR=${1:-~/Documents/Notes}
+
+HOME_PFX=${HOME//\//_}
+HOST=$(hostname)
+HOST=${HOST//.corp.google.com/}
+
+# Convert [~/path/to/dir] into [_path_to_dir]
+DST_PATH=${SRC_DIR/\~/}
+DST_PATH=${DST_PATH//\//_}
+DST_PATH=${DST_PATH/$HOME_PFX/}
+
+TIMESTAMP=$(date +%Y%m%d_%H%M)
+TAR_FILE="$HOME/Documents/DriveFS/My Drive/Backups/${TIMESTAMP}_${HOST}${DST_PATH}.tar.xz"
+
+echo "Backing-up $TAR_FILE"
+tar chjf "$TAR_FILE" ${SRC_DIR} 2>/dev/null

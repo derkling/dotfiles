@@ -1,0 +1,20 @@
+#!/bin/bash
+# ~/.local/bin/sway-lock - Instant lock with post-unlock background refresh
+
+BG_FILE="$HOME/.cache/lock-screen-bg.jpg"
+
+# 1. Lock the screen immediately.
+# We don't use --daemonize here so that the script waits until you unlock.
+swaylock \
+    --image "$BG_FILE" \
+    --scaling fill \
+    --indicator-radius 100 \
+    --indicator-thickness 10 \
+    --inside-color 00000000 \
+    --ring-color 47a2ff \
+    --key-hl-color ffaf00 \
+    --text-color ffffff
+
+# 2. Execution reaches here ONLY after you successfully unlock.
+# We trigger the refresh in the background so it doesn't delay your return to work.
+~/.local/bin/refresh-lock-bg &>/dev/null &

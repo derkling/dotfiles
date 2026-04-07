@@ -1,0 +1,43 @@
+
+# Unix utils
+neovim emacs
+tmux
+autojump bc
+fzf
+gawk sed moreutils
+# A modern replacement for ls
+eza
+# hwloc => lstopo|hwloc-ls
+htop iotop hwloc pv
+# inxi => inxi -v4 -c6 OR inxi -bDc 6
+inxi
+powertop
+ranger
+# silversearcher-ag => ag
+silversearcher-ag
+# sysfsutils => systool
+sysfsutils
+tree
+zsh
+zoxide
+alacritty
+mako-notifier
+swaylock swayidle ncal
+# Markdown reader from CLI
+glow
+
+# Hacking utilities
+autoconf automake libtool
+build-essential
+byacc flex bison
+ccache
+cmake
+git gitk git-gui tig git-flow
+ltrace strace
+
+# Networking libraries
+curl wget axel
+openssh-client
+
+# Google tools
+roadwarrior

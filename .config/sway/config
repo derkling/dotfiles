@@ -1,0 +1,399 @@
+set $mod Mod4
+
+# Set terminal to Alacritty
+set $term alacritty
+
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+#set $menu i3-dmenu-desktop --dmenu="dmenu -i" | xargs swaymsg exec --
+set $menu 'rofi -modi run -show drun -monitor primary'
+
+#font pango:Cantarell Regular, "Twitter Color Emoji" 10
+#font pango:SourceCodePro Medium 12
+#font pango:Comic Sans MS 14
+#font pango:DejaVu Sans 12
+font pango:FontAwesome Regular, 12
+
+# Hide borders
+hide_edge_borders none
+default_border pixel 3
+
+# change borders
+bindsym $mod+b border toggle
+
+
+#############################
+# Theme colors
+#############################
+# https://draculatheme.com/i3
+
+# class                 border  bground text    indicator child_border
+client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
+client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
+client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
+
+client.background       #F8F8F2
+
+
+
+include /etc/sway/config-vars.d/*
+
+################################################################################
+### Output configuration
+################################################################################
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+# Use the "wdisplays" GUI to find out the cooors for different monitors.
+
+### Integrated monitor
+# NOTE: Negative positions don't work with Xwayland. Thus, the primary/internal
+# screen has to be displaed below the (possibly) available external one.
+# NOTE: position has to compensate for scaling to ensure workspace areas are
+# contiguous, otherwise the mouse pointer will not be able to cross screen
+# boundaries.
+#
+# Internal alone
+# output eDP-1 resolution 3840x2400 pos 3840 790 scale 1.3
+# Internal below (of a 4K):
+# output eDP-1 resolution 3840x2400 pos 0 1440 scale 1.5
+# Internal on the right (of a 4k):
+output eDP-1 resolution 3840x2400 pos 3840 790 scale 2
+# Internal on the left (of a 4k):
+# output eDP-1 resolution 3840x2400 pos 0 960 scale 2
+# Internal on the right side (of a 2k):
+# output eDP-1 resolution 3840x2400 pos 3202 601 scale 2
+# Move workspace to internal monitor
+bindsym $mod+Shift+p move workspace to output eDP-1
+
+
+### External monitor(s)
+# Home
+set $extH "Lenovo Group Limited LEN T32p-20 VNA5088K"
+output $extH resolution 3840x2160@60Hz pos 0 0 scale 1
+bindsym $mod+Shift+h move workspace to output $extH
+
+# Office
+set $extO "Lenovo Group Limited LEN P32p-20 VNA7394D"
+output $extO resolution 3840x2160@60Hz pos 0 0 scale 1
+bindsym $mod+Shift+o move workspace to output $extO
+
+set $extB "Dell Inc. DELL U2518D 3C4YP99OBPEL"
+output $extB resolution 3840x2160@60Hz pos 0 0 scale 1.2
+bindsym $mod+Shift+b move workspace to output $extB
+
+# Mouse stuttering after upgrade to sway 1.5
+# https://github.com/swaywm/sway/issues/5591#issuecomment-1715956464
+output * { max_render_time 1 }
+
+#set $ext2 "????????"
+#output $ext2 resolution 3840x2160@60Hz pos 0 0 scale 1
+#bindsym $mod+Shift+o move workspace to output $ext2
+
+# Propagate general wayland variables back into your systemd session
+# This can fix things like xdg-desktop-portal (launched via systemd) defaulting
+# to gnome or not picking a backend
+# TODO: ensure we set all the variable we need to forward with the following command
+exec --no-startup-id dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway
+exec --no-startup-id systemctl --user status xdg-desktop-portal.service
+
+### SSH Agent Setup
+# NOTE: ssh-agent works out of the box, as of Sept 2025.
+# gLinux: From go/SwayWM (Session wide ssh-agent bring up)
+#         go/gcert-on-sway
+# exec "ssh-agent -a $SSH_AUTH_SOCK"
+
+### Wallpaper
+output * bg ~/Pictures/Wallpapers/current fill
+
+### Idle configuration
+exec swayidle -w \
+    timeout 290 'notify-send -t 5000 "Screen locking in 10 seconds..."' \
+    timeout 300 'sway-lock' \
+    timeout 360 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'sway-lock'
+
+
+
+## Status Bar
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    swaybar_command waybar
+}
+
+# hide/unhide bar
+bindsym $mod+m bar mode toggle
+
+### Input configuration
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+set $keyboard "6058:20564:ThinkPad_Extra_Buttons"
+input $keyboard {
+    repeat_delay 1000
+    repeat_rate 60
+}
+
+set $touchpad "1739:52841:SYNA8013:00_06CB:CE69_Touchpad"
+input $touchpad {
+    tap enabled
+    tap_button_map lrm
+    natural_scroll disabled
+    #dwt enabled
+    #accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
+    #pointer_accel 0.5 # set mouse sensitivity (between -1 and 1)
+}
+
+### Key bindings
+
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec $menu
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway and terminate Wayland session?' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+
+    # Workspace names
+    # to display names or symbols instead of plain workspace numbers you can use
+    # something like: set $ws1 1:mail
+    #                 set $ws2 2:
+    set $ws1 1
+    set $ws2 2
+    set $ws3 3
+    set $ws4 4
+    set $ws5 5
+    set $ws6 6
+    set $ws7 7
+    set $ws8 8
+    set $ws9 9
+    set $ws10 10
+
+    # Switch to workspace
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    bindsym $mod+7 workspace $ws7
+    bindsym $mod+8 workspace $ws8
+    bindsym $mod+9 workspace $ws9
+    bindsym $mod+0 workspace $ws10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace $ws1
+    bindsym $mod+Shift+2 move container to workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5
+    bindsym $mod+Shift+6 move container to workspace $ws6
+    bindsym $mod+Shift+7 move container to workspace $ws7
+    bindsym $mod+Shift+8 move container to workspace $ws8
+    bindsym $mod+Shift+9 move container to workspace $ws9
+    bindsym $mod+Shift+0 move container to workspace $ws10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+
+    # workspace back and forth (with/without active container)
+    workspace_auto_back_and_forth yes
+    bindsym $mod+Tab workspace back_and_forth
+    bindsym $mod+Shift+Tab move container to workspace back_and_forth; workspace back_and_forth
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+h splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Toggle the current window sticky mode
+    bindsym $mod+Shift+s sticky toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym Left resize shrink width 50px
+    bindsym Down resize grow height 50px
+    bindsym Up resize shrink height 50px
+    bindsym Right resize grow width 50px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# System notifications, this assume the script is
+# available under $HOME/.config/sway/scripts
+exec setup_notifications
+
+# Set shut down, restart and locking features
+# Commands can be any script available under $HOME/.config/sway/scripts
+# E.g. the suspend script will ensure we lock the screen before using systemctl to suspend
+set $mode_system (l)ock, (e)xit, (s)uspend, (h)ibernate (r)eboot, (Shift+s)hutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id ~/.local/bin/sway-lock, mode "default"
+    bindsym s exec --no-startup-id ~/.config/sway/scripts/suspend, mode "default"
+    bindsym h exec --no-startup-id ~/.config/sway/scripts/hibernate, mode "default"
+    bindsym e exec --no-startup-id swaymsg exit, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl shutdown, mode "default"
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Escape mode "$mode_system"
+
+# Lock or suspend when you close the laptop lid:
+bindswitch --reload lid:off exec ~/.local/bin/sway-lock
+
+include /etc/sway/config.d/*
+
+
+# Multimedia key control
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ 5%-
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+ # increase screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%- # decrease screen brightness
+
+# Media player control
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+
+# Open applications on specific workspaces
+# Desktop 4: Tools
+assign [title="Duckie"] $ws4
+assign [title="Gemini"] $ws4
+assign [title="Google Chat"] $ws4
+assign [title="Google Translate"] $ws4
+assign [title="Telegram Web"] $ws4
+# Desktop 5: Commsn
+assign [title="Google Calendar"] $ws5
+assign [title="Gmail"] $ws5
+# Desktop 8: Media
+assign [title="Amazon Music"] $ws8
+
+# Windows specific settings
+for_window [class="Xfce4-terminal"] border pixel 3
+
+# Open specific applications in floating mode
+# Wayand windows properties can be obtained by reading the wayland tree with a command like this:
+# $ sleep 2 ; swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true)'
+# and ensuring to focus the window to get the properties for,
+for_window [app_id="org.gnome.Calculator"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="blueman-manager"] floating enable
+for_window [app_id="sanity-check"] floating enable, resize set 800 600, move position center
+for_window [app_id="system-monitor"] floating enable, resize set width 80 ppt height 80 ppt, move position center
+for_window [app_id="calendar"] floating enable, resize set width 40 ppt height 55 ppt, move position center
+for_window [class="Lxappearance"] floating enable
+for_window [title="La7 in diretta"] floating enable
+
+# switch to workspace with urgent window automatically
+for_window [urgent=latest] focus
+
+# Autostart
+#exec --no-startup-id pasystray
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id nm-applet --indicator
+exec --no-startup-id env XDG_CURRENT_DESKTOP=gnome /usr/share/goobuntu-indicator/goobuntu_indicator.py
+exec --no-startup-id xfce4-power-manager
+exec --no-startup-id diodon
+exec --no-startup-id blueman-applet
+exec --no-startup-id start_conky_maia
+exec --no-startup-id dex -ae sway
+
+# Take screenshot
+bindsym Print exec --no-startup-id grimshot --notify save area "~/Pictures/screenshot-$(date +%F_%T).png"
+bindsym $mod+Print --release exec --no-startup-id grimshot --notify save screen "~/Pictures/screenshot-$(date +%F_%T).png"
+bindsym $mod+Shift+Print --release exec --no-startup-id grimshot --notify save window
+
+
+# Appearance
+exec {
+        gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+        gsettings set org.gnome.desktop.interface icon-theme 'Epapirus-dark'
+        gsettings set org.gnome.desktop.interface font-name 'Overpass 10'
+}
+
+# Start commonly used apps
+exec deskopen Gmail
+exec deskopen GoogleCalendar
+exec deskopen GoogleChat
+exec deskopen TelegramWeb
+exec deskopen Gemini

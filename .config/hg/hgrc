@@ -1,0 +1,9 @@
+[ui]
+# Disable Pager for All Commands
+paginate = never
+
+[pager]
+# Only Enable Pager for Specific Commands: 
+attend = diff  # Only log and diff will use the pager
+
+

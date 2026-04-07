@@ -1,0 +1,5 @@
+max-history=5
+sort=+time
+width=600
+height=200
+on-button-right=dismiss-all

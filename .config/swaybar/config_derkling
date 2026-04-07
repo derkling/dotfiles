@@ -1,0 +1,148 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 40, // Waybar height (to be removed for auto height)
+    // "output": "eDP-1", // Show always and only on internal screen
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "custom/media"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["pulseaudio", "network",
+                      "cpu", "memory", "temperature",
+                      "battery",
+                      "clock",
+                      "tray"],
+
+    // Modules configuration
+    // "sway/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
+
+    "tray": {
+        "icon-size": 22,
+        "spacing": 12
+    },
+
+    // Clocks
+    // NOTE: valid time zones are listed under /usr/share/zoneinfo/
+    "clock": {
+        "format": "{:%H:%M %Z}",
+        "format-alt": "{:%A, %B %d, %Y}",
+        "tooltip-format": "{calendar}",
+	"timezones": ["Europe/Zurich", "America/Los_Angeles"],
+        "calendar": {
+                    "mode"          : "year",
+                    "mode-mon-col"  : 3,
+                    "weeks-pos"     : "right",
+                    "on-scroll"     : 1,
+                    "on-click-right": "mode",
+                    "format": {
+                              "months":     "<span color='#ffead3'><b>{}</b></span>",
+                              "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                              "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                              "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                              "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                              }
+                    },
+        "actions":  {
+                    "on-click-right": "mode",
+                    "on-click-forward": "tz_up",
+                    "on-click-backward": "tz_down",
+                    "on-scroll-up": "shift_up",
+                    "on-scroll-down": "shift_down"
+                    }
+    },
+    //"clock": {
+    //    "timezone": "Europe/Zurich",
+    //    "format": "{:%H:%M %Z}",
+    //    "timezones": ["Europe/Zurich", "Europe/London"],
+    //    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    //    "format-alt": "{:%d-%m-%Y %H:%M %Z}",
+    //},
+    //"clock#tz2": {
+    //    "timezone": "PST8PDT",
+    //    "format": "{:%H:%M %Z}",
+    //    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    //    "format-alt": "{:%d-%m-%Y %H:%M %Z}",
+    //},
+
+
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "Br: {capacity}% {icon}",
+        "format-charging": "Bc: {capacity}%",
+        "format-plugged": "Bp: {capacity}%",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "temperature": {
+        // "thermal-zone": 5,
+        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+
+    "memory": {
+        "format": "{}% "
+    },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": true
+    },
+
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{ipaddr} ({essid} {signalStrength}%)",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+
+}
+

@@ -1,0 +1,60 @@
+#!/bin/bash
+# ~/.local/bin/theme-selector - Interactively choose and set a new color theme for Alacritty
+
+set -euo pipefail
+
+ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
+THEME_DIR="$HOME/.cache/alacritty-themes"
+THEME_REPO="https://github.com/alacritty/alacritty-theme.git"
+
+# Check if the config file exists
+if [ ! -f "$ALACRITTY_CONFIG" ]; then
+    echo "Alacritty config file not found at: $ALACRITTY_CONFIG"
+    exit 1
+fi
+
+# Clone the theme repository if it doesn't exist
+if [ ! -d "$THEME_DIR" ]; then
+    echo "Cloning alacritty-theme repository to $THEME_DIR..."
+    git clone --depth 1 "$THEME_REPO" "$THEME_DIR"
+else
+    echo "Updating theme repository..."
+    (cd "$THEME_DIR" && git pull)
+fi
+
+# Get a list of themes and let the user choose
+# We extract the theme name from the filename (e.g., themes/gruvbox_dark.toml -> gruvbox_dark)
+selected_theme_name=$(find "$THEME_DIR/themes" -type f -name "*.toml" | 
+    sed -E 's|.*/(.*)\.toml|\1|' | 
+    sort | 
+    fzf --prompt="Select a new theme > ")
+
+# Exit if no theme was selected
+if [ -z "$selected_theme_name" ]; then
+    echo "No theme selected. Exiting."
+    exit 0
+fi
+
+selected_theme_file="$THEME_DIR/themes/${selected_theme_name}.toml"
+
+# Create a temporary file to safely build the new config
+temp_config=$(mktemp)
+
+# Use awk to remove all existing [colors.*] sections from the config
+awk '
+/^\[colors\./ { in_colors_block = 1 }
+/^\[/ && !/^\[colors\./ { in_colors_block = 0 }
+!in_colors_block
+' "$ALACRITTY_CONFIG" > "$temp_config"
+
+# Append the new theme to the temporary config file
+echo -e "
+# Applied theme: $selected_theme_name" >> "$temp_config"
+cat "$selected_theme_file" >> "$temp_config"
+
+# Replace the old config with the new one
+mv "$temp_config" "$ALACRITTY_CONFIG"
+
+echo "Successfully applied theme: $selected_theme_name"
+echo "Alacritty will now use the new theme. You may need to restart it if live reload is disabled."
+

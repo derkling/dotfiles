@@ -1,0 +1,57 @@
+#!/bin/bash
+# ~/.local/bin/git-quickfix - Robust git quickfix alias helper
+
+set -e
+
+COMMIT=$1
+if [ -z "$COMMIT" ]; then
+    echo "Usage: git quickfix <commit>"
+    exit 1
+fi
+
+STASH_NAME="quickfix_stash_$(date +%s)"
+echo "Stashing unstaged/untracked changes..."
+# We use -k (keep-index) to ensure staged changes remain in the worktree
+# and -u (include-untracked) to ensure we have a clean slate.
+git stash push -k -u -m "$STASH_NAME"
+
+echo "Creating fixup commit for $COMMIT..."
+git commit --fixup="$COMMIT"
+
+echo "Starting autosquash rebase..."
+# Disable sequence editor for a truly automated rebase starting from the target commit's parent.
+set +e
+GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "${COMMIT}^"
+REBASE_STATUS=$?
+set -e
+
+if [ $REBASE_STATUS -ne 0 ]; then
+    echo "Rebase failed/stopped for conflicts."
+
+    # Loop until the rebase is completed or aborted
+    while [ -d ".git/rebase-merge" ] || [ -d ".git/rebase-apply" ]; do
+        CONFL_FILES=$(git diff --name-only --diff-filter=U)
+        if [ -n "$CONFL_FILES" ]; then
+            echo "Conflicts detected in: $CONFL_FILES"
+            echo "Opening nvim to resolve conflicts..."
+            # Open Neovim with the quickfix list populated with conflicted files
+            nvim -q <(git diff --name-only --diff-filter=U)
+        fi
+
+        echo -n "Conflicts resolved? (y=continue / n=abort / Enter=re-open nvim): "
+        read -r REPLY
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            git rebase --continue || echo "Rebase still has conflicts."
+        elif [[ $REPLY =~ ^[Nn]$ ]]; then
+            echo "Aborting rebase..."
+            git rebase --abort
+            break
+        fi
+    done
+fi
+
+# Only pop if we successfully finished rebase and the stash is still there
+if git stash list | grep -q "$STASH_NAME"; then
+    echo "Restoring stashed changes..."
+    git stash pop
+fi

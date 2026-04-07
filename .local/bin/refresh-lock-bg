@@ -1,0 +1,16 @@
+#!/bin/bash
+# ~/.local/bin/refresh-lock-bg - Fetch a reliable 2K background image from Picsum
+
+BG_FILE="$HOME/.cache/lock-screen-bg.jpg"
+# Picsum photos: 2560x1440 (2K)
+URL="https://picsum.photos/2560/1440"
+
+echo "Fetching new 2K lock screen background from Picsum..."
+# -L follows redirects, -f fails on server error
+if curl -L -f -o "$BG_FILE.tmp" "$URL"; then
+    mv "$BG_FILE.tmp" "$BG_FILE"
+    echo "Lock screen background updated: $BG_FILE (2K)"
+else
+    echo "Failed to fetch image from Picsum. Keeping old one."
+    exit 1
+fi

@@ -1,0 +1,62 @@
+#!/bin/bash
+# ~/.local/bin/dr - Shared DevRez utility script
+# This script handles all dr_* functions from your old zsh config.
+
+# Ensure shared variables are available
+source ~/.config/shell/vars.sh
+
+COMMAND=$1
+shift
+
+case "$COMMAND" in
+    reserve)
+        FAMILY=${1:?}
+        GENUS=${2}
+        if [[ $(reservation.par ls | wc -l) -gt 1 ]]; then
+            echo "Already a machine reserved. Use FORCE=1 to get another."
+            reservation.par ls
+            exit 1
+        fi
+        if [[ -z ${GENUS} ]]; then
+            reservation.par get --family ${FAMILY}
+        else
+            reservation.par get --family ${FAMILY} --genus ${GENUS}
+        fi
+        ;;
+    info)
+        echo "Using machine [${MACHINE:?}]: http://woodenshoes/${MACHINE} http://mach/${MACHINE}"
+        prdcs find --mask=logical_config.human_friendly_name ${MACHINE}
+        megapede info "${MACHINE}.prod.google.com"
+        ;;
+    ssh)
+        /usr/bin/miba_ssh_session -a -- ssh root@${MACHINE:?}
+        ;;
+    push)
+        FILE=${1:?}
+        DEST=${2:-"/data/"}
+        /usr/bin/miba_ssh_session -a -- scp ${FILE} root@${MACHINE}:${DEST}
+        ;;
+    pull)
+        FILE=${1:?}
+        DEST=${2:-"./"}
+        /usr/bin/miba_ssh_session -a -- scp root@${MACHINE}:${FILE} ${DEST}
+        ;;
+    console)
+        megapede console "${MACHINE:?}.prod.google.com"
+        ;;
+    boot-latest)
+        CMDLINE="console=ttyS0,115200n8 earlyprintk=serial,ttyS0,115200 crashzone=64M $@"
+        konjurer -cmdline="${CMDLINE}" pkgs/LATEST.tar.xz ${MACHINE:?}
+        ;;
+    yogi)
+        SINCE=${1:-"15 days ago"}
+        yogi --start_time="${SINCE}" --columns=date,hostname,id,kdump_uid,kernel,base_kernel_cl,dump_type,mobo,mobo_family,panic_reason --order=-date --machines ${MACHINE:?} | column -t
+        ;;
+    crash)
+        ssh root@${MACHINE:?} 'echo PANIC > /sys/kernel/debug/provoke-crash/DIRECT'
+        ;;
+    *)
+        echo "Usage: dr {reserve|info|ssh|push|pull|console|boot-latest|yogi|crash}"
+        exit 1
+        ;;
+esac

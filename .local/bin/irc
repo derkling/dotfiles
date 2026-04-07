@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+set -x
+
+DAEMON_NAME=quassel_ssh_tunnel
+QUASSEL_PORT=4242
+UBI_HOST=$YOUR_GANETI_HOST_HERE
+
+daemon --running --name=$DAEMON_NAME || daemon --name=$DAEMON_NAME \
+    --delay 10 \
+    --verbose \
+    --output=/tmp/$DAEMON_NAME.out \
+    --respawn --attempts=2 \
+    -- autossh -NL $QUASSEL_PORT:localhost:$QUASSEL_PORT $UBI_HOST
+
+while ! nc -z localhost $QUASSEL_PORT
+do
+  sleep 5
+done
+
+exec quasselclient

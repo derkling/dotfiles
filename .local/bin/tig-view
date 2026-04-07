@@ -1,0 +1,37 @@
+#!/bin/bash
+# ~/.local/bin/tig-open - Helper for Tig 'E' binding
+
+FILE="$1"
+LINE="$2"
+
+# If FILE is empty, Tig probably failed to provide it.
+if [ -z "$FILE" ]; then
+    echo "No file selected."
+    exit 1
+fi
+
+# Determine if we are over an SSH connection
+IS_SSH=0
+if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ]; then
+    IS_SSH=1
+fi
+
+# Determine if we should use glow or the editor.
+if [[ "$FILE" =~ \.(md|markdown)$ ]]; then
+    if [ "$IS_SSH" -eq 1 ]; then
+        # Over SSH: Open with glow in pager mode
+        glow -p "$FILE"
+    else
+        # Local session: Open with browser
+        # Ensure BROWSER is set, fallback to google-chrome
+        ${BROWSER:-google-chrome} "$FILE" &>/dev/null &
+    fi
+else
+    # Fallback to editor, defaulting to vim if EDITOR is not set.
+    # Use +LINE if LINE is provided and greater than 0.
+    if [ -n "$LINE" ] && [ "$LINE" -gt 0 ] 2>/dev/null; then
+        ${EDITOR:-vim} +"$LINE" "$FILE"
+    else
+        ${EDITOR:-vim} "$FILE"
+    fi
+fi

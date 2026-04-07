@@ -1,0 +1,33 @@
+#!/bin/bash
+# ~/.local/bin/font-selector - Interactively choose and set a new font for Alacritty
+
+set -euo pipefail
+
+ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
+
+# Check if the config file exists
+if [ ! -f "$ALACRITTY_CONFIG" ]; then
+    echo "Alacritty config file not found at: $ALACRITTY_CONFIG"
+    exit 1
+fi
+
+# Get the current font from the config file
+current_font=$(grep -E "^\s*family\s*=" "$ALACRITTY_CONFIG" | head -n1 | sed -E 's/^\s*family\s*=\s*"([^"]*)".*/\1/')
+echo "Current font is: $current_font"
+
+# Get a unique, sorted list of monospaced fonts and let the user choose
+selected_font=$(fc-list :mono | cut -d: -f2 | sort -u | fzf --prompt="Select a new font > ")
+
+# Exit if no font was selected (user pressed Esc or Ctrl-C)
+if [ -z "$selected_font" ]; then
+    echo "No font selected. Exiting."
+    exit 0
+fi
+
+# Update the config file with the new font
+# This uses sed to replace the value of the 'family' key under any [font.*] section
+sed -i -E 's/(family\s*=\s*")[^"]*(".*)/\1'"$selected_font"'\2/' "$ALACRITTY_CONFIG"
+
+echo "Successfully updated font to: $selected_font"
+echo "Alacritty will now use the new font. You may need to restart it if live reload is disabled."
+

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+APP=${1:?}
+FOLDERS="$HOME/Desktop $HOME/.local/share/applications"
+
+# Clanup desktop file names
+for FOLDER in $FOLDERS; do
+  pushd $FOLDER >/dev/null
+  grep -m1 -E "^Name=" *.desktop | \
+  sed -e 's/ //g' -e 's/:Name=/ /' | \
+  tr ":'()" "_" | \
+  awk '{printf("mv %s %s.desktop 2>/dev/null\n", $1, $2)}' | \
+  while read CMD; do eval $CMD; done
+  popd >/dev/null
+done
+
+# Lookup for the requested app and launch it if found
+for FOLDER in $FOLDERS; do
+  pushd $FOLDER >/dev/null
+  EXEC=$(grep -m1 Exec $APP.desktop | sed 's/Exec=//')
+  [[ "x$EXEC" != "x" ]] || continue
+  eval $EXEC &>/dev/null &
+  exit 0
+  popd >/dev/null
+done
+
+echo "FAILED: App [$APP] not found in $FOLDERS."
+exit 1

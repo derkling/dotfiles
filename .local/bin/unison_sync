@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Synch a remote desktop folder which is locally mounted via SSHFS
+unison -batch \
+	-ignore 'Name .#*' \
+	/home/derkling/Documents/Notes \
+	/home/derkling/CorpMachine/Documents/Notes

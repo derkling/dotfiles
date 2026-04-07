@@ -1,0 +1,50 @@
+# Unix utils
+aterm screen terminator
+bsdextrautils ghex
+# debianutils => run-parts
+debianutils
+figlet
+elpa-ggtags
+highlight
+highlight caca-utils atool exiftool mediainfo odt2txt
+redshift
+smartmontools
+ttyrec
+usbutils
+# x11-xserver-utils => xrandr
+x11-xserver-utils arandr xdotool xsel
+cscope exuberant-ctags
+doxygen graphviz
+mmdebstrap genext2fs
+
+# Window Manager
+dunst
+# lxappearance => setup icon theme for Thunar and other GTK b
+#                 used from withint Awesome
+lxappearance
+iproute2 iptables netcat-openbsd rsync tcpdump nmap
+irssi weechat
+links2
+mutt msmtp imapfilter ldap-utils procmail isync
+public-inbox notmuch
+openssh-server
+transmission
+# uml-utilities => tunctl
+uml-utilities
+
+# Go programming
+gopls
+
+# Multimedia libraries
+gcolor3
+gimp gimp-data-extras gimp-gutenprint gimp-plugin-registry gi
+smplayer sox
+
+# Archive utilities
+atool
+unrar
+
+## Google Stuff
+#piper-client
+#hashbang-borg-sre
+#megapede-cli

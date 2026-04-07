@@ -1,0 +1,64 @@
+[font]
+size = 12.0
+
+[font.bold]
+family = " Liberation Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = " Liberation Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = " Liberation Mono"
+style = "Italic"
+
+[font.normal]
+family = " Liberation Mono"
+style = "Regular"
+
+[window]
+decorations = "full"
+dynamic_padding = true
+opacity = 1.0
+
+[window.dimensions]
+columns = 120
+lines = 34
+
+[window.padding]
+x = 5
+y = 5
+
+[general]
+live_config_reload = true
+
+# Applied theme: horizon_dark
+# Colors (Horizon Dark)
+
+# Primary colors
+[colors.primary]
+background = '#1c1e26'
+foreground = '#e0e0e0'
+
+# Normal colors
+[colors.normal]
+black = '#16161c'
+red = '#e95678'
+green = '#29d398'
+yellow = '#fab795'
+blue = '#26bbd9'
+magenta = '#ee64ac'
+cyan = '#59e1e3'
+white = '#d5d8da'
+
+# Bright colors
+[colors.bright]
+black = '#5b5858'
+red = '#ec6a88'
+green = '#3fdaa4'
+yellow = '#fbc3a7'
+blue = '#3fc4de'
+magenta = '#f075b5'
+cyan = '#6be4e6'
+white = '#d5d8da'

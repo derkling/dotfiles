@@ -1,0 +1,36 @@
+#!/bin/bash
+# ~/.local/bin/gutils - Shared Google general utilities
+
+source ~/.config/shell/vars.sh
+
+COMMAND=$1
+shift
+
+case "$COMMAND" in
+    port_of)
+        grep -iE "$1" /google/src/files/head/depot/eng/ports
+        ;;
+    ganpati_team)
+        TEAM=${1:-anvil-team}
+        ganpati list-members -g $TEAM --noheaders | egrep -v "^$TEAM" | awk '{print $1}'
+        ;;
+    borg_master)
+        CELL=${1:-lg-derkling-crash}
+        borg printmaster --borg $CELL
+        ;;
+    borg_machines)
+        CELL=${1:-lg-derkling-crash}
+        borg lsmach -N -borg $CELL
+        ;;
+    nsu_default)
+        PACKAGE_NAME=${1:-kernel}
+        stubby call blade:node-config-editor NodeConfigEditor.DelegationInfo "name: '$PACKAGE_NAME-rollout'" | grep default_version
+        ;;
+    find_glogs)
+        find /usr/local/google/tmp -type f -printf "%T+\t%p\n" 2>/dev/null | sort -r | cut -d$'\t' -f2- | fzf --exit-0 --preview 'tail -n $LINES {}' --preview-window='top:65%'
+        ;;
+    *)
+        echo "Usage: gutils {port_of|ganpati_team|borg_master|borg_machines|nsu_default|find_glogs}"
+        exit 1
+        ;;
+esac

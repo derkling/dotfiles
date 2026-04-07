@@ -1,0 +1,10 @@
+# ~/.gitignore - Globally exclude private/work-specific files
+# This ensures that even if you use 'config add', these won't be staged.
+
+# Ingnore temp file and pretty much everything,
+# unless explicitely added via "git add -f"
+*~
+*.swp
+.*
+# Ignore also all top level folders unless explicitely added
+*/*

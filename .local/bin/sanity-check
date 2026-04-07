@@ -1,0 +1,147 @@
+#!/bin/bash
+# ~/.local/bin/sanity-check - System configuration validator
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+function log_ok() { echo -e " ✅ ${GREEN}$1${NC}"; }
+function log_warn() { echo -e " ⚠️  ${YELLOW}$1${NC}"; }
+function log_err() { echo -e " ❌ ${RED}$1${NC}"; }
+function log_info() { echo -e " 🔍 ${BLUE}$1${NC}"; }
+
+# Detect if we are running on a remote machine via SSH
+IS_REMOTE=0
+if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+    IS_REMOTE=1
+fi
+
+echo -e "${BLUE}--- 🛡️  System Sanity Check ($( [ $IS_REMOTE -eq 1 ] && echo "Remote" || echo "Local" )) 🛡️  ---${NC}"
+
+# ==============================================================================
+# SHARED CHECKS (Local & Remote)
+# ==============================================================================
+
+# 1. Network Check
+HAS_INTERNET=0
+if ip route | grep -q 'default'; then
+    log_ok "Network: Internet connection available 🌐"
+    HAS_INTERNET=1
+else
+    log_err "Network: No default route found (Offline?) 🔌"
+fi
+
+# 2. Path Check
+BIN_DIR=$(dirname "$(realpath "$0")")
+if [[ ":$PATH:" == *":$BIN_DIR:"* ]]; then
+    log_ok "Path: Local binaries directory is correctly exported 🛤️"
+else
+    log_err "Path: Local binaries ($BIN_DIR) MISSING from PATH 🛑"
+fi
+
+# 3. Dotfiles State
+CONFIG_BIN="$HOME/.local/bin/config"
+if [ -x "$CONFIG_BIN" ]; then
+    if $CONFIG_BIN status --short | grep -q "^ [MADRCU]"; then
+        log_warn "Dotfiles: You have uncommitted changes 📂"
+    else
+        log_ok "Dotfiles: Configuration is locally clean ✨"
+    fi
+
+    if [ "$HAS_INTERNET" -eq 1 ]; then
+        # Silently fetch remote changes with a short timeout
+        timeout 5s $CONFIG_BIN fetch --quiet &>/dev/null || true
+
+        LOCAL=$( $CONFIG_BIN rev-parse @ )
+        REMOTE=$( $CONFIG_BIN rev-parse @{u} 2>/dev/null || echo "$LOCAL" )
+        BASE=$( $CONFIG_BIN merge-base @ @{u} 2>/dev/null || echo "$LOCAL" )
+
+        if [ "$LOCAL" = "$REMOTE" ]; then
+            log_ok "Dotfiles: Synced with remote ☁️"
+        elif [ "$LOCAL" = "$BASE" ]; then
+            log_err "Dotfiles: Remote has NEW changes! (Run 'config pull') 🚀"
+        elif [ "$REMOTE" = "$BASE" ]; then
+            log_info "Dotfiles: Local is ahead of remote (Don't forget to push) ⬆️"
+        else
+            log_err "Dotfiles: Local and remote have diverged! 💥"
+        fi
+    fi
+else
+    log_warn "Dotfiles: 'config' tool not found at $CONFIG_BIN 🔍"
+fi
+
+# 4. MIBA/Google Certs (Check if gcert is valid)
+if command -v gcertstatus &>/dev/null; then
+    if gcertstatus --check_ssh=false &>/dev/null; then
+        log_ok "Google: MIBA/Certs are valid 🔑"
+    else
+        log_warn "Google: Certs expired or missing (Run 'gcert') 🔒"
+    fi
+fi
+
+# ==============================================================================
+# LOCAL-ONLY CHECKS (Desktop/Laptop)
+# ==============================================================================
+if [ "$IS_REMOTE" -eq 0 ]; then
+
+    # 5. Audio Check
+    if command -v pactl &>/dev/null; then
+        SPEAKER_SINK=$(pactl list sinks | grep -B 1 "Description: .*Speaker" | grep "Name:" | awk '{print $2}')
+        if [ -n "$SPEAKER_SINK" ]; then
+            MUTE_STATUS=$(pactl get-sink-mute "$SPEAKER_SINK" | awk '{print $2}')
+            VOLUME_PERC=$(pactl get-sink-volume "$SPEAKER_SINK" | grep -Po '[0-9]+(?=%)' | head -n 1)
+
+            if [ "$MUTE_STATUS" == "yes" ]; then
+                log_err "Audio: Speakers are MUTED. Fixing..."
+                pactl set-sink-mute "$SPEAKER_SINK" 0
+            fi
+            if [ "$VOLUME_PERC" -lt 1 ]; then
+                log_warn "Audio: Volume is 0%. Setting to 1% to keep UI visible..."
+                pactl set-sink-volume "$SPEAKER_SINK" 1%
+            else
+                log_ok "Audio: Speakers unmuted at ${VOLUME_PERC}% 🔊"
+            fi
+        else
+            log_err "Audio: Internal speaker sink not found! 🔇"
+        fi
+    fi
+
+    # 6. Mako Check
+    if systemctl --user is-active --quiet mako 2>/dev/null; then
+        log_ok "Notifications: Mako is running 🔔"
+    else
+        log_err "Notifications: Mako service is NOT active 🔕"
+    fi
+
+    # 7. Wayland Environment
+    if [ -n "$WAYLAND_DISPLAY" ] && [ -n "$SWAYSOCK" ]; then
+        log_ok "Environment: Wayland/Sway variables are set 🖼️"
+    else
+        log_err "Environment: WAYLAND_DISPLAY or SWAYSOCK is missing 👻"
+    fi
+
+    # 8. Systemd Failed Units (Desktop specific can be annoying on remote)
+    FAILED_UNITS=$(systemctl --user list-units --state=failed --no-legend)
+    if [ -z "$FAILED_UNITS" ]; then
+        log_ok "Systemd: No failed user units ⚙️"
+    else
+        log_err "Systemd: Found failed units: 💣\n$FAILED_UNITS"
+    fi
+
+fi
+
+# ==============================================================================
+# REMOTE-ONLY CHECKS (Barebone Server)
+# ==============================================================================
+if [ "$IS_REMOTE" -eq 1 ]; then
+    # Add remote-specific checks here
+    # Example: Check if a specific persistent tunnel or mount is active
+    log_info "Remote: Running in server mode (Desktop checks skipped) 🖥️"
+fi
+
+echo -e "${BLUE}--------------------------------------------------${NC}"
+echo -n "Press any key to close..."
+read -n 1 -s -r

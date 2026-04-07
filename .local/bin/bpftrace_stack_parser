@@ -1,0 +1,103 @@
+#!/bin/bash
+
+set -e
+
+UNAMER=${1:-?} # Set the actual kernel version returned by uname -r
+
+KERNELLONG=$(echo $UNAMER | sed -e 's/-smp//')
+KERNEL_PKG="kernel-unstripped-smp-${KERNELLONG}.x86_64-x86.tar.xz"
+KPATH="/google/src/head/depot/sysimages/buildmaster/packages/kernel/${KERNEL_PKG}"
+
+if [[ -f "${KPATH}" ]]; then
+  echo "Found kernel package: ${KPATH}"
+  mkdir -p /tmp/kernel_debug
+  rm -rf /tmp/kernel_debug/*
+  cp "${KPATH}" /tmp/kernel_debug/
+  cd /tmp/kernel_debug/
+  unxz "${KERNEL_PKG}"
+  tar xf "kernel-unstripped-smp-${KERNELLONG}.x86_64-x86.tar"
+  VMLINUX=$(realpath "./boot/vmlinux-${UNAMER}")
+  MAP_FILE=$(realpath "./boot/System.map-${UNAMER}")
+else
+  echo "ERROR: Kernel package not found at ${KPATH}"
+  echo "Please double-check the kernel version and path."
+  echo "Did you use 'uname -r' output?"
+  exit -1
+fi
+
+# Check if VMLINUX file exists
+if [[ ! -f "${VMLINUX}" ]]; then
+  echo "ERROR: VMLINUX file not found at ${VMLINUX}" >&2
+  echo "Please check the KERNELLONG and path." >&2
+  exit 1
+fi
+
+# Check if MAP_FILE exists
+if [[ ! -f "${MAP_FILE}" ]]; then
+  echo "ERROR: System.map file not found at ${MAP_FILE}" >&2
+  echo "Please check the KERNELLONG and path." >&2
+  exit 1
+fi
+
+# Function to resolve <func_name>+<hex_offset> to file:line
+resolve_bpf_addr() {
+  local bpf_string="$1" # Input format: <func_name>+<hex_offset>
+
+  # Trim potential leading/trailing whitespace
+  bpf_string=$(echo "${bpf_string}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+  if [[ -z "${bpf_string}" ]]; then
+    return 0
+  fi
+
+  # Split function name and offset
+  local func_name=$(echo "${bpf_string}" | cut -d'+' -f1)
+  local hex_offset_str=$(echo "${bpf_string}" | cut -d'+' -f2)
+
+  if [[ "${func_name}" == "${bpf_string}" || -z "${hex_offset_str}" ]]; then
+    echo "ERROR: Invalid input format. Expected <func_name>+<hex_offset>, got ${bpf_string}" >&2
+    return 1
+  fi
+
+  # Check if hex_offset_str is a valid hex number
+  if ! [[ "${hex_offset_str}" =~ ^0x[0-9a-fA-F]+$ ]]; then
+     echo "ERROR: Invalid hex offset format in ${bpf_string}. Expected 0x<hex>." >&2
+     return 1
+  fi
+
+  # Convert hex offset to integer
+  local offset=$((hex_offset_str))
+
+  # Get the base address from System.map
+  local base_addr_str=$(grep -w "${func_name}" "${MAP_FILE}" | awk '{print $1}')
+
+  if [[ -z "${base_addr_str}" ]]; then
+    echo "WARNING: Could not find ${func_name} in ${MAP_FILE}. Trying nm..." >&2
+    # Fallback to nm if not in System.map (e.g., some static symbols)
+    base_addr_str=$(nm "${VMLINUX}" | grep -w "${func_name}" | awk '{print $1}')
+    if [[ -z "${base_addr_str}" ]]; then
+      echo "ERROR: Could not find ${func_name} with nm either." >&2
+      return 1
+    fi
+    echo "Found ${func_name} using nm." >&2
+  fi
+
+  # Calculate absolute address
+  local abs_addr=$(printf "0x%x" "$((16#${base_addr_str} + offset))")
+
+  echo "Input: ${bpf_string}"
+  echo "Resolving ${func_name}+${hex_offset_str} (Base: 0x${base_addr_str}, Absolute: ${abs_addr})"
+
+  # Use addr2line
+  addr2line -e "${VMLINUX}" -a "${abs_addr}" -f -C
+  # -e: executable
+  # -a: print address
+  # -f: print function names
+  # -C: demangle function names
+  echo "---"
+}
+
+# Read from standard input line by line
+while IFS= read -r line || [[ -n "$line" ]]; do
+  resolve_bpf_addr "${line}"
+done

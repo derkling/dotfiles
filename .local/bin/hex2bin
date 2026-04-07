@@ -1,0 +1,21 @@
+#!/bin/bash
+# Hex to Binary converter
+# Portable script available to all shells via ~/.local/bin
+
+hex=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+bin=$(echo "ibase=16; obase=2; $hex" | bc)
+len=${#bin}
+padding=$((4 - len % 4))
+padded_bin=""
+
+if [[ $padding -ne 4 ]]; then
+    for ((i=0; i<padding; i++)); do
+        padded_bin+="0"
+    done
+    padded_bin+="$bin"
+else
+    padded_bin="$bin"
+fi
+
+grouped_bin=$(echo "$padded_bin" | fold -w 4 | sed '$!s/$/ /' | tr -d '\n')
+echo "$grouped_bin"

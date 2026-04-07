@@ -1,0 +1,63 @@
+#!/bin/bash
+# ~/.local/bin/sanity-check-waybar - Waybar-compatible sanity check
+
+# Use standard sanity-check to get statuses
+# We'll do a quick check: if any check fails or warns, we change the icon.
+
+# 1. Audio Check
+SPEAKER_SINK=$(pactl list sinks | grep -B 1 "Description: .*Speaker" | grep "Name:" | awk '{print $2}')
+AUDIO_OK=1
+if [ -n "$SPEAKER_SINK" ]; then
+    MUTE_STATUS=$(pactl get-sink-mute "$SPEAKER_SINK" | awk '{print $2}')
+    VOLUME_PERC=$(pactl get-sink-volume "$SPEAKER_SINK" | grep -Po '[0-9]+(?=%)' | head -n 1)
+    if [ "$MUTE_STATUS" == "yes" ] || [ "$VOLUME_PERC" -lt 1 ]; then
+        AUDIO_OK=0
+    fi
+else
+    AUDIO_OK=0
+fi
+
+# 2. Mako Check
+MAKO_OK=1
+systemctl --user is-active --quiet mako || MAKO_OK=0
+
+# 3. Network Check
+NET_OK=1
+ip route | grep -q 'default' || NET_OK=0
+
+# 4. Systemd Failed Units
+SYS_OK=1
+FAILED_UNITS=$(systemctl --user list-units --state=failed --no-legend)
+[ -z "$FAILED_UNITS" ] || SYS_OK=0
+
+# 5. Dotfiles Sync
+DOT_OK=1
+CONFIG_BIN="$HOME/.local/bin/config"
+if [ -x "$CONFIG_BIN" ]; then
+    $CONFIG_BIN status --short | grep -q "^ [MADRCU]" && DOT_OK=0
+fi
+
+# 6. MIBA/Google Certs
+CERT_OK=1
+if command -v gcertstatus &>/dev/null; then
+    gcertstatus --check_ssh=false &>/dev/null || CERT_OK=0
+fi
+
+# Aggregate Status
+if [ $AUDIO_OK -eq 1 ] && [ $MAKO_OK -eq 1 ] && [ $NET_OK -eq 1 ] && [ $SYS_OK -eq 1 ] && [ $DOT_OK -eq 1 ] && [ $CERT_OK -eq 1 ]; then
+    CLASS="ok"
+    TEXT="🛡️"
+    TOOLTIP="System Healthy"
+else
+    CLASS="warning"
+    TEXT="⚠️"
+    TOOLTIP="Issues detected:\n"
+    [ $AUDIO_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Audio Muted/Missing\n"
+    [ $MAKO_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Mako Inactive\n"
+    [ $NET_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Offline\n"
+    [ $SYS_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Failed Systemd Units\n"
+    [ $DOT_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Dotfiles Dirty\n"
+    [ $CERT_OK -eq 0 ] && TOOLTIP="${TOOLTIP}- Google Certs Expired\n"
+fi
+
+echo "{\"text\": \"$TEXT\", \"class\": \"$CLASS\", \"tooltip\": \"$TOOLTIP\"}"

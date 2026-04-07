@@ -1,0 +1,25 @@
+#!/bin/bash
+
+PIDFILE=/tmp/tgd.pid
+
+case $1 in
+
+start)
+	echo "Starting Telegram service..."
+	cd /home/derkling/Documents/Coding/Telegram &&
+	(while [ 1 ]; do sleep 1; done) | ./telegram -N &>/dev/null &
+	sleep 1
+	TGPID=$(ps aux | grep telegram | head -n1 | awk '{print $2}')
+	echo $TGPID > $PIDFILE
+	;;
+
+stop)
+	echo "Stopping Telegram service..."
+	killall -9 telegram &>/dev/null
+	;;
+
+*)
+	echo "Usage: $0 [start|stop]"
+	;;
+esac
+

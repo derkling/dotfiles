@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SYNC_SCRIPT=/home/derkling/dotfiles/bin/unison_sync
+
+find /home/derkling/Documents/Notes -type d -print0 \
+	| xargs -0 -I{} echo "{} IN_CLOSE_WRITE,IN_CREATE,IN_DELETE $SYNC_SCRIPT" \
+	> /etc/incron.d/notes.conf
+
+# Report monitored folders
+grep '' /etc/incron.d/*
+
+# Reload service rules
+service incron reload

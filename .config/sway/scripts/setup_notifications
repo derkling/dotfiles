@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# See: b/286212018
+# Kill all OBNO daemons (which does not work with sway, TBV)
+ps aux | awk '/awk/{next}/obno/{print $2}' 2>/dev/null
+
+# Ensure the mako daemon is running
+systemctl --user restart mako
+notify-send "Notifications working with Mako"
+

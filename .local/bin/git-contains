@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# Check which tag contains a given SHA1
+
+SHA1=${1:-HEAD}
+
+git tag --sort version:refname --contains $SHA1 | egrep -m1 '^v[0-9]+\.[0-9]+$'

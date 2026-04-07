@@ -1,0 +1,185 @@
+
+# Check go/git-tricks for even more nice to have settings
+
+[user]
+  name = Patrick Bellasi
+  email = derkling@matbug.net
+
+[includeIf "env:DOTFILES_PROFILE=work"]
+  path = ~/.config/git/config.work
+
+[includeIf "env:DOTFILES_PROFILE=lab"]
+  path = ~/.config/git/config.lab
+
+[credential]
+  helper = cache
+
+[http]
+  cookiefile = ~/.gitcookies
+
+[github]
+  user = derkling
+
+[alias]
+  bv = branch --sort=-committerdate -av
+  co = checkout
+  cb = checkout -b
+  d = diff
+  dc = diff --cached
+  ri = rebase -i
+  quickfix = !git-quickfix
+  org = describe --contains
+
+  promote = !$ZSH/bin/git-promote
+  wtf     = !$ZSH/bin/git-wtf
+  rank-contributors = !$ZSH/bin/git-rank-contributors
+  count   = !git shortlog -sn
+
+  lg = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --oneline --graph --decorate --first-parent --date=short
+  lgs = log --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cd %an)%Creset' --oneline --graph --decorate --first-parent --date=short -n20
+  refresh-sha1s = rebase --interactive --exec 'git commit --amend --no-edit'
+  check-maintainer = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/get_maintainer.pl'
+  check-series = rebase --interactive --exec 'git format-patch --stdout -1 | scripts/checkpatch.pl'
+  check-series-custom = rebase --interactive --exec './check-series-custom'
+  list-patches = cherry -v
+
+  se = send-email --confirm=always --cc="Patrick Bellasi <derkling@matbug.net>"
+  sep = send-email --suppress-cc=all --confirm=always --cc="Patrick Bellasi <derkling@matbug.net>"
+  ses = send-email --suppress-cc=all --confirm=always --to="Patrick Bellasi <derkling@matbug.net>"
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = auto
+
+[core]
+  excludesfile = ~/.gitignore
+  pager = less -FRSX
+  commitGraph = true
+
+  # The core.editor must be set to something usable from within
+  # the VSCode terminal, e.g. vim.
+  # This will ensure we can use it for histedit.
+  #
+  # To make tig integration working with VSCode, since we need
+  # to translate into file:line format, we need instead
+  # to overried this editor with
+  #   export TIG_EDITOR=~/bin/cim
+  #
+  #editor = emacsclient -t
+  editor = vim
+  #editor = code -r --wait
+  #editor = ~/bin/tig_editor
+
+[gc]
+  writeCommitGraph = true
+  # for the above to work, ensure you also run:
+  #    git commit-graph write --reachable
+
+[maintenance]
+  auto = false
+  strategy = incremental
+
+#[checkout]
+#  workers = 0  # use num_cpu
+
+[apply]
+  whitespace = nowarn
+
+[merge]
+  tool = vimdiff
+	conflictStyle = zdiff3
+
+[mergetool]
+  keepBackup = false
+
+[difftool]
+  prompt = false
+
+[help]
+  autocorrect = 1
+
+[hub]
+  protocol = https
+
+[sendemail]
+  from = Patrick Bellasi <derkling@matbug.net>
+  bcc = derkling+lkml@gmail.com
+  confirm = always
+  multiedit = false
+
+[tig]
+  # Settings for speeding up Tig in large repositories
+  # Use Git's default (reverse chronological) order, never automatically
+  # use topo-order for the commit graph
+  commit-order = default
+  # Limit number of commits loaded by default to 1000
+  main-options = -n 1000
+  # Don't show staged and unstaged changes in the main view
+  # show-changes = no
+  # Always split in vertical
+  vertical-split = yes
+  # Sort branches by date
+  refs-view = line-number:no id:yes date:relative-compact author:abbreviated ref commit-title
+  # Show SHA1, YYYY-MM-DD, Author, and CommitTitle
+  main-view = id date:custom author commit-title:graph=yes,refs=yes
+  main-view-date-format = "%Y-%m-%d"
+  # Optionally, use the old and faster but less acurate graph renderer
+  # set main-view-commit-title-graph = v1
+
+[tig "bind"]
+  generic = v !tig-view "%(file)" "%(lineno)"
+  generic = Meta-m view-main
+  generic = Meta-s view-status
+  generic = _ :set vertical-split = no
+  generic = | :set vertical-split = yes
+  generic = <C-r> refresh
+
+  main = <C-f>  ?git commit --amend
+  main = <C-b>  !git branch -f "%(prompt Enter branch name: )" $(commit)
+  main = <Esc>r ?git reset %(commit)
+  main = <Esc>R ?git reset --hard %(commit)
+  main = <C-b>  !@git branch -f %(prompt) %(commit)
+  main = <C-d>  !@git branch -D %(prompt)
+  main = <C-s>  !@git stash save "%(prompt)"
+  main =    c   !@git checkout %(branch)
+  main =    C   !@git checkout %(commit)
+  main =    s   !@git checkout %(prompt)
+  main =    F   !git quickfix %(commit)
+  main =    Q   !git quickfix %(commit)
+  main =    f   !git format-patch -o /tmp --suffix=."%(prompt Enter patch suffix: )" %(commit) 0
+  main =    P   !git cherry-pick %(commit)
+  main =    R   !git rebase -i %(commit)
+  main =    T   !@git tag %(prompt) %(commit)
+  main =    !   !@git revert %(commit)
+
+  status = A !git commit --amend
+  status = C !git commit -s
+  status = R !git checkout %(file)
+
+  refs = n !@git branch %(prompt Enter branch name: )
+
+  tree = l !git log %(file)
+
+[diff]
+  tool = vimdiff
+
+[gui]
+  fontui = -family \"Liberation Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+  fontdiff = -family \"Liberation Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+
+[url "https://chromium.googlesource.com/a/"]
+  insteadOf = https://chromium.googlesource.com/a/
+  insteadOf = https://chromium.googlesource.com/
+
+[rerere]
+  autoupdate = true
+  enabled = true
+
+#[url "https://github.com/"]
+#	insteadOf = git@github.com:
+#
+# vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=gitconfig
+[safe]
+	directory = ~/Code/linux-worktrees/ramdisk

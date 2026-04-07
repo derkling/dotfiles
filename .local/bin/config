@@ -1,0 +1,65 @@
+#!/bin/bash
+# ~/.local/bin/config - Dotfiles git config CLI
+# Replaces the shell function for cross-shell compatibility
+
+GIT_OPTS="--git-dir=$HOME/.dotfiles --work-tree=$HOME"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# If no arguments are passed and tig is installed, run tig by default.
+if [ "$#" -eq 0 ] && command -v tig &> /dev/null; then
+    GIT_DIR=$HOME/.dotfiles GIT_WORK_TREE=$HOME tig
+    exit $?
+fi
+
+# Special handling for explicit 'tig' command
+if [[ "$1" == "tig" ]]; then
+    shift
+    GIT_DIR=$HOME/.dotfiles GIT_WORK_TREE=$HOME tig "$@"
+    exit $?
+fi
+
+# Special handling for the 'add' command, everything is excluded by default,
+# thus add an implicit -f assuming all add are intentional.
+if [[ "$1" == "add" ]]; then
+    shift
+    git $GIT_OPTS add -f "$@"
+    exit $?
+fi
+
+# Special handling for 'status' command to include remote sync check
+if [[ "$1" == "status" ]]; then
+    # Run the original git status
+    git $GIT_OPTS "$@"
+
+    # Check remote status if we have an internet connection
+    if ip route | grep -q 'default'; then
+        echo -e "\n${BLUE}🔍 Checking remote status...${NC}"
+        if timeout 5s git $GIT_OPTS fetch --quiet &>/dev/null; then
+            LOCAL=$(git $GIT_OPTS rev-parse @)
+            REMOTE=$(git $GIT_OPTS rev-parse @{u} 2>/dev/null || echo "$LOCAL")
+            BASE=$(git $GIT_OPTS merge-base @ @{u} 2>/dev/null || echo "$LOCAL")
+
+            if [ "$LOCAL" = "$REMOTE" ]; then
+                echo -e " ✅ ${GREEN}Synced with remote${NC} ☁️"
+            elif [ "$LOCAL" = "$BASE" ]; then
+                echo -e " 🚀 ${RED}Remote has NEW changes!${NC} Run 'config pull' to update."
+            elif [ "$REMOTE" = "$BASE" ]; then
+                echo -e " ⬆️  ${YELLOW}Local is ahead of remote${NC}. Run 'config push' to sync."
+            else
+                echo -e " 💥 ${RED}Local and remote have diverged!${NC}"
+            fi
+        else
+            echo -e " ⚠️  ${YELLOW}Remote check timed out${NC}"
+        fi
+        echo "" # Extra newline for spacing
+    fi
+    exit 0
+fi
+
+git $GIT_OPTS "$@"

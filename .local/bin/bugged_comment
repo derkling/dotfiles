@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Replace <BUG_ID> with the bug number and <N> with the comment number
+BUG_COMMENT_INPUT=${1:-?}
+
+# Extract BUG_ID and COMMENT_NUM from the input string
+BUG_ID=$(echo "$BUG_COMMENT_INPUT" | grep -oP '(b/|http://b/)\K[0-9]+')
+COMMENT_NUM=$(echo "$BUG_COMMENT_INPUT" | grep -oP '#comment\K[0-9]+')
+
+if [ -z "$BUG_ID" ] || [ -z "$COMMENT_NUM" ]; then
+    echo "Error: Invalid input format. Expected b/BUG_ID#commentN"
+    exit 1
+fi
+
+bugged show ${BUG_ID} | awk -v num="${COMMENT_NUM}" '
+  BEGIN {in_comment=0}
+  /^> From: .*\(comment #/ {
+    if ($0 ~ "\\(comment #" num "\\s") {
+      in_comment=1
+      next
+    } else {
+      in_comment=0
+    }
+  }
+  in_comment && /^> / {print substr($0, 3)}
+  in_comment && /^>$/ {print ""}
+'

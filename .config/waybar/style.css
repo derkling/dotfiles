@@ -1,0 +1,91 @@
+/* ~/.config/waybar/style.css */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "DejaVu Sans", "FontAwesome", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: rgba(40, 42, 54, 0.8); /* Dark Dracula-like background with transparency */
+    color: #f8f8f2;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background-color: transparent;
+    color: #f8f8f2;
+    border-bottom: 3px solid transparent;
+}
+
+#workspaces button.focused {
+    background-color: #44475a;
+    border-bottom: 3px solid #bd93f9;
+}
+
+#workspaces button.urgent {
+    background-color: #ff5555;
+}
+
+#mode, #clock, #battery, #cpu, #memory, #disk, #temperature, #backlight, #network, #pulseaudio, #custom-media, #tray, #mode, #idle_inhibitor, #custom-sanity {
+    padding: 0 10px;
+    color: #f8f8f2;
+}
+
+/* Specific styling for your new geeky modules */
+#custom-sanity.ok {
+    color: #50fa7b; /* Green */
+}
+
+#custom-sanity.warning {
+    color: #ffb86c; /* Orange */
+}
+
+#load {
+    color: #8be9fd; /* Cyan */
+}
+
+#cpu {
+    color: #ff79c6; /* Pink */
+}
+
+#memory {
+    color: #bd93f9; /* Purple */
+}
+
+#disk {
+    color: #f1fa8c; /* Yellow */
+}
+
+#pulseaudio {
+    color: #f1fa8c; /* Yellow for output */
+}
+
+#pulseaudio.source {
+    color: #ffb86c; /* Orange for microphone */
+}
+
+#network.disconnected {
+    background-color: #ff5555;
+}
+
+#battery.critical:not(.charging) {
+    background-color: #ff5555;
+    color: #f8f8f2;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: #f8f8f2;
+        color: #282a36;
+    }
+}
