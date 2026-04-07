@@ -170,7 +170,6 @@
   fontdiff = -family \"Liberation Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
 
 [url "https://chromium.googlesource.com/a/"]
-  insteadOf = https://chromium.googlesource.com/a/
   insteadOf = https://chromium.googlesource.com/
 
 [rerere]
