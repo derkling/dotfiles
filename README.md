@@ -57,7 +57,7 @@ local files suffixed with the profile name, which are ignored by Git.
 
 | Subsystem | Generic (Tracked) | Profile-Specific (Ignored) |
 | :--- | :--- | :--- |
-| **Git Identity** | `~/.gitconfig` | `~/.gitconfig.{profile}` |
+| **Git Identity** | `~/.config/git/config` | `~/.config/git/config.{profile}` |
 | **Shell Vars** | `~/.config/shell/vars.sh` | `~/.config/shell/vars.{profile}.sh` |
 | **SSH Config** | `~/.ssh/config` | `~/.ssh/config.{profile}` |
 | **Binaries** | `~/.local/bin/` | `~/.local/bin/{profile}/` |
@@ -66,7 +66,7 @@ local files suffixed with the profile name, which are ignored by Git.
 
 1.  **Environment Variables**: Add context-specific tokens or paths to
     `~/.config/shell/vars.{profile}.sh`.
-2.  **Git**: Add specific email or signing keys to `~/.gitconfig.{profile}`.
+2.  **Git**: Add specific email or signing keys to `~/.config/git/config.{profile}`.
 3.  **SSH**: Add hostnames and identity files to `~/.ssh/config.{profile}`.
 4.  **Binaries**: Place context-specific scripts in `~/.local/bin/{profile}/`.
 
