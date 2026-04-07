@@ -1,0 +1,24 @@
+# Shell & Basic CLI
+zsh
+tmux
+neovim
+fzf
+zoxide
+eza
+htop
+iotop
+powertop
+
+# Desktop & UI (Host-specific)
+alacritty
+mako
+swaylock
+swayidle
+ncal
+
+# Utils
+tree
+bc
+pv
+inxi
+hwloc
