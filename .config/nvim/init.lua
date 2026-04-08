@@ -257,6 +257,10 @@ require("lazy").setup({
         { "<leader>ts", "<cmd>lua _G.ToggleSpell()<CR>", desc = "Toggle spell checking" },
         { "<leader>tw", "<cmd>set list!<CR>", desc = "Toggle render whitespace" },
 
+        { "<leader>v", group = "+Vim" },
+        { "<leader>vl", "<cmd>Lazy<CR>", desc = "Lazy (Plugin Manager)" },
+        { "<leader>vu", "<cmd>Lazy update<CR>", desc = "Update plugins" },
+
         { "<leader>w", group = "+Window" },
         { "<leader>w-", "<cmd>split<CR>", desc = "Split window below" },
         { "<leader>w/", "<cmd>vsplit<CR>", desc = "Split window right" },
