@@ -1,16 +1,21 @@
 #!/bin/bash
-# ~/.local/bin/font-selector - Interactively choose and set a new font for Alacritty
+# ~/.local/bin/font-selector - Interactively choose and set a new font for multiple components
 
 set -euo pipefail
 
 ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
+SWAY_CONFIG="$HOME/.config/sway/config"
+WAYBAR_STYLE="$HOME/.config/waybar/style.css"
 FONT_DIR="$HOME/.local/share/fonts"
 
-# Check if the config file exists
-if [ ! -f "$ALACRITTY_CONFIG" ]; then
-    echo "Alacritty config file not found at: $ALACRITTY_CONFIG"
-    exit 1
-fi
+# Function to check if a file exists
+check_file() {
+    if [ ! -f "$1" ]; then
+        echo "Warning: File not found at $1"
+        return 1
+    fi
+    return 0
+}
 
 # Ask the user if they want to download more fonts
 echo "More fonts available for download from: https://www.programmingfonts.org/"
@@ -36,12 +41,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     fi
 fi
 
-# Get the current font from the config file
-current_font=$(grep -E "^\s*family\s*=" "$ALACRITTY_CONFIG" | head -n1 | sed -E 's/^\s*family\s*=\s*"([^"]*)".*/\1/')
-echo "Current font is: $current_font"
-
 # Get a unique, sorted list of monospaced fonts and let the user choose
-selected_font=$(fc-list :mono | cut -d: -f2 | sort -u | fzf --prompt="Select a new font > ")
+# We trim leading/trailing whitespace from the family name
+selected_font=$(fc-list :mono | cut -d: -f2 | sed 's/^ //' | sort -u | fzf --prompt="Select a new font > ")
 
 # Exit if no font was selected (user pressed Esc or Ctrl-C)
 if [ -z "$selected_font" ]; then
@@ -49,10 +51,44 @@ if [ -z "$selected_font" ]; then
     exit 0
 fi
 
-# Update the config file with the new font
-# This uses sed to replace the value of the 'family' key under any [font.*] section
-sed -i -E 's/(family\s*=\s*")[^"]*(".*)/\1'"$selected_font"'\2/' "$ALACRITTY_CONFIG"
+echo "Selected font: $selected_font"
+
+# 1. Update Alacritty
+if check_file "$ALACRITTY_CONFIG"; then
+    sed -i -E 's/(family\s*=\s*")[^"]*(".*)/\1'"$selected_font"'\2/' "$ALACRITTY_CONFIG"
+    echo "Updated Alacritty config."
+fi
+
+# 2. Update Sway
+if check_file "$SWAY_CONFIG"; then
+    # Matches 'font pango:Font Name Regular, 12' or similar
+    # We preserve the style and size
+    sed -i -E 's/^(font pango:)[^,]+(,[[:space:]]*[0-9]+)/\1'"$selected_font"'\2/' "$SWAY_CONFIG"
+    echo "Updated Sway config."
+fi
+
+# 3. Update Waybar
+if check_file "$WAYBAR_STYLE"; then
+    # Matches 'font-family: "Font Name", ...;'
+    # We replace the first quoted family
+    sed -i -E 's/(font-family:[[:space:]]*")[^"]+(")/\1'"$selected_font"'\2/' "$WAYBAR_STYLE"
+    echo "Updated Waybar style."
+fi
+
+# 4. Update GSettings (GTK applications)
+if command -v gsettings >/dev/null; then
+    gsettings set org.gnome.desktop.interface font-name "$selected_font 10"
+    echo "Updated GSettings (GTK font)."
+fi
+
+# 5. Reload configurations
+echo "Reloading configurations..."
+if pgrep sway >/dev/null; then
+    swaymsg reload >/dev/null
+fi
+if pgrep waybar >/dev/null; then
+    pkill -USR2 waybar
+fi
 
 echo "Successfully updated font to: $selected_font"
-echo "Alacritty will now use the new font. You may need to restart it if live reload is disabled."
-
+echo "All supported components (Alacritty, Sway, Waybar, GTK) have been updated."
