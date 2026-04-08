@@ -153,10 +153,12 @@
   main =    R   !git rebase -i %(commit)
   main =    T   !@git tag %(prompt) %(commit)
   main =    !   !@git revert %(commit)
+  main =    U   ?git push
 
   status = A !git commit --amend
   status = C !git commit -s
   status = R !git checkout %(file)
+  status = U ?git push
 
   refs = n !@git branch %(prompt Enter branch name: )
 
