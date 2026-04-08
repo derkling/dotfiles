@@ -91,6 +91,11 @@
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
+    "sway/language": {
+        "format": "{short} {flag}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+        "tooltip": false
+    },
     "sway/scratchpad": {
         "format": "{icon} {count}",
         "show-empty": false,
