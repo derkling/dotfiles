@@ -1,11 +1,16 @@
 // -*- mode: jsonc -*-
 {
-    // "layer": "top", // Waybar at top layer
-    "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 30, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
-    // Choose the order of the modules
+    // =========================================================================
+    // Global Configuration
+    // =========================================================================
+    "layer": "top",
+    "position": "bottom",
+    "height": 30,
+    "spacing": 4,
+
+    // =========================================================================
+    // Modules Layout
+    // =========================================================================
     "modules-left": [
         "sway/workspaces",
         "sway/mode",
@@ -16,37 +21,41 @@
         "sway/window"
     ],
     "modules-right": [
+        // --- Group 1: System Health ---
         "custom/sanity",
         "load",
         "cpu",
         "memory",
         "disk",
         "temperature",
+
+        // --- Group 2: Hardware Controls ---
         "backlight",
         "pulseaudio",
         "pulseaudio#source",
+
+        // --- Group 3: Connectivity & Power ---
         "network",
+        "power-profiles-daemon",
+        "battery",
+
+        // --- Group 4: Context & Utilities ---
         "idle_inhibitor",
         "keyboard-state",
         "sway/language",
-        "battery",
         "clock",
-        "power-profiles-daemon",
+
+        // --- Group 5: System Menu & Tray ---
         "tray",
         "custom/power"
     ],
-    // Modules configuration
-    "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "⚡",
-        "performance": "🔴",
-        "balanced": "🟡",
-        "power-saver": "🟢"
-      }
-    },
+
+    // =========================================================================
+    // Modules Definition
+    // =========================================================================
+
+    // --- Group 1: System Health ---
+
     "custom/sanity": {
         "exec": "$HOME/.local/bin/sanity-check-waybar",
         "return-type": "json",
@@ -54,156 +63,42 @@
         "format": "{}",
         "on-click": "alacritty --class sanity-check -e fish -c sanity-check"
     },
+
     "load": {
         "format": "L: {load1} {load5}",
         "interval": 10
     },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "on-click": "alacritty --class system-monitor -e btop"
+    },
+
+    "memory": {
+        "format": "{}% "
+    },
+
     "disk": {
         "format": "D: {free} ",
         "path": "/",
         "interval": 300
     },
-    // "sway/workspaces": {
-    //     "disable-scroll": true,
-    //     "all-outputs": true,
-    //     "warp-on-scroll": false,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-    "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
-    },
-    "sway/language": {
-        "format": "{short} {flag}",
-        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
-        "tooltip": false
-    },
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
-    },
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 5,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10,
-        // "icons": {
-        //   "blueman": "bluetooth",
-        //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-        // }
-    },
-    "clock": {
-        "format": "{:%d %b %y @ %H:%M (%Z) }",
-        "timezones": ["Europe/Zurich", "America/Los_Angeles"],
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "on-click": "alacritty --class calendar -e sh -c 'ncal -y; read -n 1'",
-	"actions":  {
-        	"on-click": "tz_up",
-        	"on-click-right": "mode",
-        	"on-scroll-up": "shift_up",
-        	"on-scroll-down": "shift_down"
-        }
-    },
-    "cpu": {
-        "format": "{usage}% ",
-        "tooltip": false
-    },
-    "memory": {
-        "format": "{}% "
-    },
+
     "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
         "format": "Temp: {temperatureC}°C {icon}",
-        "format-icons": ["🌡️"],
-        "on-click": "alacritty --class system-monitor -e btop"
+        "format-icons": ["🌡️"]
     },
+
+
+    // --- Group 2: Hardware Controls ---
+
     "backlight": {
-        // "device": "acpi_video1",
         "format": "Light: {percent}% {icon}",
         "format-icons": ["☀️"]
     },
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ⚡",
-        "format-plugged": "{capacity}% 🔌",
-        "format-alt": "{time} {icon}",
-        "format-icons": ["🪫", "🔋", "🔋", "🔋", "🔋"],
-        "on-click": "alacritty --class battery-report -e fish -c battery-report"
-    },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
-        "format-ethernet": "{ipaddr}/{cidr} {icon}",
-        "tooltip-format": "{ifname} via {gwaddr} 📡",
-        "format-linked": "{ifname} (No IP) 🔗",
-        "format-disconnected": "Disconnected {icon}",
-        "format-alt": "{ifname}: {ipaddr}/{cidr} {icon}",
-        "format-icons": {
-            "wifi": "🌐",
-            "ethernet": "🔌",
-            "disconnected": "🚫"
-        }
-    },
+
     "pulseaudio": {
         "format": "{volume}% {icon}",
         "format-bluetooth": "{volume}% {icon}",
@@ -220,12 +115,149 @@
         },
         "on-click": "pavucontrol"
     },
+
     "pulseaudio#source": {
         "format": "{format_source}",
         "format-source": "{volume}% 🎙️",
         "format-source-muted": "OFF 󰍭",
         "on-click": "pavucontrol -t 4"
     },
+
+
+    // --- Group 3: Connectivity & Power ---
+
+    "network": {
+        "format-wifi": "{essid} ({signalStrength}%) {icon}",
+        "format-ethernet": "{ipaddr}/{cidr} {icon}",
+        "tooltip-format": "{ifname} via {gwaddr} 📡",
+        "format-linked": "{ifname} (No IP) 🔗",
+        "format-disconnected": "Disconnected {icon}",
+        "format-alt": "{ifname}: {ipaddr}/{cidr} {icon}",
+        "format-icons": {
+            "wifi": "🌐",
+            "ethernet": "🔌",
+            "disconnected": "🚫"
+        }
+    },
+
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "⚡",
+            "performance": "🔴",
+            "balanced": "🟡",
+            "power-saver": "🟢"
+        }
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ⚡",
+        "format-plugged": "{capacity}% 🔌",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["🪫", "🔋", "🔋", "🔋", "🔋"],
+        "on-click": "alacritty --class battery-report -e fish -c battery-report"
+    },
+
+
+    // --- Group 4: Context & Utilities ---
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+
+    "sway/language": {
+        "format": "{short} {flag}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+        "tooltip": false
+    },
+
+    "clock": {
+        "format": "{:%d %b %y @ %H:%M (%Z) }",
+        "timezones": ["Europe/Zurich", "America/Los_Angeles"],
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click": "alacritty --class calendar -e sh -c 'ncal -y; read -n 1'",
+        "actions":  {
+            "on-click": "tz_up",
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+
+
+    // --- Group 5: System Menu & Tray ---
+
+    "tray": {
+        "spacing": 10
+    },
+
+    "custom/power": {
+        "format" : "⏻ ",
+        "tooltip": false,
+        "menu": "on-click",
+        "menu-file": "$HOME/.config/waybar/power_menu.xml",
+        "menu-actions": {
+            "shutdown": "shutdown",
+            "reboot": "reboot",
+            "suspend": "systemctl suspend",
+            "hibernate": "systemctl hibernate"
+        }
+    },
+
+
+    // --- Contextual Modules (Left/Center) ---
+
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "format": "{name}"
+    },
+
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 50,
+        "rewrite": {
+            "(.*) - Mozilla Firefox": "🌎 $1",
+            "(.*) - Visual Studio Code": "💻 $1",
+            "(.*) - Alacritty": " $1"
+        }
+    },
+
     "custom/media": {
         "format": "{icon} {text}",
         "return-type": "json",
@@ -235,19 +267,6 @@
             "default": "🎜"
         },
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    },
-    "custom/power": {
-        "format" : "⏻ ",
-		"tooltip": false,
-		"menu": "on-click",
-		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-		"menu-actions": {
-			"shutdown": "shutdown",
-			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"hibernate": "systemctl hibernate"
-		}
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
     }
 }
