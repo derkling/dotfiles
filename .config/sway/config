@@ -13,7 +13,7 @@ set $menu 'rofi -modi run -show drun -monitor primary'
 #font pango:SourceCodePro Medium 12
 #font pango:Comic Sans MS 14
 #font pango:DejaVu Sans 12
-font pango:FontAwesome Regular, 12
+font pango:BitstromWera Nerd Font, 12
 
 # Hide borders
 hide_edge_borders none

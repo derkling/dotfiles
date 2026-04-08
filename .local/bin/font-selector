@@ -18,7 +18,9 @@ check_file() {
 }
 
 # Ask the user if they want to download more fonts
-echo "More fonts available for download from: https://www.programmingfonts.org/"
+echo "More fonts available for download from:"
+echo "- https://www.nerdfonts.com/font-downloads"
+echo "- https://www.programmingfonts.org"
 read -p "Would you like to check for new fonts to download? (y/N) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
