@@ -6,13 +6,14 @@
     "layer": "top",
     "position": "bottom",
     "height": 30,
-    "spacing": 4,
+    "spacing": 2,
 
     // =========================================================================
     // Modules Layout
     // =========================================================================
     "modules-left": [
         "sway/workspaces",
+        "idle_inhibitor",
         "sway/mode",
         "sway/scratchpad",
         "custom/media"
@@ -21,10 +22,14 @@
         "sway/window"
     ],
     "modules-right": [
+        // --- Group 4: Context & Utilities ---
+        "sway/language",
+        "battery",
+
         // --- Group 1: System Health ---
         "custom/sanity",
-        "load",
         "cpu",
+        "load",
         "memory",
         "disk",
         "temperature",
@@ -37,16 +42,10 @@
         // --- Group 3: Connectivity & Power ---
         "network",
         "power-profiles-daemon",
-        "battery",
-
-        // --- Group 4: Context & Utilities ---
-        "idle_inhibitor",
-        "keyboard-state",
-        "sway/language",
-        "clock",
 
         // --- Group 5: System Menu & Tray ---
         "tray",
+        "clock",
         "custom/power"
     ],
 
@@ -64,46 +63,47 @@
         "on-click": "alacritty --class sanity-check -e fish -c sanity-check"
     },
 
-    "load": {
-        "format": "L: {load1} {load5}",
-        "interval": 10
-    },
-
-    "cpu": {
-        "format": "{usage}% ",
+   "cpu": {
+        "format": " {usage}%",
         "tooltip": false,
         "on-click": "alacritty --class system-monitor -e btop"
     },
 
+    "load": {
+        "format": "{load1} {load5}",
+        "interval": 10
+    },
+
     "memory": {
-        "format": "{}% "
+        "format": " {}%"
     },
 
     "disk": {
-        "format": "D: {free} ",
+        "format": " {free}",
         "path": "/",
         "interval": 300
     },
 
     "temperature": {
         "critical-threshold": 80,
-        "format": "Temp: {temperatureC}°C {icon}",
-        "format-icons": ["🌡️"]
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["🌡️"],
+        "on-click": "alacritty --class system-monitor -e btop"
     },
 
 
     // --- Group 2: Hardware Controls ---
 
     "backlight": {
-        "format": "Light: {percent}% {icon}",
+        "format": "{icon} {percent}%",
         "format-icons": ["☀️"]
     },
 
     "pulseaudio": {
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon}",
-        "format-bluetooth-muted": " {icon}",
-        "format-muted": "Muted 🔇",
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "{icon} ",
+        "format-muted": "🔇 Muted",
         "format-icons": {
             "headphone": "🎧",
             "hands-free": "",
@@ -118,8 +118,8 @@
 
     "pulseaudio#source": {
         "format": "{format_source}",
-        "format-source": "{volume}% 🎙️",
-        "format-source-muted": "OFF 󰍭",
+        "format-source": "🎙️ {volume}%",
+        "format-source-muted": "󰍭 OFF",
         "on-click": "pavucontrol -t 4"
     },
 
@@ -127,12 +127,12 @@
     // --- Group 3: Connectivity & Power ---
 
     "network": {
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
-        "format-ethernet": "{ipaddr}/{cidr} {icon}",
-        "tooltip-format": "{ifname} via {gwaddr} 📡",
-        "format-linked": "{ifname} (No IP) 🔗",
-        "format-disconnected": "Disconnected {icon}",
-        "format-alt": "{ifname}: {ipaddr}/{cidr} {icon}",
+        "format-wifi": "{icon} {essid} ({signalStrength}%)",
+        "format-ethernet": "{icon} {ipaddr}/{cidr}",
+        "tooltip-format": "📡 {ifname} via {gwaddr}",
+        "format-linked": "🔗 {ifname} (No IP)",
+        "format-disconnected": "{icon} Disconnected",
+        "format-alt": "{icon} {ifname}: {ipaddr}/{cidr}",
         "format-icons": {
             "wifi": "🌐",
             "ethernet": "🔌",
@@ -157,11 +157,11 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ⚡",
-        "format-plugged": "{capacity}% 🔌",
-        "format-alt": "{time} {icon}",
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "⚡ {capacity}%",
+        "format-plugged": "🔌 {capacity}%",
+        "format-alt": "{icon} {time}",
         "format-icons": ["🪫", "🔋", "🔋", "🔋", "🔋"],
         "on-click": "alacritty --class battery-report -e fish -c battery-report"
     },
@@ -177,24 +177,14 @@
         }
     },
 
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-
     "sway/language": {
-        "format": "{short} {flag}",
+        "format": "{flag} {short}",
         "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
         "tooltip": false
     },
 
     "clock": {
-        "format": "{:%d %b %y @ %H:%M (%Z) }",
+        "format": "{:%d.%b %H:%M (%Z) }",
         "timezones": ["Europe/Zurich", "America/Los_Angeles"],
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "on-click": "alacritty --class calendar -e sh -c 'ncal -y; read -n 1'",

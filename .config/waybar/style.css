@@ -31,8 +31,8 @@ window#waybar {
     background-color: #ff5555;
 }
 
-#mode, #clock, #battery, #cpu, #memory, #disk, #temperature, #backlight, #network, #pulseaudio, #custom-media, #tray, #mode, #idle_inhibitor, #custom-sanity {
-    padding: 0 10px;
+#mode, #clock, #battery, #cpu, #memory, #disk, #temperature, #backlight, #network, #pulseaudio, #custom-media, #tray, #idle_inhibitor, #custom-sanity, #language {
+    padding: 0 4px;
     color: #f8f8f2;
 }
 
