@@ -361,6 +361,7 @@ for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="sanity-check"] floating enable, resize set 800 600, move position center
 for_window [app_id="system-monitor"] floating enable, resize set width 80 ppt height 80 ppt, move position center
 for_window [app_id="calendar"] floating enable, resize set width 40 ppt height 55 ppt, move position center
+for_window [app_id="battery-report"] floating enable, resize set 800 600, move position center
 for_window [class="Lxappearance"] floating enable
 for_window [title="La7 in diretta"] floating enable
 

@@ -1,0 +1,16 @@
+#!/bin/bash
+# ~/.local/bin/battery-report - Battery status report for Waybar
+
+BAT=$(upower -e | grep battery | head -n 1)
+if [ -z "$BAT" ]; then
+    echo "No battery found"
+    read -n 1
+    exit 1
+fi
+
+echo "--- Battery Report ---"
+upower -i "$BAT" | grep -E 'state|percentage|energy-rate|time to full|charge-cycles|voltage|capacity'
+echo "----------------------"
+echo
+echo "Press any key to close..."
+read -n 1
