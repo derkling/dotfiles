@@ -46,6 +46,7 @@
   se = send-email --confirm=always --cc="Patrick Bellasi <derkling@matbug.net>"
   sep = send-email --suppress-cc=all --confirm=always --cc="Patrick Bellasi <derkling@matbug.net>"
   ses = send-email --suppress-cc=all --confirm=always --to="Patrick Bellasi <derkling@matbug.net>"
+  compare = "!f() { git range-diff $1~..$1 ${2:-HEAD}~..${2:-HEAD}; }; f"
 
 [color]
   diff = auto
