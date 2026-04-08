@@ -2,19 +2,19 @@
 size = 12.0
 
 [font.bold]
-family = " Liberation Mono"
+family = " Bitstream Vera Sans Mono"
 style = "Bold"
 
 [font.bold_italic]
-family = " Liberation Mono"
+family = " Bitstream Vera Sans Mono"
 style = "Bold Italic"
 
 [font.italic]
-family = " Liberation Mono"
+family = " Bitstream Vera Sans Mono"
 style = "Italic"
 
 [font.normal]
-family = " Liberation Mono"
+family = " Bitstream Vera Sans Mono"
 style = "Regular"
 
 [window]
