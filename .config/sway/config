@@ -19,6 +19,10 @@ font pango:FontAwesome Regular, 12
 hide_edge_borders none
 default_border pixel 3
 
+# Gaps
+gaps inner 5
+gaps outer 5
+
 # change borders
 bindsym $mod+b border toggle
 
@@ -35,7 +39,7 @@ client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
 client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
 client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 
-client.background       #F8F8F2
+client.background       #F8F8F200
 
 
 
