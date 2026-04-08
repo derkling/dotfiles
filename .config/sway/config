@@ -298,6 +298,7 @@ bindsym $mod+r mode "resize"
 # System notifications, this assume the script is
 # available under $HOME/.config/sway/scripts
 exec setup_notifications
+exec setup_clipboard
 
 # Set shut down, restart and locking features
 # Commands can be any script available under $HOME/.config/sway/scripts

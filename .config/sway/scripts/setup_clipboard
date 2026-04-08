@@ -1,0 +1,20 @@
+#!/bin/bash
+# Sync primary and clipboard buffers while avoiding infinite loops
+
+# Sync primary (selection) to clipboard (Ctrl+V)
+wl-paste -p --watch bash -c '
+    new_primary=$(wl-paste -p -n)
+    curr_clipboard=$(wl-paste -n)
+    if [ "$new_primary" != "$curr_clipboard" ]; then
+        wl-copy "$new_primary"
+    fi
+' &
+
+# Sync clipboard (Ctrl+C) to primary (middle-click)
+wl-paste --watch bash -c '
+    new_clipboard=$(wl-paste -n)
+    curr_primary=$(wl-paste -p -n)
+    if [ "$new_clipboard" != "$curr_primary" ]; then
+        wl-copy -p "$new_clipboard"
+    fi
+' &
