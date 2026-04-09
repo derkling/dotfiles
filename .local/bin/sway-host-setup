@@ -62,7 +62,7 @@ case $hostname in
         swaymsg 'output "*" bg "~/Pictures/Wallpapers/current" fill'
 
         # Internal monitoring configuration for ThinkPad
-        swaymsg 'output "eDP-1 resolution 3840x2400 pos 3840 1400 scale 2'
+        swaymsg 'output "eDP-1" resolution 3840x2400 pos 3840 1400 scale 2'
 
         # Variables and bindings for ThinkPad
         echo '#### External monitor(s)' >> "$TEMP_CONFIG_FILE"
@@ -96,14 +96,11 @@ esac
 
 # FIX: Mouse stuttering after upgrade to sway 1.5
 # https://github.com/swaywm/sway/issues/5591#issuecomment-1715956464
-swaymsg 'output * { max_render_time 1 }'
+swaymsg 'output "*" max_render_time 1'
 
 # FIX: Propagate general wayland variables back into your systemd session.
 # This can fix things like xdg-desktop-portal (launched via systemd) defaulting
 # to gnome or not picking a backend
 # TODO: ensure we set all the variable we need to forward with the following
 # command.
-exec --no-startup-id dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway
-
-# Common swaymsg settings for all machines
-swaymsg 'output "*" max_render_time 1'
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway
