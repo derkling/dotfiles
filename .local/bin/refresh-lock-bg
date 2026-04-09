@@ -8,6 +8,8 @@ URL="https://picsum.photos/2560/1440"
 echo "Fetching new 2K lock screen background from Picsum..."
 # -L follows redirects, -f fails on server error
 if curl -L -f -o "$BG_FILE.tmp" "$URL"; then
+    # Keep the previous background aside
+    [ -f "$BG_FILE" ] && cp "$BG_FILE" "$BG_FILE.old"
     mv "$BG_FILE.tmp" "$BG_FILE"
     echo "Lock screen background updated: $BG_FILE (2K)"
 else

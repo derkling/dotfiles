@@ -1,0 +1,16 @@
+#!/bin/bash
+# ~/.local/bin/lock-bg-keep - Save a copy of the previous lock screen wallpaper
+
+OLD_BG_FILE="$HOME/.cache/lock-screen-bg.jpg.old"
+DEST_DIR="$HOME/Pictures/Wallpapers"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+DEST_FILE="$DEST_DIR/saved-lock-bg-$TIMESTAMP.jpg"
+
+if [ ! -f "$OLD_BG_FILE" ]; then
+    echo "No previous lock screen background found to keep."
+    exit 1
+fi
+
+mkdir -p "$DEST_DIR"
+cp "$OLD_BG_FILE" "$DEST_FILE"
+echo "Saved previous lock screen background to: $DEST_FILE"

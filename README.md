@@ -113,4 +113,17 @@ config push
   `~/.local/bin/` to ensure consistency across all shells.
 
 ---
+
+### Wallpaper Management
+
+The lock screen background is automatically refreshed using a script that
+fetches a random 2K image from Picsum.
+
+- **Refresh**: `refresh-lock-bg` updates `~/.cache/lock-screen-bg.jpg`.
+- **Backup**: Each refresh keeps the *previous* image at
+  `~/.cache/lock-screen-bg.jpg.old`.
+- **Preserve**: If you liked a previous wallpaper, run `lock-bg-keep` to
+  save a permanent copy into `~/Pictures/Wallpapers/`.
+
+---
 **Author:** Patrick Bellasi ([github.com/derkling](https://github.com/derkling))
