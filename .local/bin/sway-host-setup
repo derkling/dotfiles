@@ -97,6 +97,7 @@ esac
 # FIX: Mouse stuttering after upgrade to sway 1.5
 # https://github.com/swaywm/sway/issues/5591#issuecomment-1715956464
 swaymsg 'output "*" max_render_time 1'
+swaymsg 'output "*" adaptive_sync on'
 
 # FIX: Propagate general wayland variables back into your systemd session.
 # This can fix things like xdg-desktop-portal (launched via systemd) defaulting
