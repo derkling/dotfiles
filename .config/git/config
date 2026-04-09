@@ -5,11 +5,8 @@
   name = Patrick Bellasi
   email = derkling@matbug.net
 
-[includeIf "env:DOTFILES_PROFILE=work"]
+[includeIf "hasconfig:remote.*.url:sso://**"]
   path = ~/.config/git/config.work
-
-[includeIf "env:DOTFILES_PROFILE=lab"]
-  path = ~/.config/git/config.lab
 
 [credential]
   helper = cache
