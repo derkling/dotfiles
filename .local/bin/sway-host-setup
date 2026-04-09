@@ -73,6 +73,9 @@ case $hostname in
         echo 'bindsym $mod+Shift+h move workspace to output $extH' >> "$TEMP_CONFIG_FILE"
 
         echo '# Office' >> "$TEMP_CONFIG_FILE"
+        echo '# NOTE: For ThinkVision P32p-20, ensure "USB Source Selection" is set' >> "$TEMP_CONFIG_FILE"
+        echo '# to "USB 2.0" in the OSD to allow 4K@60Hz over USB-C. USB 3.0 mode' >> "$TEMP_CONFIG_FILE"
+        echo '# limits bandwidth to 2 lanes, restricting resolution to 4K@30Hz.' >> "$TEMP_CONFIG_FILE"
         echo 'set $extO "Lenovo Group Limited LEN P32p-20 VNA7394D"' >> "$TEMP_CONFIG_FILE"
         echo 'output $extO resolution 3840x2160@60Hz pos 0 0 scale 1' >> "$TEMP_CONFIG_FILE"
         echo 'bindsym $mod+Shift+o move workspace to output $extO' >> "$TEMP_CONFIG_FILE"
