@@ -36,7 +36,18 @@ fi
 
 # 2. Path Check
 BIN_DIR=$(dirname "$(realpath "$0")")
-if [[ ":$PATH:" == *":$BIN_DIR:"* ]]; then
+# Resolve entries in PATH to handle symlinked home directories (e.g. Fedora Atomic)
+IN_PATH=0
+IFS=: read -ra PATH_DIRS <<< "$PATH"
+for dir in "${PATH_DIRS[@]}"; do
+    # realpath -m ensures we don't fail if a dir in PATH doesn't exist yet
+    if [[ -d "$dir" && "$(realpath -m "$dir" 2>/dev/null)" == "$BIN_DIR" ]]; then
+        IN_PATH=1
+        break
+    fi
+done
+
+if [ $IN_PATH -eq 1 ]; then
     log_ok "Path: Local binaries directory is correctly exported 🛤️"
 else
     log_err "Path: Local binaries ($BIN_DIR) MISSING from PATH 🛑"
