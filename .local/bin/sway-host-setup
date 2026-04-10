@@ -19,7 +19,12 @@
 # PLEASE SET THE HOSTNAME MANUALLY IF NEEDED. For example:
 # hostname="darkstar"
 # ==============================================================================
-hostname=$(hostname)
+# Source host-specific settings which provides the 'hostname' variable
+if [ -f "$HOME/.config/shell/host.sh" ]; then
+    source "$HOME/.config/shell/host.sh"
+else
+    hostname=$(hostname)
+fi
 
 TEMP_CONFIG_FILE="$HOME/.config/sway/.temp_host_config"
 # Ensure the directory exists

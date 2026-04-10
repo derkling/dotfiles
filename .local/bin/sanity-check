@@ -3,6 +3,11 @@
 
 # Colors for output
 RED='\033[0;31m'
+
+# Source host-specific settings
+if [ -f "$HOME/.config/shell/host.sh" ]; then
+    source "$HOME/.config/shell/host.sh"
+fi
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -100,11 +105,10 @@ if [ "$IS_REMOTE" -eq 0 ]; then
 
     # 5. Audio Check
     if command -v pactl &>/dev/null; then
-        SPEAKER_SINK=$(pactl list sinks | grep -B 1 "Description: .*Speaker" | grep "Name:" | awk '{print $2}')
+        SPEAKER_SINK=$(pactl list sinks | grep -B 1 "Description: .*${HOST_AUDIO_SINK_PATTERN:-Speaker}" | grep "Name:" | awk '{print $2}')
         if [ -n "$SPEAKER_SINK" ]; then
             MUTE_STATUS=$(pactl get-sink-mute "$SPEAKER_SINK" | awk '{print $2}')
             VOLUME_PERC=$(pactl get-sink-volume "$SPEAKER_SINK" | grep -Po '[0-9]+(?=%)' | head -n 1)
-
             if [ "$MUTE_STATUS" == "yes" ]; then
                 log_err "Audio: Speakers are MUTED. Fixing..."
                 pactl set-sink-mute "$SPEAKER_SINK" 0
