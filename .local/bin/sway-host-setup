@@ -33,7 +33,7 @@ mkdir -p "$(dirname "$TEMP_CONFIG_FILE")"
 swaymsg 'input "type:keyboard" xkb_layout "us,gb,it"'
 
 case $hostname in
-    "darkstar")
+    "darkstar" | "darkstar25")
         # Input configuration for Dell Laptop
         swaymsg 'input "1:1:AT_Translated_Set_2_keyboard" repeat_delay 1000'
         swaymsg 'input "1:1:AT_Translated_Set_2_keyboard" repeat_rate 60'
