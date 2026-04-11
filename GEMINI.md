@@ -69,6 +69,18 @@ Fish) and cross-machine.
     - `Q` (inside Tig): `quickfix` (fixup + autosquash rebase) on selected
       commit.
 
+## Toolbox & Container Environment
+- **Detection**: Check for the existence of `/run/.containerenv` or the presence
+  of `VARIANT_ID=toolbx` in `/etc/os-release`.
+- **Host Filesystem Access**: If running in a toolbox, the host's root filesystem
+  is mounted at `/run/host`. You can read files there (e.g.,
+  `cat /run/host/etc/systemd/system/nordvpn.service`), but you **CANNOT**
+  directly execute commands on the host (like `systemctl`, `dnf`, or `rpm`).
+- **Command Execution**: If a task requires host-side modifications (e.g.,
+  enabling a system service or installing a host package), you **MUST** inform
+  the user and ask them to run the command on the host system outside the
+  toolbox.
+
 ## Recommended Diagnostic Tools
 - `sanity-check`: Run a comprehensive system health and configuration check.
 - `config status` / `config diff`: Check pending changes.
