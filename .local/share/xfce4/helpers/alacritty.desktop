@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Icon=alacritty
+Type=X-XFCE-Helper
+Name=Alacritty
+X-XFCE-Category=TerminalEmulator
+X-XFCE-Commands=alacritty
+X-XFCE-CommandsWithParameter=alacritty --working-directory "%s"
