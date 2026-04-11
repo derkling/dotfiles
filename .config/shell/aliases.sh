@@ -57,10 +57,15 @@ alias slabinfo="sudo cat /proc/slabinfo | sed 's/#//' | column -t"
 
 # Host-specific Aliases
 case "$(hostname)" in
+  darkstar)
+    alias gemini='toolbox run -c gemini gemini'
+    ;;
   derkling5)
     alias gemini='/google/bin/releases/gemini-cli/tools/gemini --noproxy'
     ;;
-  *) # Default aliases for other hosts
+  derkling)
     alias gemini='/google/bin/releases/gemini-cli/tools/gemini'
+    ;;
+  *) # Default aliases for other hosts
     ;;
 esac
