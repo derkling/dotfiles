@@ -8,29 +8,39 @@ These dotfiles are managed using a bare Git repository stored in `~/.dotfiles`.
 This allows managing configuration files directly in the `$HOME` directory
 without messy symlinks.
 
-### 1. Installation
+### 1. Quick Start (Bootstrap)
 
-From the home directory of a freshly installed Linux machine:
+The easiest way to set up a new machine (Fedora Atomic or Debian-based) is to
+run the standalone bootstrap script. It installs `git`, clones the repo,
+provisions system packages, and initializes the default toolbox.
 
 ```bash
-# Install git
-sudo apt-get install git
-
-# Clone bare git repo locally
-git clone --no-checkout <repository_url> $HOME/.dotfiles
-
-# Define the 'config' path for management (initial setup)
-export PATH="$HOME/.local/bin:$PATH"
-
-# Checkout the configuration files to your home directory
-/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
-/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
-
-# Update submodules
-/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME submodule update --init --recursive
+curl -sL https://raw.githubusercontent.com/derkling/dotfiles/master/bootstrap.sh | bash
 ```
 
-### 2. Profile Activation
+### 2. Manual Installation
+
+If you prefer to perform the steps manually:
+
+#### 2.1 Clone and Checkout
+From the home directory:
+
+```bash
+# Clone bare git repo locally
+git clone --no-checkout https://github.com/derkling/dotfiles.git $HOME/.dotfiles
+
+# Checkout the configuration files
+/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
+/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
+```
+
+#### 2.2 Provisioning
+- **Fedora Atomic**: Run `make -C ~/.config bootstrap` to layer host packages
+  and setup the toolbox.
+- **Debian/Ubuntu**: Run `make -C ~/.config install-deps` to install packages
+  via `apt`.
+
+### 3. Profile Activation
 
 This repository supports a **Multi-Profile Strategy**. Beside the generic
 configuration, you can activate one or more custom profiles (e.g., `work`,
@@ -47,10 +57,12 @@ echo "work" > ~/.dotfiles_profile
 ## Fedora Sway Atomic (Sericea)
 
 On immutable Fedora variants, system-level tools are managed via `rpm-ostree`.
+The bootstrap script handles layering the packages defined in
+`~/.config/Fedfile.system`.
 
-### 1. Base Package Layering
+### 1. Manual Package Layering
 
-Install the core CLI and GUI tools required for this configuration:
+If not using the bootstrap script, you can manually layer the core tools:
 
 ```bash
 sudo rpm-ostree install \
