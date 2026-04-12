@@ -221,8 +221,8 @@ exec setup_clipboard
 set $mode_system (l)ock, (e)xit, (s)uspend, (h)ibernate (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
     bindsym l exec --no-startup-id ~/.local/bin/sway-lock, mode "default"
-    bindsym s exec --no-startup-id ~/.config/sway/scripts/suspend, mode "default"
-    bindsym h exec --no-startup-id ~/.config/sway/scripts/hibernate, mode "default"
+    bindsym s exec --no-startup-id ~/.local/bin/sway-lock suspend, mode "default"
+    bindsym h exec --no-startup-id ~/.local/bin/sway-lock hibernate, mode "default"
     bindsym e exec --no-startup-id swaymsg exit, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl shutdown, mode "default"

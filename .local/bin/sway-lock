@@ -1,20 +1,51 @@
 #!/bin/bash
-# ~/.local/bin/sway-lock - Instant lock with post-unlock background refresh
+# ~/.local/bin/sway-lock - Instant lock with optional suspend/hibernate and background refresh
 
 BG_FILE="$HOME/.cache/lock-screen-bg.jpg"
+ACTION="$1"
 
-# 1. Lock the screen immediately.
-# We don't use --daemonize here so that the script waits until you unlock.
-swaylock \
-    --image "$BG_FILE" \
-    --scaling fill \
-    --indicator-radius 100 \
-    --indicator-thickness 10 \
-    --inside-color 00000000 \
-    --ring-color 47a2ff \
-    --key-hl-color ffaf00 \
-    --text-color ffffff
+# 1. Handle pre-lock actions if suspend/hibernate is requested
+if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
+    # Ensure next wallpaper is collected BEFORE suspending/hibernating
+    ~/.local/bin/refresh-lock-bg
+fi
 
-# 2. Execution reaches here ONLY after you successfully unlock.
-# We trigger the refresh in the background so it doesn't delay your return to work.
-~/.local/bin/refresh-lock-bg &>/dev/null &
+# 2. Lock the screen.
+# If we're just locking, we run synchronously so we can refresh the bg *after* unlock.
+# If we're suspending/hibernating, we background swaylock so we can trigger the action.
+if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
+    swaylock \
+        --image "$BG_FILE" \
+        --scaling fill \
+        --indicator-radius 100 \
+        --indicator-thickness 10 \
+        --inside-color 00000000 \
+        --ring-color 47a2ff \
+        --key-hl-color ffaf00 \
+        --text-color ffffff &
+
+    # Wait a moment to ensure swaylock has started before suspending/hibernating
+    sleep 1
+
+    # Execute systemctl via host-side command since we are likely in a toolbox
+    if command -v flatpak-spawn &>/dev/null; then
+        flatpak-spawn --host systemctl "$ACTION"
+    else
+        systemctl "$ACTION"
+    fi
+else
+    # Default: Just lock and wait for unlock
+    swaylock \
+        --image "$BG_FILE" \
+        --scaling fill \
+        --indicator-radius 100 \
+        --indicator-thickness 10 \
+        --inside-color 00000000 \
+        --ring-color 47a2ff \
+        --key-hl-color ffaf00 \
+        --text-color ffffff
+
+    # Execution reaches here ONLY after you successfully unlock.
+    # We trigger the refresh in the background so it doesn't delay your return to work.
+    ~/.local/bin/refresh-lock-bg &>/dev/null &
+fi
