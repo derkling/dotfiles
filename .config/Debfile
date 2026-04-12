@@ -1,43 +1,27 @@
+# Fedfile.debian - Core cross-distro packages for Debian/Ubuntu
+#
+# These are the same essential tools tracked in Fedfile.system/toolbox.
+# Descriptions match the roles in the Fedora environment.
 
-# Unix utils
-neovim emacs
-tmux
-autojump bc
-fzf
-gawk sed moreutils
-# A modern replacement for ls
-eza
-# hwloc => lstopo|hwloc-ls
-htop iotop hwloc pv ncdu
-# inxi => inxi -v4 -c6 OR inxi -bDc 6
-inxi
-powertop
-ranger
-# silversearcher-ag => ag
-silversearcher-ag
-# sysfsutils => systool
-sysfsutils
-tree
-zsh
-zoxide
-alacritty
-mako-notifier
-swaylock swayidle ncal
-# Markdown reader from CLI
-glow
-
-# Hacking utilities
-autoconf automake libtool
-build-essential
-byacc flex bison
-ccache
-cmake
-git gitk git-gui tig git-flow
-ltrace strace
-
-# Networking libraries
-curl wget axel
-openssh-client
-
-# Google tools
-roadwarrior
+alacritty           # Terminal emulator with GPU acceleration
+chafa               # Terminal graphics for image previews (used by yazi)
+distrobox           # Container manager for running other Linux distros
+eza                 # Modern, colorized replacement for 'ls'
+fish                # User-friendly interactive shell
+fzf                 # Command-line fuzzy finder
+git                 # Distributed version control system
+glow                # Terminal Markdown renderer
+golang              # Go programming language compiler
+htop                # Interactive process viewer
+jq                  # Command-line JSON processor
+ncdu                # NCurses disk usage analyzer
+neovim              # Extensible text editor
+poppler-utils       # PDF rendering for Yazi previews
+ranger              # Console file manager with VI keybindings
+tig                 # Text-mode interface for Git
+tmux                # Terminal multiplexer
+tree                # Recursive directory listing
+yazi                # Terminal file manager with image previews (requires manual setup)
+zathura             # Lightweight, keyboard-centric PDF viewer
+libzathura-pdf-poppler # PDF backend for Zathura (Debian name)
+zoxide              # Smarter 'cd' command

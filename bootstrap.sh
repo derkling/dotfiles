@@ -64,9 +64,9 @@ if [[ "$OS_VARIANT_ID" == *"-atomic"* ]]; then
     fi
 elif [[ "$OS_ID" == "debian" ]] || [[ "$OS_ID" == "ubuntu" ]]; then
     ansi_green "Running Debian/Ubuntu bootstrap..."
-    # Debian uses the existing Makefile/install_deps.sh logic
+    # Both Fedora and Debian now use the bootstrap target for consistency
     if [ -f "$HOME/.config/Makefile" ]; then
-        make -C "$HOME/.config" install-deps
+        make -C "$HOME/.config" bootstrap
     else
         ansi_yellow "Makefile not found at ~/.config/Makefile"
         exit 1

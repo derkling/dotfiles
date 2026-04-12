@@ -24,10 +24,16 @@ fi
 # ask sudo upfront
 sudo -v
 if [[ "${OSTYPE:?}" == "debian"* ]]; then
-	sudo apt-get update
-	ansi --green "Using $DEBIAN_BUNDLE_FILE bundle file"
-	sudo apt-get install $(grep -e '^[a-zA-Z]' "$DEBIAN_BUNDLE_FILE")
+        sudo apt-get update
+        ansi --green "Using $DEBIAN_BUNDLE_FILE bundle file"
+        sudo apt-get install -y $(grep -e '^[a-zA-Z]' "$DEBIAN_BUNDLE_FILE" | awk '{print $1}')
+
+        if [[ -f "$DIR/Debfile.extra" ]]; then
+            ansi --green "Using $DIR/Debfile.extra bundle file"
+            sudo apt-get install -y $(grep -e '^[a-zA-Z]' "$DIR/Debfile.extra" | awk '{print $1}')
+        fi
 elif [[ "${OSTYPE:?}" == "arch"* ]]; then
+
 	# ask sudo upfront
 	sudo -v
 	sudo pacman -Syy

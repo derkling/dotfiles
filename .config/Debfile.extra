@@ -1,50 +1,66 @@
-# Unix utils
-aterm screen terminator
-bsdextrautils ghex
-# debianutils => run-parts
-debianutils
-figlet
-elpa-ggtags
-highlight
-highlight caca-utils atool exiftool mediainfo odt2txt
-redshift
-smartmontools
-ttyrec
-usbutils
-# x11-xserver-utils => xrandr
-x11-xserver-utils arandr xdotool xsel
-cscope exuberant-ctags
-doxygen graphviz
-mmdebstrap genext2fs
+# Debfile.extra - Supplementary Debian-specific packages
+#
+# These are additional utilities used mainly on Debian/Ubuntu systems
+# that are not currently prioritized or available on the Atomic host.
 
-# Window Manager
-dunst
-# lxappearance => setup icon theme for Thunar and other GTK b
-#                 used from withint Awesome
-lxappearance
-iproute2 iptables netcat-openbsd rsync tcpdump nmap
-irssi weechat
-links2
-mutt msmtp imapfilter ldap-utils procmail isync
-public-inbox notmuch
-openssh-server
-transmission
-# uml-utilities => tunctl
-uml-utilities
+# Unix Utilities & Terminal
+emacs               # Real-time display editor
+aterm               # AfterStep terminal emulator
+screen              # Window manager that multiplexes terminals
+terminator          # Multiple terminals in one window
+autojump            # Faster way to navigate your filesystem
+bc                  # Arbitrary precision calculator language
+bsdextrautils       # Various small utilities (ghex, etc.)
+debianutils         # Miscellaneous utilities (run-parts)
+figlet              # Program for making large letters out of ordinary text
+gawk                # Pattern scanning and processing language
+ghex                # Hex editor for GNOME
+highlight           # Universal source code to formatted text converter
+moreutils           # Collection of the unix utilities nobody thought to write
+sed                 # Stream editor for filtering and transforming text
+zsh                 # Shell designed for interactive use
 
-# Go programming
-gopls
+# Hacking & Development
+autoconf automake   # Automatic configure script builder
+build-essential     # Informational list of build-essential packages
+byacc flex bison    # LALR parser generators
+ccache              # Compiler cache
+cmake               # Cross-platform, open-source build system
+cscope              # Interactively examine a C program
+doxygen             # Documentation system for various languages
+exuberant-ctags     # Multilanguage reimplementation of ctags
+genext2fs           # Ext2 filesystem generator
+graphviz            # Graph visualization software
+libtool             # Generic library support script
+ltrace              # Track dynamic library calls
+mmdebstrap          # Multi-mirror Debian chroot creation
+strace              # Track system calls and signals
 
-# Multimedia libraries
-gcolor3
-gimp gimp-data-extras gimp-gutenprint gimp-plugin-registry gi
-smplayer sox
+# Networking & System
+arandr              # Provide a simple visual front end for XRandR
+axel                # Light download accelerator
+curl                # Command line tool for transferring data with URL syntax
+dunst               # Lightweight and customizable notification daemon
+iproute2            # Networking and traffic control tools
+iptables            # Administration tool for IPv4/IPv6 packet filtering
+irssi               # Terminal based IRC client
+mako-notifier       # Lightweight notification daemon for Wayland
+mutt                # Text-based mailreader
+nmap                # Network exploration tool and security / port scanner
+openssh-client      # OpenSSH client (remote login program)
+openssh-server      # OpenSSH server (remote login daemon)
+rsync               # Fast, versatile, remote (and local) file-copying tool
+swaylock swayidle   # Screen locker and idle daemon for Sway
+tcpdump             # Dump traffic on a network
+transmission        # Lightweight BitTorrent client
+wget                # Non-interactive network downloader
 
-# Archive utilities
-atool
-unrar
+# Multimedia & Others
+gcolor3             # Simple color chooser for GNOME
+gimp                # GNU Image Manipulation Program
+smplayer            # Media player with built-in codecs
+sox                 # Swiss Army knife of sound processing
+zathura-ps          # PostScript backend for Zathura
 
-## Google Stuff
-#piper-client
-#hashbang-borg-sre
-#megapede-cli
+# Google specific
+roadwarrior         # Internal VPN and connectivity tool
