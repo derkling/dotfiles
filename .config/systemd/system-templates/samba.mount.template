@@ -1,0 +1,25 @@
+[Unit]
+Description=Mount NAS Share: {{NAS_SHARE}} on {{MOUNT_PATH}}
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What=//{{NAS_HOST}}/{{NAS_SHARE}}
+Where={{MOUNT_PATH}}
+Type=cifs
+# Description of Options:
+# - credentials: Path to the file containing username and password to keep them out of this unit.
+# - iocharset=utf8: Ensures correct handling of non-ASCII characters in filenames.
+# - rw: Mount the filesystem as read-write.
+# - uid/gid=1000: Map all files to the local user/group (assuming 1000 is your ID).
+# - file/dir_mode=0775: Set default permissions for files and directories.
+# - vers=3.0: Use SMB 3.0 for better performance and security.
+# - noperm: Client does not do permission checks. Rely on the server for authorization.
+#   Avoids local/remote UID mismatch issues.
+# - user: Allow the mount to be managed/visible to the user context.
+# - mfsymlinks: Enable support for symlinks (stored as special files). Necessary since
+#   CIFS doesn't natively support Linux symlinks.
+Options=credentials=/etc/samba/credentials/{{NAME}},iocharset=utf8,rw,uid=1000,gid=1000,file_mode=0775,dir_mode=0775,vers=3.0,noperm,user,mfsymlinks
+
+[Install]
+WantedBy=multi-user.target

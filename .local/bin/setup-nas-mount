@@ -1,0 +1,77 @@
+#!/bin/bash
+# ~/.local/bin/setup-nas-mount - Provision an SMB mount using templates
+
+set -e
+
+usage() {
+    echo "Usage: $0 <NAME> <NAS_HOST> <NAS_SHARE>"
+    echo "Example: $0 $USER 192.168.1.100 $USER"
+    exit 1
+}
+
+[ $# -ne 3 ] && usage
+
+NAME="$1"
+NAS_HOST="$2"
+NAS_SHARE="$3"
+MOUNT_DIR="$HOME/nas/$NAME"
+
+# Systemd requires mount units to be named after the path they mount to.
+# We replace / with - and trim the leading /.
+# For Fedora Atomic, $HOME is /var/home/$USER.
+# We must use the REAL path, not the symlinked /home/$USER.
+REAL_HOME=$(realpath "$HOME")
+MOUNT_PATH="$REAL_HOME/nas/$NAME"
+
+# Ensure the mount point exists
+mkdir -p "$MOUNT_PATH"
+
+# Convert path to systemd-style name (e.g., var-home-user-nas-photos)
+# We trim the leading slash first.
+UNIT_NAME=$(echo "${MOUNT_PATH:1}" | tr '/' '-')
+MOUNT_UNIT="${UNIT_NAME}.mount"
+AUTOMOUNT_UNIT="${UNIT_NAME}.automount"
+
+CRED_FILE="/etc/samba/credentials/$NAME"
+TEMPLATE_DIR="$HOME/.config/systemd/system-templates"
+TEMP_DIR=$(mktemp -d)
+
+echo "Setting up NAS mount: $NAME"
+echo "Target path: $MOUNT_PATH"
+echo "Unit name: $UNIT_NAME"
+
+# Prompt for credentials (will be used by sudo later)
+echo -n "NAS Username: "
+read -r SMB_USER
+echo -n "NAS Password: "
+read -rs SMB_PASS
+echo
+
+# Generate Mount Unit
+sed -e "s|{{NAS_HOST}}|$NAS_HOST|g" \
+    -e "s|{{NAS_SHARE}}|$NAS_SHARE|g" \
+    -e "s|{{MOUNT_PATH}}|$MOUNT_PATH|g" \
+    -e "s|{{NAME}}|$NAME|g" \
+    "$TEMPLATE_DIR/samba.mount.template" > "$TEMP_DIR/$MOUNT_UNIT"
+
+# Generate Automount Unit
+sed -e "s|{{MOUNT_PATH}}|$MOUNT_PATH|g" \
+    -e "s|{{NAS_SHARE}}|$NAS_SHARE|g" \
+    "$TEMPLATE_DIR/samba.automount.template" > "$TEMP_DIR/$AUTOMOUNT_UNIT"
+
+# Instructions for the user
+echo "----------------------------------------------------------------------"
+echo "Generated units and credentials for $NAME. Please run these on HOST:"
+echo "----------------------------------------------------------------------"
+echo "1. Create credentials file:"
+echo "   sudo mkdir -p /etc/samba/credentials"
+echo "   echo -e \"username=$SMB_USER\npassword=$SMB_PASS\" | sudo tee $CRED_FILE > /dev/null"
+echo "   sudo chmod 600 $CRED_FILE"
+echo ""
+echo "2. Install and enable systemd units:"
+echo "   sudo cp $TEMP_DIR/$MOUNT_UNIT /etc/systemd/system/"
+echo "   sudo cp $TEMP_DIR/$AUTOMOUNT_UNIT /etc/systemd/system/"
+echo "   sudo systemctl daemon-reload"
+echo "   sudo systemctl enable --now $AUTOMOUNT_UNIT"
+echo "----------------------------------------------------------------------"
+echo "Once done, access your NAS at $MOUNT_DIR"
