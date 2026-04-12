@@ -11,10 +11,10 @@ if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
 fi
 
 # 2. Lock the screen.
-# If we're just locking, we run synchronously so we can refresh the bg *after* unlock.
-# If we're suspending/hibernating, we background swaylock so we can trigger the action.
+# If we're suspending/hibernating, we use --daemonize to ensure the screen is locked
+# BEFORE the script continues to the systemctl command.
 if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
-    swaylock \
+    swaylock --daemonize \
         --image "$BG_FILE" \
         --scaling fill \
         --indicator-radius 100 \
@@ -22,10 +22,7 @@ if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
         --inside-color 00000000 \
         --ring-color 47a2ff \
         --key-hl-color ffaf00 \
-        --text-color ffffff &
-
-    # Wait a moment to ensure swaylock has started before suspending/hibernating
-    sleep 1
+        --text-color ffffff
 
     # Execute systemctl via host-side command since we are likely in a toolbox
     if command -v flatpak-spawn &>/dev/null; then
@@ -34,6 +31,7 @@ if [[ "$ACTION" == "suspend" ]] || [[ "$ACTION" == "hibernate" ]]; then
         systemctl "$ACTION"
     fi
 else
+
     # Default: Just lock and wait for unlock
     swaylock \
         --image "$BG_FILE" \
