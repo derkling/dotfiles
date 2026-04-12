@@ -1,0 +1,48 @@
+#!/bin/bash
+# ~/.local/bin/bootstrap-system - Automate Fedora Atomic host and toolbox setup
+
+set -e
+
+ansi_green() { echo -e "\033[0;32m$1\033[0m"; }
+ansi_yellow() { echo -e "\033[0;33m$1\033[0m"; }
+
+# 1. Detect Environment
+if test -f /run/.containerenv; then
+    ansi_yellow "This script MUST be run on the HOST, not inside a container."
+    exit 1
+fi
+
+if ! grep -q "VARIANT_ID=.*-atomic" /etc/os-release; then
+    ansi_yellow "This script is designed for Fedora Atomic variants."
+    exit 1
+fi
+
+VERSION=$(grep "^VERSION_ID=" /etc/os-release | cut -d'=' -f2 | tr -d '"')
+DEFAULT_TOOLBOX="fedora-toolbox-$VERSION"
+
+# 2. Host Layering (rpm-ostree)
+if [[ -f "$HOME/.config/Fedfile.system" ]]; then
+    ansi_green "Layering host packages from Fedfile.system..."
+    PACKAGES=$(grep -e '^[a-zA-Z]' "$HOME/.config/Fedfile.system" | awk '{print $1}' | xargs)
+    sudo rpm-ostree install --apply-live $PACKAGES || true
+fi
+
+# 3. Initialize Default Toolbox
+ansi_green "Initializing default toolbox: $DEFAULT_TOOLBOX..."
+if ! toolbox list --containers | grep -q "$DEFAULT_TOOLBOX"; then
+    toolbox create -c "$DEFAULT_TOOLBOX" -y
+fi
+
+# 4. Install Toolbox Packages
+if [[ -f "$HOME/.config/Fedfile.toolbox" ]]; then
+    ansi_green "Installing toolbox packages from Fedfile.toolbox..."
+    PACKAGES=$(grep -e '^[a-zA-Z]' "$HOME/.config/Fedfile.toolbox" | awk '{print $1}' | xargs)
+    
+    # Pre-setup for specialized repos (e.g. Yazi)
+    toolbox run -c "$DEFAULT_TOOLBOX" sudo curl -L -o /etc/yum.repos.d/_copr_yazi.repo \
+        https://copr.fedorainfracloud.org/coprs/lihaohong/yazi/repo/fedora-$VERSION/lihaohong-yazi-fedora-$VERSION.repo
+    
+    toolbox run -c "$DEFAULT_TOOLBOX" sudo dnf install -y $PACKAGES
+fi
+
+ansi_green "Bootstrap complete! You may need to reboot or restart your session."

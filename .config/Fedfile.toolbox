@@ -1,0 +1,30 @@
+# Fedfile.toolbox - Packages for the default development toolbox
+#
+# These packages are installed inside the 'fedora-toolbox-$VERSION' container.
+# They provide the full set of development, hacking, and daily-use tools.
+
+# Core CLI Utilities
+eza      # Modern ls replacement
+fish     # Interactive shell
+fzf      # Fuzzy finder
+git      # Version control
+htop     # Interactive process viewer
+jq       # Command-line JSON processor
+ncdu     # NCurses disk usage analyzer
+ranger   # Console file manager with VI keybindings
+tig      # Text-mode interface for Git
+tmux     # Terminal multiplexer
+tree     # Recursive directory listing
+zoxide   # Smarter 'cd' command
+
+# Editors & Viewing
+glow     # Terminal Markdown renderer
+neovim   # Extensible text editor
+yazi     # Terminal file manager with image previews
+zathura  # Lightweight, keyboard-centric PDF viewer
+zathura-pdf-poppler # PDF backend for Zathura
+
+# Support Tools
+chafa    # Terminal graphics for image previews
+golang   # Go programming language compiler
+poppler-utils # PDF rendering for Yazi previews

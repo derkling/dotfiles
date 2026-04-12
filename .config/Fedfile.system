@@ -1,0 +1,15 @@
+# Fedfile.system - Host-level packages for rpm-ostree layering
+#
+# These packages are installed directly on the Fedora Atomic host.
+# They provide the core environment required to bootstrap and manage the system.
+
+alacritty # Terminal emulator with GPU acceleration
+distrobox # Container manager for running other Linux distributions
+eza       # Modern, colorized replacement for 'ls'
+fish      # User-friendly interactive shell
+fzf       # Command-line fuzzy finder (used by fish history and config commands)
+git       # Distributed version control system
+neovim    # Extensible text editor
+tig       # Text-mode interface for Git
+tmux      # Terminal multiplexer for persistent sessions
+zoxide    # Smarter 'cd' command that learns your habits
