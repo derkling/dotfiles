@@ -1,0 +1,7 @@
+[Default Applications]
+application/octet-stream=gcr-viewer.desktop
+application/pdf=org.pwmt.zathura.desktop
+
+[Added Associations]
+application/octet-stream=gcr-viewer.desktop;
+application/pdf=org.pwmt.zathura.desktop;

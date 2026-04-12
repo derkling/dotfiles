@@ -1,0 +1,41 @@
+# ~/.config/zathura/zathurarc - Zathura Configuration
+
+# Basics
+set selection-clipboard clipboard
+set window-title-basename true
+set statusbar-basename true
+
+# Dark Mode (Recolor)
+# These colors match a dark theme (Dracula/Adwaita-Dark)
+set recolor                     "true"
+set recolor-keephue             "false"
+
+set default-bg                  "#282A36"
+set default-fg                  "#F8F8F2"
+
+set recolor-lightcolor          "#282A36"
+set recolor-darkcolor           "#F8F8F2"
+
+# Highlights and Statusbar
+set statusbar-fg                "#F8F8F2"
+set statusbar-bg                "#44475A"
+set inputbar-fg                 "#F8F8F2"
+set inputbar-bg                 "#282A36"
+
+set notification-error-bg       "#FF5555"
+set notification-error-fg       "#F8F8F2"
+set notification-warning-bg     "#FFB86C"
+set notification-warning-fg     "#44475A"
+
+set highlight-color             "#F1FA8C"
+set highlight-active-color      "#FF79C6"
+
+set completion-bg               "#282A36"
+set completion-fg               "#BD93F9"
+set completion-highlight-fg     "#F8F8F2"
+set completion-highlight-bg     "#44475A"
+
+# Keybindings (Vim-style)
+map [normal] r recolor
+map [normal] R reload
+map [normal] i invert-colors
