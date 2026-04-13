@@ -106,17 +106,22 @@ To add a private API key for the `work` profile:
 
 ### Terminal & Editor
 - **Alacritty**: GPU-accelerated terminal with Wayland support.
-- **Neovim**: Modern setup using `lazy.nvim`. First launch auto-installs all
-  plugins and LSPs.
+- **Neovim**: Modern setup using `lazy.nvim`. Features include a discoverable
+  menu system via `which-key`, project-wide search, and modern LSP support.
+  The first launch auto-installs all plugins.
 - **Yazi & Zathura**: Integrated CLI file management with PDF previews and
   lightweight viewing.
 
-### Power Management (Sway)
+### Power Management & Appearance (Sway)
 - Use `$mod+Escape` to enter the system mode:
   - `l`: Lock screen
   - `s`: Suspend (Locks before suspending)
   - `h`: Hibernate (Locks before hibernating)
-- Wallpaper is refreshed from Picsum on every unlock (`refresh-lock-bg`).
+- **Wallpaper**: The lock screen background is refreshed from Picsum on every
+  unlock (`refresh-lock-bg`). If you like a wallpaper, run `lock-bg-keep` to save
+  it to `~/Pictures/Wallpapers/`.
+- **Window Properties**: To find properties for `for_window` rules, run:
+  `sleep 2; swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true)'`
 
 ---
 
