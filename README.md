@@ -1,187 +1,109 @@
 # Dotfiles
 
 Personal configuration files for Linux, Vim/Neovim, Git, and various shell tools.
+Designed for **Fedora Sway Atomic** (Sericea) and **Debian/Ubuntu** systems.
 
-## Setup
+## Why this setup?
+- **Symlink-Free**: Managed as a **bare Git repository** (`~/.dotfiles`),
+  avoiding the clutter of symlink managers.
+- **Atomic-Ready**: Optimized for Fedora's immutable variants with automated
+  host layering and toolbox provisioning.
+- **Privacy-First**: A **Layered Profile Strategy** keeps private tokens and
+  identities out of the public Git history.
+- **Single Source of Truth**: Shared shell logic and binaries ensure a consistent
+  experience across Bash, Zsh, and Fish.
 
-These dotfiles are managed using a bare Git repository stored in `~/.dotfiles`.
-This allows managing configuration files directly in the `$HOME` directory
-without messy symlinks.
+---
 
-### 1. Quick Start (Bootstrap)
+## Quick Start (Bootstrap)
 
-The easiest way to set up a new machine (Fedora Atomic or Debian-based) is to
-run the standalone bootstrap script. It installs `git`, clones the repo,
-provisions system packages, and initializes the default toolbox.
+Replicate this entire environment on a fresh installation with one command. It
+installs `git`, clones the repo, provisions system packages, and initializes the
+default toolbox.
 
 ```bash
 curl -sL https://raw.githubusercontent.com/derkling/dotfiles/master/bootstrap.sh | bash
 ```
 
-### 2. Manual Installation
+### Manual Installation
+1. **Clone**: `git clone --no-checkout https://github.com/derkling/dotfiles.git $HOME/.dotfiles`
+2. **Checkout**: `/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f`
+3. **Provision**: `make -C ~/.config bootstrap` (Detects OS and installs deps).
 
-If you prefer to perform the steps manually:
+---
 
-#### 2.1 Clone and Checkout
-From the home directory:
+## Key Features
 
-```bash
-# Clone bare git repo locally
-git clone --no-checkout https://github.com/derkling/dotfiles.git $HOME/.dotfiles
-
-# Checkout the configuration files
-/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
-/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME config --local status.showUntrackedFiles no
-```
-
-#### 2.2 Provisioning
-To install the required system packages and set up the environment:
-
-```bash
-make -C ~/.config bootstrap
-```
-
-This command automatically detects your OS and performs the appropriate
-actions (e.g., `rpm-ostree` layering and toolbox setup on Fedora, or `apt`
-installation on Debian).
-
-### 3. Profile Activation
-
-This repository supports a **Multi-Profile Strategy**. Beside the generic
-configuration, you can activate one or more custom profiles (e.g., `work`,
-`lab`) to load specific identities, variables, and tools.
-
-To set the active profile for a machine:
-
+### 1. Layered Profile Strategy
+Load different identities (e.g., `work`, `lab`) based on a profile file:
 ```bash
 echo "work" > ~/.dotfiles_profile
 ```
-
----
-
-## Fedora Sway Atomic (Sericea)
-
-On immutable Fedora variants, system-level tools are managed via `rpm-ostree`.
-The bootstrap script handles layering the packages defined in
-`~/.config/Fedfile.system`.
-
-### 1. Manual Package Layering
-
-If not using the bootstrap script, you can manually layer the core tools:
-
-```bash
-sudo rpm-ostree install \
-    alacritty distrobox eza fish fzf git neovim tig tmux zoxide
-```
-
-### 2. NordVPN Installation
-
-**Warning:** Version 4.5.0+ currently suffers from a packaging bug ("Invalid mode
-2147500525") that prevents `rpm-ostree` from importing the RPM. You must use
-version **4.3.1** or **3.18.5**.
-
-1. **Install the Repository:**
-   ```bash
-   sudo rpm-ostree install \
-       https://repo.nordvpn.com/yum/nordvpn/centos/noarch/Packages/n/nordvpn-release-1.0.0-1.noarch.rpm
-   ```
-
-2. **Install the Client (Pinned Version):**
-   ```bash
-   sudo rpm-ostree install \
-       https://repo.nordvpn.com/yum/nordvpn/centos/x86_64/Packages/n/nordvpn-4.3.1-1.x86_64.rpm \
-       https://repo.nordvpn.com/yum/nordvpn/centos/x86_64/Packages/n/nordvpn-gui-4.3.1-1.x86_64.rpm
-   ```
-
-3. **Post-Install Setup:**
-   After rebooting, add your user to the group and enable the service:
-   ```bash
-   sudo usermod -aG nordvpn $USER
-   sudo systemctl enable --now nordvpnd
-   ```
-
----
-
-## Split Configuration Strategy
-
-To allow these dotfiles to be safely shared on public repositories while
-maintaining access to private or context-specific tools, a **Layered Profile**
-strategy is used.
-
-### Generic vs. Profile-Specific Settings
-
-Tracked files contain generic configurations. Context-specific data lives in
-local files suffixed with the profile name, which are ignored by Git.
-
-| Subsystem | Generic (Tracked) | Profile-Specific (Ignored) |
+| Subsystem | Tracked (Generic) | Ignored (Profile-Specific) |
 | :--- | :--- | :--- |
 | **Git Identity** | `~/.config/git/config` | `~/.config/git/config.{profile}` |
 | **Shell Vars** | `~/.config/shell/vars.sh` | `~/.config/shell/vars.{profile}.sh` |
 | **SSH Config** | `~/.ssh/config` | `~/.ssh/config.d/{profile}` |
 | **Binaries** | `~/.local/bin/` | `~/.local/bin/{profile}/` |
 
-### Adding Custom Settings
+### 2. Dependency Management (`Fedfiles`)
+Dependencies are tracked in `~/.config/Fedfile.*` and `~/.config/Debfile*`.
+- `Fedfile.system`: Host packages for `rpm-ostree`.
+- `Fedfile.toolbox`: Development tools for the default container.
+- `Debfile`: Core packages for Debian/Ubuntu systems.
 
-1.  **Environment Variables**: Add context-specific tokens or paths to
-    `~/.config/shell/vars.{profile}.sh`.
-2.  **Git**: Add specific email or signing keys to `~/.config/git/config.{profile}`.
-3.  **SSH**: Add hostnames and identity files to `~/.ssh/config.d/{profile}`.
-4.  **Binaries**: Place context-specific scripts in `~/.local/bin/{profile}/`.
+### 3. Automatic Toolbox Entry
+On Atomic systems, spawning an interactive shell on the host automatically
+teleports you into the default `fedora-toolbox-43` (or current version). Use
+`exit` to return to the host shell.
+
+---
+
+## Customization & Extension
+
+### Adding New Packages
+1. Add the tool name and an inline comment to the appropriate `Fedfile.*` or `Debfile`.
+2. Run `make -C ~/.config bootstrap` to apply changes.
+
+### Adding Shell Aliases
+- **Global**: Add to `~/.config/shell/aliases.sh` (Shared by all shells).
+- **Fish Specific**: Add a function to `~/.config/fish/functions/`.
+
+### Profile-Specific Secrets
+To add a private API key for the `work` profile:
+1. Create `~/.config/shell/vars.work.sh`.
+2. Add `export API_KEY="secret_value"`.
+3. It will be sourced automatically but never committed.
 
 ---
 
 ## Subsystems
 
-### Terminal (Alacritty)
+### Terminal & Editor
+- **Alacritty**: GPU-accelerated terminal with Wayland support.
+- **Neovim**: Modern setup using `lazy.nvim`. First launch auto-installs all
+  plugins and LSPs.
+- **Yazi & Zathura**: Integrated CLI file management with PDF previews and
+  lightweight viewing.
 
-The recommended terminal emulator is **Alacritty**. It is a modern, fast, and
-safe terminal written in Rust.
-
-- **Wayland Native**: Works seamlessly on modern Linux desktops.
-- **Configuration**: Managed via `~/.config/alacritty/alacritty.toml`.
-
-### Neovim (Modern Setup)
-
-Powered by [lazy.nvim](https://github.com/folke/lazy.nvim).
-
-- **Bootstrapping**: Launching `nvim` automatically installs the plugin manager
-  and all configured plugins.
-- **Key Features**: Discoverable menu system via `which-key`, built-in project
-  search, and modern LSP support.
+### Power Management (Sway)
+- Use `$mod+Escape` to enter the system mode:
+  - `l`: Lock screen
+  - `s`: Suspend (Locks before suspending)
+  - `h`: Hibernate (Locks before hibernating)
+- Wallpaper is refreshed from Picsum on every unlock (`refresh-lock-bg`).
 
 ---
 
 ## Management
 
 Use the `config` alias to manage your dotfiles:
-
 ```bash
 config status
 config add .bashrc
 config commit -m "[Shell] Update bashrc"
 config push
 ```
-
-### Shell (Fish & Bash)
-
-- **Entry Point**: **Bash** is the login shell and handles the transition to the
-  interactive shell.
-- **Priority**: **Fish** (if available) -> **Zsh** -> **Bash**.
-- **Single Source of Truth**: Shared logic lives in `~/.config/shell/` and
-  `~/.local/bin/` to ensure consistency across all shells.
-
----
-
-### Wallpaper Management
-
-The lock screen background is automatically refreshed using a script that
-fetches a random 2K image from Picsum.
-
-- **Refresh**: `refresh-lock-bg` updates `~/.cache/lock-screen-bg.jpg`.
-- **Backup**: Each refresh keeps the *previous* image at
-  `~/.cache/lock-screen-bg.jpg.old`.
-- **Preserve**: If you liked a previous wallpaper, run `lock-bg-keep` to
-  save a permanent copy into `~/Pictures/Wallpapers/`.
 
 ---
 **Author:** Patrick Bellasi ([github.com/derkling](https://github.com/derkling))
