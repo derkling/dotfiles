@@ -35,10 +35,15 @@ git clone --no-checkout https://github.com/derkling/dotfiles.git $HOME/.dotfiles
 ```
 
 #### 2.2 Provisioning
-- **Fedora Atomic**: Run `make -C ~/.config bootstrap` to layer host packages
-  and setup the toolbox.
-- **Debian/Ubuntu**: Run `make -C ~/.config install-deps` to install packages
-  via `apt`.
+To install the required system packages and set up the environment:
+
+```bash
+make -C ~/.config bootstrap
+```
+
+This command automatically detects your OS and performs the appropriate
+actions (e.g., `rpm-ostree` layering and toolbox setup on Fedora, or `apt`
+installation on Debian).
 
 ### 3. Profile Activation
 
