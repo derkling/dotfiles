@@ -109,6 +109,9 @@ To add a private API key for the `work` profile:
 - **Neovim**: Modern setup using `lazy.nvim`. Features include a discoverable
   menu system via `which-key`, project-wide search, and modern LSP support.
   The first launch auto-installs all plugins.
+- **Tmux**: Advanced terminal multiplexer with session persistence (via
+  `tmux-resurrect`) and a discoverable
+  [cheatsheet](.config/tmux/tmux-cheatsheet.md).
 - **Yazi & Zathura**: Integrated CLI file management with PDF previews and
   lightweight viewing.
 
