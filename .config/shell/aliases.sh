@@ -53,6 +53,7 @@ alias dr_reserve='dr reserve'
 alias dr_ssh='dr ssh'
 
 # Utils
+alias glow='glow -s ~/.config/glow/tokyo_night.json -w80 -p'
 alias slabinfo="sudo cat /proc/slabinfo | sed 's/#//' | column -t"
 alias yy='yazi'
 
