@@ -54,6 +54,7 @@ alias dr_ssh='dr ssh'
 
 # Utils
 alias slabinfo="sudo cat /proc/slabinfo | sed 's/#//' | column -t"
+alias yy='yazi'
 
 # Host-specific Aliases
 case "$(hostname)" in
