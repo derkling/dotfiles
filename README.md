@@ -61,11 +61,36 @@ teleports you into the default `fedora-toolbox-43` (or current version). Use
 
 ## Customization & Extension
 
-### Adding New Packages
+### 1. Adding New Packages
 1. Add the tool name and an inline comment to the appropriate `Fedfile.*` or `Debfile`.
 2. Run `make -C ~/.config bootstrap` to apply changes.
 
-### Adding Shell Aliases
+### 2. Known Issues & Workarounds
+
+#### NordVPN on Fedora Atomic
+**Warning:** Version 4.5.0+ currently suffers from a packaging bug ("Invalid mode
+2147500525") that prevents `rpm-ostree` from importing the RPM. You must use
+version **4.3.1** or **3.18.5**.
+
+1. **Install the Repository:**
+   ```bash
+   sudo rpm-ostree install \
+       https://repo.nordvpn.com/yum/nordvpn/centos/noarch/Packages/n/nordvpn-release-1.0.0-1.noarch.rpm
+   ```
+2. **Install the Client (Pinned Version):**
+   ```bash
+   sudo rpm-ostree install \
+       https://repo.nordvpn.com/yum/nordvpn/centos/x86_64/Packages/n/nordvpn-4.3.1-1.x86_64.rpm \
+       https://repo.nordvpn.com/yum/nordvpn/centos/x86_64/Packages/n/nordvpn-gui-4.3.1-1.x86_64.rpm
+   ```
+3. **Post-Install Setup:**
+   After rebooting, add your user to the group and enable the service:
+   ```bash
+   sudo usermod -aG nordvpn $USER
+   sudo systemctl enable --now nordvpnd
+   ```
+
+### 3. Adding Shell Aliases
 - **Global**: Add to `~/.config/shell/aliases.sh` (Shared by all shells).
 - **Fish Specific**: Add a function to `~/.config/fish/functions/`.
 

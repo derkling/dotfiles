@@ -29,8 +29,13 @@ this repository. For architectural details, directory structure, and the
       command to the user and ask them to run it on the host.
 
 ## 4. Subsystem Rules
-- **Systemd**: Never modify `/usr/lib/systemd/`. Always use user-specific
-  drop-in overrides in `~/.config/systemd/user/<service>.service.d/`.
+- **Systemd**:
+    - Never modify `/usr/lib/systemd/`. Always use user-specific drop-in
+      overrides in `~/.config/systemd/user/<service>.service.d/override.conf`.
+    - **Activation**: Always run `systemctl --user daemon-reload` and restart
+      the service after modifying overrides.
+    - **Inspection**: Use `systemctl --user cat <service>` to verify the merged
+      configuration.
 - **Fish Shell**:
     - Place `bind` commands *after* `fish_vi_key_bindings` in `config.fish`.
     - Use `fish -c '<command>'` for non-interactive testing.
