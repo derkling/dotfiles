@@ -23,5 +23,5 @@ tmux                # Terminal multiplexer
 tree                # Recursive directory listing
 yazi                # Terminal file manager with image previews (requires manual setup)
 zathura             # Lightweight, keyboard-centric PDF viewer
-libzathura-pdf-poppler # PDF backend for Zathura (Debian name)
+zathura-pdf-poppler # PDF backend for Zathura (Debian name)
 zoxide              # Smarter 'cd' command
