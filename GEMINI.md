@@ -17,6 +17,10 @@ this repository. For architectural details, directory structure, and the
 - **Tone**: Use imperative tone (e.g., "Add feature" not "Added feature").
 - **Prefixes**: Use bracketed prefixes based on the component: `[Shell]`,
   `[Fish]`, `[Sway]`, `[NVim]`, `[Config]`, `[SSH]`, `[Docs]`.
+- **Work-Related Changes**:
+    - **Format**: Use the `[Work:Subject] Title` format for the first line.
+    - **Privacy**: These commits MUST NOT be pushed to public remotes (e.g.,
+      GitHub). The `config` alias enforces this.
 
 ## 3. Environment Awareness (Toolbox/Atomic)
 - **Detection**: Check `/run/.containerenv` or `VARIANT_ID=toolbx` in
