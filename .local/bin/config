@@ -62,4 +62,29 @@ if [[ "$1" == "status" ]]; then
     exit 0
 fi
 
+# Special handling for 'push' command to prevent leaking work-related commits to public remotes
+if [[ "$1" == "push" ]]; then
+    # Default to google if no remote is provided
+    REMOTE="${2:-google}"
+    # Check if we are pushing to github
+    if [[ "$REMOTE" == "github" ]]; then
+        # Identify the branch being pushed
+        BRANCH=$(git $GIT_OPTS rev-parse --abbrev-ref HEAD)
+        # If the remote branch exists, check only the commits to be pushed
+        # Otherwise, check all commits in the current branch
+        RANGE="HEAD"
+        if git $GIT_OPTS rev-parse --verify "github/${BRANCH}" &>/dev/null; then
+            RANGE="github/${BRANCH}..HEAD"
+        fi
+
+        # Check for any "Work:" prefixed commits that would be pushed
+        if git $GIT_OPTS log "$RANGE" --oneline | grep -q "\[Work:"; then
+            echo -e " 🛑 ${RED}ERROR: Attempting to push work-related commits to GitHub!${NC}"
+            echo -e " The following commits have the 'Work:' prefix:"
+            git $GIT_OPTS log "$RANGE" --oneline | grep "\[Work:"
+            exit 1
+        fi
+    fi
+fi
+
 git $GIT_OPTS "$@"
