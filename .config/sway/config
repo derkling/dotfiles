@@ -212,6 +212,7 @@ bindsym $mod+r mode "resize"
 
 # System notifications, this assume the script is
 # available under $HOME/.config/sway/scripts
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec setup_notifications
 exec setup_clipboard
 
