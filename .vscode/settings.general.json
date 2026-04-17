@@ -1,0 +1,288 @@
+{
+  "editor.lineNumbers": "relative",
+  "editor.renderWhitespace": "all",
+  "editor.minimap.enabled": false,
+  "editor.rulers": [
+    72,
+    80,
+    100,
+    120
+  ],
+  "checkpatch.checkpatchPath": "~/Code/linux/scripts/checkpatch.pl",
+  "workbench.colorTheme": "Monokai",
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.enablePreviewFromCodeNavigation": true,
+  "search.useReplacePreview": false,
+  "notebook.output.textLineLimit": 300,
+  "update.mode": "manual",
+  "terminal.external.linuxExec": "terminator",
+  "editor.inlayHints.enabled": "off",
+  "settingsSync.ignoredExtensions": [
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "toxyflog1627.vscode-magit"
+  ],
+  "terminal.integrated.scrollback": 100000,
+  "terminal.integrated.fastScrollSensitivity": 20,
+  "editor.tabSize": 8,
+  "cSpell.language": "en-US,it",
+  "cSpell.useGitignore": false,
+  "cSpell.enabledFileTypes": {
+    "*": true,
+    "diff": false,
+    "dockerfile": false,
+    "dts": false,
+    "makefile": false,
+    "shellscript": false,
+    "git-rebase": true,
+    "magit": true,
+    "kconfig": true
+  },
+  "cSpell.userWords": [
+    "checkpatch",
+    "derkling",
+    "ioremap",
+    "MMIO",
+    "printk",
+    "prodkernel",
+    "struct",
+    "unmap",
+    "venv",
+    "vmalloc",
+    "vspacecode"
+  ],
+  "diffEditor.ignoreTrimWhitespace": false,
+  "zenMode.hideLineNumbers": false,
+  "cmake.showOptionsMovedNotification": false,
+  "workbench.editorAssociations": {
+    "git-rebase-todo": "default"
+  },
+  "debug.onTaskErrors": "debugAnyway",
+  "hexeditor.columnWidth": 8,
+  "hexeditor.showDecodedText": false,
+  "hexeditor.defaultEndianness": "little",
+  "hexeditor.inspectorType": "aside",
+  "editor.showFoldingControls": "always",
+  "go.toolsManagement.autoUpdate": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+  "diffEditor.codeLens": true,
+  "[git-commit]": {
+    "vim.textwidth": 72,
+    "editor.rulers": [
+      72,
+      80
+    ],
+    "editor.wordWrapColumn": 72,
+    "editor.wordWrap": "wordWrapColumn",
+    "diffEditor.wordWrap": "inherit"
+  },
+  "git.openRepositoryInParentFolders": "never",
+  "gitlens.advanced.abbreviatedShaLength": 13,
+  "gitlens.rebaseEditor.ordering": "asc",
+  "gitlens.hovers.currentLine.over": "line",
+  "scm.diffDecorationsGutterPattern": {
+    "added": true
+  },
+  "scm.diffDecorationsGutterWidth": 5,
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "rss.accounts": {
+    "3082a820-df0e-11ef-8e04-b1329a1682f3": {
+      "name": "Default",
+      "type": "local",
+      "feeds": [
+        "https://lore.kernel.org/lkml/new.atom"
+      ]
+    }
+  },
+  "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+  "vim.easymotion": true,
+  "vim.useSystemClipboard": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<space>"
+      ],
+      "commands": [
+        "vspacecode.space"
+      ]
+    },
+    {
+      "before": [
+        ","
+      ],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "<space>"
+      ],
+      "commands": [
+        "vspacecode.space"
+      ]
+    },
+    {
+      "before": [
+        ","
+      ],
+      "commands": [
+        "vspacecode.space",
+        {
+          "command": "whichkey.triggerKey",
+          "args": "m"
+        }
+      ]
+    },
+    {
+      "before": [
+        ">"
+      ],
+      "commands": [
+        "editor.action.indentLines"
+      ]
+    },
+    {
+      "before": [
+        "<"
+      ],
+      "commands": [
+        "editor.action.outdentLines"
+      ]
+    }
+  ],
+  "vspacecode.bindingOverrides": [
+    {
+      "keys": "f.f",
+      "name": "Fuzzy search and open file",
+      "type": "command",
+      "command": "workbench.action.quickOpen"
+    },
+    {
+      "keys": "g.C",
+      "name": "GitLens: Copy Remote Commit URL",
+      "type": "command",
+      "command": "gitlens.copyRemoteCommitUrl"
+    },
+    {
+      "keys": "g.L",
+      "name": "GitLens: Copy Remote File URL",
+      "type": "command",
+      "command": "gitlens.copyRemoteFileUrlToClipboard"
+    },
+    {
+      "keys": "g.g",
+      "name": "Magit Status",
+      "type": "command",
+      "command": "magit.status"
+    },
+    {
+      "keys": "g.s",
+      "name": "Stage selected range",
+      "type": "command",
+      "command": "git.stageSelectedRanges"
+    },
+    {
+      "keys": "g.u",
+      "name": "Unstage selected range",
+      "type": "command",
+      "command": "git.unstageSelectedRanges"
+    },
+    {
+      "keys": "S.K",
+      "name": "Preferences: Open Keyboard Shortcuts (JSON)",
+      "type": "command",
+      "command": "workbench.action.openGlobalKeybindingsFile"
+    },
+    {
+      "keys": "S.S",
+      "name": "Preferences: Open User Settings (JSON)",
+      "type": "command",
+      "command": "workbench.action.openSettingsJson"
+    },
+    {
+      "keys": "s.D",
+      "name": "Open Definition (Side)",
+      "type": "command",
+      "command": "editor.action.revealDefinitionAside",
+      "position": 1
+    },
+    {
+      "keys": "s.d",
+      "name": "Go to Definition",
+      "type": "command",
+      "command": "editor.action.revealDefinition",
+      "position": 1
+    },
+    {
+      "keys": "s.H",
+      "name": "Pick call hierarchy",
+      "type": "command",
+      "command": "editor.showCallHierarchy"
+    },
+    {
+      "keys": "t.f",
+      "name": "Toggle Blame file",
+      "type": "command",
+      "command": "gitlens.toggleFileBlameInDiffLeft"
+    },
+    {
+      "keys": "t.i",
+      "name": "Toggle inlay hints",
+      "type": "command",
+      "command": "clangd.inlayHints.toggle"
+    },
+    {
+      "keys": "t.p",
+      "name": "Toggle Blame Prior to Change",
+      "type": "command",
+      "command": "gitlens.openBlamePriorToChange"
+    },
+    {
+      "keys": "t.s",
+      "name": "Toggle Spell Checking",
+      "type": "command",
+      "command": "cSpell.toggleEnableSpellChecker"
+    },
+    {
+      "keys": "t.t",
+      "name": "Toggle Terminal",
+      "type": "command",
+      "command": "workbench.action.terminal.focus"
+    },
+    {
+      "keys": "t.z",
+      "name": "Toggle Zen Mode",
+      "type": "command",
+      "command": "workbench.action.toggleZenMode"
+    }
+  ],
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "cSpell.noSuggestDictionaries": [
+    "~/.hunspell_default"
+  ],
+  "cSpell.diagnosticLevel": "Error",
+  "addr2line.target": "./vmlinux",
+  "gitlens.graph.onlyFollowFirstParent": true,
+  "cSpell.enabled": false,
+  "lldb.suppressUpdateNotifications": true,
+  "cscope-code.database": ".out/cscope/cscope.out",
+  "cscope-code.auto": false
+}
